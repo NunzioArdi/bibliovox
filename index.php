@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Slim;
+use bibliovox\models\Dictionnaire;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -21,30 +22,39 @@ $app->get('/', function () {
 })->name('home');
 
 
-$app->get('/', function () {
+$app->get('/compte', function () {
     echoHead('Compte');
-    echo "hello world";
+    echo "account";
 })->name('compte');
 
 
 //Dictionnaires
-$app->get('/dictionnaires', function () {
+$app->get('/dictionnaires/', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
-    echo "<a href='" . PATH . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a><br>";
+    //$dico = Dictionnaire::all();
+    echo "<a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a><br>";
     echo "Ou sélectionnez un dictionnaire:";
-    echo "<form id='f1' method='post' action='" . PATH . "/dictionnaire/access'>";
+    echo "<form id='f1' method='get' action='" . PATH . "/dictionnaire/acces'>";
     echo "<select name='idD'>";
-    $dico = Dictionnaire::all();
+    /**
     foreach ($dico as $d) {
-        echo "<option value='" . $d->idD . "'>" . $d->nomD . "</option";
+        echo "<option value='" . $d->idD . "'>" . $d->nomD . "</option>";
     }
-    echo "<input type = 'submit' class='bouton' name='valider' value='Valider'></form>";
+     **/
+    echo "<option value='1'>3</option>";
+    echo "</select>\n<input type = 'submit' class='bouton' name='valider' value='Valider'></form>";
 
 })->name('dictionnaires');
 
 
-$app->get('/dictionnaires', function () {
+//Accès à un dictionnaire
+$app->get('dictionnaire/acces', function (){
+    echo "<h1>Accès au dictionnaire</h1>";
+})->name('dictionnaire_acces');
+
+
+$app->get('/dictionnaire/alphabetique', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
 
