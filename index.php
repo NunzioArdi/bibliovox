@@ -32,16 +32,16 @@ $app->get('/compte', function () {
 $app->get('/dictionnaires/', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
-    //$dico = Dictionnaire::all();
+    $dico = Dictionnaire::all();
     echo "<a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a><br>";
     echo "Ou sélectionnez un dictionnaire:";
     echo "<form id='f1' method='get' action='" . PATH . "/dictionnaire/acces'>";
     echo "<select name='idD'>";
-    /**
+
     foreach ($dico as $d) {
         echo "<option value='" . $d->idD . "'>" . $d->nomD . "</option>";
     }
-     **/
+
     echo "<option value='1'>3</option>";
     echo "</select>\n<input type = 'submit' class='bouton' name='valider' value='Valider'></form>";
 
@@ -49,7 +49,7 @@ $app->get('/dictionnaires/', function () {
 
 
 //Accès à un dictionnaire
-$app->get('dictionnaire/acces', function (){
+$app->get('/dictionnaire/acces', function (){
     echo "<h1>Accès au dictionnaire</h1>";
 })->name('dictionnaire_acces');
 
@@ -78,7 +78,7 @@ function echoHead(string $titre)
 <title>Bibli O'Vox - $titre</title>\n
 HEAD;
     echo "<link rel='stylesheet' href='" . PATH . "/web/css/bibliovox.css'>\n";
-    echo "<link rel='icon' href='" . PATH . "/web/img/icones/logo.png'>\n";
+    echo "<link rel='icon' href='" . PATH . "/media/img/icn/logo.png'>\n";
     echo "</head>\n";
     echo "<body>\n";
 
