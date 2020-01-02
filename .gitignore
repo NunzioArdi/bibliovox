@@ -61,4 +61,4 @@ out/
 .cache-main
 .scala_dependencies
 .worksheet
-.ini
+*.ini
