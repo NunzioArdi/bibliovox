@@ -1,0 +1,49 @@
+
+
+h1 {
+    font-family: Arial, serif;
+    font-weight: bolder;
+    color: #020647;
+    font-size: 40px;
+    margin-left: 15px;
+}
+
+
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+nav {
+    background-color: #dddddd;
+
+}
+
+nav ul {
+    padding: 10px;
+    margin: 0px;
+    list-style-type: none;
+    text-align: left;
+}
+
+nav li {
+    display: inline-block;
+    padding: 20px;
+}
+
+nav li a {
+    text-decoration: none;
+    font-family: Arial, serif;
+    font-size: 25px;
+    color: rgb(43, 190, 224);
+    font-weight: bolder;
+
+}
+
+nav li img {
+    width: 65px;
+}
+
+nav li .icn {
+    width: 90px;
+}
