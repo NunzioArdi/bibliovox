@@ -1,5 +1,8 @@
 <?php
 
+use bibliovox\models\ControleurMot;
+use bibliovox\models\DicoContient;
+use bibliovox\models\Mot;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Slim;
 use bibliovox\models\Dictionnaire;
@@ -36,29 +39,57 @@ $app->get('/dictionnaires/', function () {
     echo "<a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a><br>";
     echo "Ou sélectionnez un dictionnaire:";
     echo "<form id='f1' method='get' action='" . PATH . "/dictionnaire/acces'>";
-    echo "<select name='idD'>";
+    echo "<select name='id'>";
 
     foreach ($dico as $d) {
         echo "<option value='" . $d->idD . "'>" . $d->nomD . "</option>";
     }
 
-    echo "<option value='1'>3</option>";
     echo "</select>\n<input type = 'submit' class='bouton' name='valider' value='Valider'></form>";
 
 })->name('dictionnaires');
 
 
 //Accès à un dictionnaire
-$app->get('/dictionnaire/acces', function (){
-    echo "<h1>Accès au dictionnaire</h1>";
+$app->get('/dictionnaire/acces', function () {
+    if (isset($_GET['id'])) {
+        $dico = Dictionnaire::getId($_GET['id']);
+        if ($dico != null) {
+            echoHead("$dico->nomD");
+            echo "<h1>Accès au dictionnaire <i>$dico->nomD</i></h1>";
+            $mots = DicoContient::motContenuDico($_GET['id']);
+            foreach ($mots as $m) {
+                echo "<a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte.</a>";
+            }
+        } else {
+            echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
+            echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour.</a>";
+        }
+    } else
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('dictionnaires'));
 })->name('dictionnaire_acces');
 
 
 $app->get('/dictionnaire/alphabetique', function () {
     echoHead('Dictionnaires');
-    echo "<h1>Les Dictionnaires</h1>";
+    echo "<h1>Tous les mots par ordre alphabétique</h1>";
+    $mots = Mot::allAlpha();
 
+    foreach ($mots as $m) {
+        echo "<a href='" . PATH . "/dictionnaire/acces/-1/$m->texte'>$m->texte.</a>";
+    }
 })->name('dictionnaire_alpha');
+
+$app->get('/dictionnaire/acces/:idD/:texte', function (int $idD, string $texte) {
+    echoHead($texte);
+    $mot = Mot::getByTxt($texte);
+    if ($mot != null) {
+        ControleurMot::renderMot($mot);
+    } else {
+        echo "<div class='erreur'>Le mot <i>$texte</i> n'existe pas dans ce dictionnaire";
+        echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
+    }
+})->name('mot');
 
 
 $app->get('/about', function () {

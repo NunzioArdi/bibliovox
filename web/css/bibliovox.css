@@ -47,3 +47,15 @@ nav li img {
 nav li .icn {
     width: 90px;
 }
+
+.erreur {
+    font-style: normal;
+    font-weight: bolder;
+    font-size: medium;
+    background-color: red;
+    font-family: Arial;
+    padding: 4px;
+    margin: 5px 0px 3px 0px;
+    border: 3px solid red;
+    border-radius: 5px;
+}
