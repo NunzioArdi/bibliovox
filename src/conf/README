@@ -1,0 +1,14 @@
+Dossier où le fichier conf.ini doit se trouver afin de donner les paramètres de connexion à la base de donnée devant contenir
+
+driver=
+username=
+password=
+host=
+database=
+port=
+charset=
+collation=
+
+Dossier où le fichier conf_path.ini doit se trouver afin de déterminer la racine virtuelle du projet devant contenir
+
+path=

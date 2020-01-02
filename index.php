@@ -1,6 +1,8 @@
 <?php
+
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Slim;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 define('PATH', parse_ini_file('src/conf/conf_path.ini')['path']);
@@ -13,27 +15,47 @@ $db->bootEloquent();
 $app = new Slim();
 
 
-
 $app->get('/', function () {
     echoHead('Accueil');
     echo "hello world";
 })->name('home');
 
 
-
 $app->get('/', function () {
-    echoHead('Accueil');
+    echoHead('Compte');
     echo "hello world";
 })->name('compte');
 
 
+//Dictionnaires
+$app->get('/dictionnaires', function () {
+    echoHead('Dictionnaires');
+    echo "<h1>Les Dictionnaires</h1>";
+    echo "<a href='" . PATH . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a><br>";
+    echo "Ou sélectionnez un dictionnaire:";
+    echo "<form id='f1' method='post' action='" . PATH . "/dictionnaire/access'>";
+    echo "<select name='idD'>";
+    $dico = Dictionnaire::all();
+    foreach ($dico as $d) {
+        echo "<option value='" . $d->idD . "'>" . $d->nomD . "</option";
+    }
+    echo "<input type = 'submit' class='bouton' name='valider' value='Valider'></form>";
 
-$app->get('/', function () {
-    echoHead('Accueil');
-    echo "hello world";
-})->name('dictionnaire');
+})->name('dictionnaires');
 
 
+$app->get('/dictionnaires', function () {
+    echoHead('Dictionnaires');
+    echo "<h1>Les Dictionnaires</h1>";
+
+})->name('dictionnaire_alpha');
+
+
+$app->get('/about', function () {
+    echoHead('À propos');
+    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/eucalyp\" title=\"Eucalyp\">Eucalyp</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
+
+})->name('about');
 
 
 function echoHead(string $titre)
@@ -53,6 +75,7 @@ HEAD;
     echo "<nav><ul>";
     echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img class ='icn' src='" . PATH . "/media/img/icn/logo.png'></a></li>";
     echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img src='" . PATH . "/media/img/icn/home.png'>Accueil</a></li>";
+    echo "<li><a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'><img src='" . PATH . "/media/img/icn/dico.png'>Dictionnaires</a></li>";
     echo "<li><a href='" . Slim::getInstance()->urlFor('compte') . "'><img src='" . PATH . "/media/img/icn/compte.png'>Votre compte</a></li>";
     echo "</ul></nav>";
 
