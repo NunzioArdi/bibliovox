@@ -11,7 +11,8 @@ class ControleurDictionnaire
 {
     static function renderDictionnaire($dico) {
         echo "<h1>Accès au dictionnaire <i>$dico->nomD</i></h1>";
-        echo "<img src='".PATH."/media/img/img/dico/$dico->imageD'>";
+        //On veut l'image ?
+        //echo "<img src='".PATH."/media/img/img/dico/$dico->imageD'>";
         $mots = DicoContient::motContenuDico($_GET['id']);
         foreach ($mots as $m) {
             echo "<h2><a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte</a></h2>";

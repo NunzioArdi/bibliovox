@@ -53,7 +53,8 @@ $app->get('/dictionnaire/acces', function () {
         if ($_GET['id'] == -1) {
             echoHead('Tous les mots');
             echo "<h1>Tous les mots par ordre alphabétique</h1>";
-            echo "<img src='".PATH."/media/img/img/dico/alpha.png'>";
+            //On veut l'image?
+            //echo "<img src='".PATH."/media/img/img/dico/alpha.png'>";
             $mots = Mot::allAlpha();
 
             foreach ($mots as $m) {
