@@ -41,8 +41,8 @@ $app->get('/dictionnaires/', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
-    echo "<a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a><br>";
-    echo "Ou sélectionnez un dictionnaire:";
+    echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a></h2>";
+    echo "<h2>Ou sélectionnez un dictionnaire: </h2>";
     echo "<form id='f1' method='get' action='" . PATH . "/dictionnaire/acces'>";
     echo "<select name='id'>";
 
@@ -64,7 +64,7 @@ $app->get('/dictionnaire/acces', function () {
             echo "<h1>Accès au dictionnaire <i>$dico->nomD</i></h1>";
             $mots = DicoContient::motContenuDico($_GET['id']);
             foreach ($mots as $m) {
-                echo "<a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte.</a>";
+                echo "<h2><a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte</a></h2>";
             }
         } else {
             echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
@@ -82,7 +82,7 @@ $app->get('/dictionnaire/alphabetique', function () {
     $mots = Mot::allAlpha();
 
     foreach ($mots as $m) {
-        echo "<p></p><a href='" . PATH . "/dictionnaire/acces/-1/$m->texte'>$m->texte</a></p>";
+        echo "<h2><a href='" . PATH . "/dictionnaire/acces/-1/$m->texte'>$m->texte</a></h2>";
     }
 })->name('dictionnaire_alpha');
 
