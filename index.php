@@ -1,5 +1,6 @@
 <?php
 
+use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\models\DicoContient;
@@ -41,12 +42,7 @@ $app->get('/dictionnaires/', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
-    echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=-1'><img src='".PATH."/media/img/img/dico/alpha.png'>Dictionnaire alphabétique</a></h2>";
-
-    foreach ($dico as $d) {
-        echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='".PATH."/media/img/img/dico/$d->imageD'>$d->nomD</a></h2>";
-    }
-
+    ControleurDictionnaire::renderDictionnaires($dico);
 
 })->name('dictionnaires');
 
@@ -68,15 +64,11 @@ $app->get('/dictionnaire/acces', function () {
 
             if ($dico != null) {
                 echoHead("$dico->nomD");
-                echo "<h1>Accès au dictionnaire <i>$dico->nomD</i></h1>";
-                echo "<img src='".PATH."/media/img/img/dico/$dico->imageD'>";
-                $mots = DicoContient::motContenuDico($_GET['id']);
-                foreach ($mots as $m) {
-                    echo "<h2><a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte</a></h2>";
-                }
+                ControleurDictionnaire::renderDictionnaire($dico);
             } else {
+                echoHead('');
                 echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
-                echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour.</a>";
+                echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'><h1><- Retour</h1></a>";
             }
         }
     } else
@@ -105,6 +97,7 @@ $app->get('/about', function () {
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/itim2101\" title=\"itim2101\">itim2101</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/eucalyp\" title=\"Eucalyp\">Eucalyp</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
 })->name('about');
