@@ -18,8 +18,10 @@ class ControleurRecueil
 
     public static function renderRecueil($rec)
     {
+        $date =explode('-', $rec->dateR);
+
         echo "<h1>Recueil: <i>$rec->nomR</i></h1>";
-        echo "<div class='date'>Créé le: $rec->dateR</div>";
+        echo "<div class='date'>Créé le: ". $date['2'] ."/". $date['1'] ."/". $date['0'] ."</div>";
         echo "<cite>$rec->descriptionR</cite>";
         echo "<p>Ton enregistrement: </p>";
 
