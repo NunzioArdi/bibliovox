@@ -59,3 +59,24 @@ nav li .icn {
     border: 3px solid red;
     border-radius: 5px;
 }
+
+.cite {
+    font-family: Arial, serif;
+    font-size:27px;
+    margin-left: 15px;
+    resize: none;
+    height: 300px;
+    width: 98%;
+}
+.date {
+    margin: 3px 3px 3px 15px;
+    font-family: Arial, serif;
+    color: rgba(0, 0, 0, 0.76);
+}
+
+.comm {
+    font-size: 27px;
+    margin: 3px 3px 0px 15px;
+    font-family: Arial, serif;
+    color: #020647;
+}
