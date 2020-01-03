@@ -41,16 +41,12 @@ $app->get('/dictionnaires/', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
-    echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'>Dictionnaire alphabétique</a></h2>";
-    echo "<h2>Ou sélectionnez un dictionnaire: </h2>";
-    echo "<form id='f1' method='get' action='" . PATH . "/dictionnaire/acces'>";
-    echo "<select name='id'>";
+    echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'><img src='".PATH."/media/img/img/dico/alpha.png'>Dictionnaire alphabétique</a></h2>";
 
     foreach ($dico as $d) {
-        echo "<option value='" . $d->idD . "'>" . $d->nomD . "</option>";
+        echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='".PATH."/media/img/img/dico/$d->imageD'>$d->nomD</a></h2>";
     }
 
-    echo "</select>\n<input type = 'submit' class='bouton' name='valider' value='Valider'></form>";
 
 })->name('dictionnaires');
 
@@ -107,6 +103,7 @@ $app->get('/about', function () {
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/itim2101\" title=\"itim2101\">itim2101</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
 })->name('about');
