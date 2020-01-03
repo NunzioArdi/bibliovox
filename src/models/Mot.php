@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Mot extends Model
 {
     protected $table = 'mot';
-    //Pas de primary Key car string posera pb
+    protected $primaryKey = 'idM';
+
 
     static function allAlpha() {
         return Mot::orderBy('texte', 'Asc')->get();

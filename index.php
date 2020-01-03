@@ -1,8 +1,10 @@
 <?php
 
-use bibliovox\models\ControleurMot;
+use bibliovox\controllers\ControleurMot;
+use bibliovox\controllers\ControleurRecueil;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Mot;
+use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Slim;
 use bibliovox\models\Dictionnaire;
@@ -73,7 +75,6 @@ $app->get('/dictionnaire/acces', function () {
 })->name('dictionnaire_acces');
 
 
-
 //Dictionnaire alphabétique
 $app->get('/dictionnaire/alphabetique', function () {
     echoHead('Dictionnaires');
@@ -111,11 +112,26 @@ $app->get('/about', function () {
 })->name('about');
 
 
-$app->get('/recueils', function () {
+$app->get('/recueil', function () {
+    if (isset($_GET['id'])){
+        if (Recueil::exist($_GET['id'])) {
+            $rec = Recueil::getById($_GET['id']);
+            echoHead($rec->nomR);
+            ControleurRecueil::renderRecueil($rec);
+            exit();
+        } else
+            echo "<div class='erreur'>Recueil inconnu.</div>";
+
+    }
     echoHead('Recueils');
+    echo "<h1>Tous vos recueils</h1>";
+
+    $rec = Recueil::all();
+
+    ControleurRecueil::renderRecueils($rec);
+
 
 })->name('recueils');
-
 
 
 $app->get('/productions', function () {

@@ -1,8 +1,10 @@
 <?php
 
 
-namespace bibliovox\models;
+namespace bibliovox\controllers;
 
+
+use bibliovox\models\Mot;
 
 class ControleurMot
 {
