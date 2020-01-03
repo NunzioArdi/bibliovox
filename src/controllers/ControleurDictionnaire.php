@@ -20,13 +20,13 @@ class ControleurDictionnaire
 
     public static function renderDictionnaires($dictionnaires)
     {
-        echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=-1'><img src='".PATH."/media/img/img/dico/alpha.png'>Dictionnaire alphabétique</a></h2>";
+        echo "<div class='dico'><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=-1'><img src='".PATH."/media/img/img/dico/alpha.png'><h2>Dictionnaire alphabétique</h2></a></div>";
 
         foreach ($dictionnaires as $d) {
             if ($d->imageD != null)
-            echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='".PATH."/media/img/img/dico/$d->imageD'>$d->nomD</a></h2>";
+            echo "<div class='dico'><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='".PATH."/media/img/img/dico/$d->imageD'><h2>$d->nomD</h2></a></div>";
             else
-                echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='".PATH."/media/img/img/dico/dico.png'>$d->nomD</a></h2>";
+                echo "<div class='dico'><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='".PATH."/media/img/img/dico/dico.png'><h2>$d->nomD</h2></a></div>";
         }
     }
 

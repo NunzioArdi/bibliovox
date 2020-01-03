@@ -95,3 +95,15 @@ nav li .icn {
     font-family: Arial, serif;
     color: #020647;
 }
+
+.dico {
+    display: block;
+}
+
+.dico h2 {
+    display: inline-block;
+}
+
+.dico img {
+    width: 10%;
+}
