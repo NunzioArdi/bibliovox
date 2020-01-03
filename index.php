@@ -41,7 +41,7 @@ $app->get('/dictionnaires/', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
-    echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_alpha') . "'><img src='".PATH."/media/img/img/dico/alpha.png'>Dictionnaire alphabétique</a></h2>";
+    echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=-1'><img src='".PATH."/media/img/img/dico/alpha.png'>Dictionnaire alphabétique</a></h2>";
 
     foreach ($dico as $d) {
         echo "<h2><a href='" . Slim::getInstance()->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='".PATH."/media/img/img/dico/$d->imageD'>$d->nomD</a></h2>";
@@ -54,33 +54,34 @@ $app->get('/dictionnaires/', function () {
 //Accès à un dictionnaire
 $app->get('/dictionnaire/acces', function () {
     if (isset($_GET['id'])) {
-        $dico = Dictionnaire::getId($_GET['id']);
-        if ($dico != null) {
-            echoHead("$dico->nomD");
-            echo "<h1>Accès au dictionnaire <i>$dico->nomD</i></h1>";
-            $mots = DicoContient::motContenuDico($_GET['id']);
+        if ($_GET['id'] == -1) {
+            echoHead('Tous les mots');
+            echo "<h1>Tous les mots par ordre alphabétique</h1>";
+            echo "<img src='".PATH."/media/img/img/dico/alpha.png'>";
+            $mots = Mot::allAlpha();
+
             foreach ($mots as $m) {
-                echo "<h2><a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte</a></h2>";
+                echo "<h2><a href='" . PATH . "/dictionnaire/acces/-1/$m->texte'>$m->texte</a></h2>";
             }
         } else {
-            echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
-            echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour.</a>";
+            $dico = Dictionnaire::getId($_GET['id']);
+
+            if ($dico != null) {
+                echoHead("$dico->nomD");
+                echo "<h1>Accès au dictionnaire <i>$dico->nomD</i></h1>";
+                echo "<img src='".PATH."/media/img/img/dico/$dico->imageD'>";
+                $mots = DicoContient::motContenuDico($_GET['id']);
+                foreach ($mots as $m) {
+                    echo "<h2><a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte</a></h2>";
+                }
+            } else {
+                echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
+                echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour.</a>";
+            }
         }
     } else
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor('dictionnaires'));
 })->name('dictionnaire_acces');
-
-
-//Dictionnaire alphabétique
-$app->get('/dictionnaire/alphabetique', function () {
-    echoHead('Dictionnaires');
-    echo "<h1>Tous les mots par ordre alphabétique</h1>";
-    $mots = Mot::allAlpha();
-
-    foreach ($mots as $m) {
-        echo "<h2><a href='" . PATH . "/dictionnaire/acces/-1/$m->texte'>$m->texte</a></h2>";
-    }
-})->name('dictionnaire_alpha');
 
 
 //Mot du dictionnaire
