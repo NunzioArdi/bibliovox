@@ -12,7 +12,7 @@ class Mot extends Model
     //Pas de primary Key car string posera pb
 
     static function allAlpha() {
-        return Mot::orderBy('texte', 'Desc')->get();
+        return Mot::orderBy('texte', 'Asc')->get();
     }
 
     static function getByTxt(string $texte) {
