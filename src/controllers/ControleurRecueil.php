@@ -22,7 +22,7 @@ class ControleurRecueil
 
         echo "<h1>Recueil: <i>$rec->nomR</i></h1>";
         echo "<div class='date'>Créé le: ". $date['2'] ."/". $date['1'] ."/". $date['0'] ."</div>";
-        echo "<textarea class='cite'>$rec->descriptionR</textarea>";
+        echo "<textarea readonly class='cite'>$rec->descriptionR</textarea>";
         echo "<div class='comm'>Ton enregistrement: </div>";
 
         //TODO
