@@ -6,14 +6,16 @@ namespace bibliovox\controllers;
 
 class ControleurProduction
 {
-    static function renderProdctions($prods) {
+    static function renderProductions($prods)
+    {
         if ($prods != null)
             foreach ($prods as $r) {
                 echo "<a href ='" . PATH . "/production?id=$r->idP'><h2>$r->nomP</h2></a>";
             }
     }
 
-    static function renderProduction($prod){
+    static function renderProduction($prod)
+    {
         if ($prod == null) {
             echo "<div class='erreur'>Production inconnue.</div>";
         } else {

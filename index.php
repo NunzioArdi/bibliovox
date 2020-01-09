@@ -4,13 +4,12 @@ use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
-use bibliovox\models\DicoContient;
+use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\models\Production;
 use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Slim;
-use bibliovox\models\Dictionnaire;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -129,7 +128,7 @@ $app->get('/production', function () {
     echoHead('Productions');
     echo "<h1>Retrouve ici tes productions !</h1>";
     $prods = Production::allCheck(1);
-    ControleurProduction::renderProdctions($prods);
+    ControleurProduction::renderProductions($prods);
 
 })->name('productions');
 
