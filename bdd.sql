@@ -1,123 +1,79 @@
-drop table IF EXISTS eleve;
-drop table IF EXISTS classe;
-drop table IF EXISTS motPerso;
-drop table IF EXISTS audioRec;
-drop table IF EXISTS recueil;
-drop table IF EXISTS tuteur;
-drop table IF EXISTS dicoContient;
-drop table IF EXISTS mot;
-drop table IF EXISTS dictionnaire;
-drop table IF EXISTS production;
-drop table IF EXISTS utilisateur;
-drop table IF EXISTS grade;
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:8889
+-- Generation Time: Jan 09, 2020 at 02:39 PM
+-- Server version: 5.7.26
+-- PHP Version: 7.3.8
 
-SET NAMES utf8;
-SET time_zone = '+00:00';
-SET foreign_key_checks = 0;
-SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
-CREATE TABLE `grade` (
-  `idG` int(1) UNSIGNED NOT NULL,
-  `type` varchar(15),
-  PRIMARY KEY (`idG`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `utilisateur` (
-  `idU` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nom` VARCHAR(255) NOT NULL,
-  `prenom` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `salt` varchar(255) NOT NULL,
-  `mail` varchar(255),
-  `idG` int UNSIGNED NOT NULL, 
-  `avatar` varchar(255) DEFAULT NULL COMMENT 'nom du fichier image', 
-  PRIMARY KEY (`idU`),
-  FOREIGN KEY (`idG`) REFERENCES grade (`idG`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-CREATE TABLE `tuteur` (
-  `idUEnfant` int UNSIGNED NOT NULL,
-  `idUTuteur` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`idUEnfant`, `idUTuteur`),
-  FOREIGN KEY (`idUEnfant`) REFERENCES utilisateur (`idU`),
-  FOREIGN KEY (`idUTuteur`) REFERENCES utilisateur (`idU`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Database: `BibliOvox`
+--
 
-CREATE TABLE `mot` (
-  `idM` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `texte` VARCHAR(255) NOT NULL,
-  `audio` VARCHAR(255) NOT NULL COMMENT 'nom du fichier son',
-  `image` varchar(255) NOT NULL COMMENT 'nom du fichier image',
-  PRIMARY KEY (`idM`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- --------------------------------------------------------
 
-CREATE TABLE `dictionnaire` (
-  `idD` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nomD` VARCHAR(255) NOT NULL,
-  `descriptionD` text DEFAULT NULL,
-  `imageD` VARCHAR(255) NOT NULL COMMENT 'nom du fichier image',
-  PRIMARY KEY (`idD`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Table structure for table `production`
+--
 
-CREATE TABLE `dicoContient` (
-  `idD` int UNSIGNED NOT NULL,
-  `idM` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`idD`, `idM`),
-  FOREIGN KEY (`idD`) REFERENCES dictionnaire (`idD`),
-  FOREIGN KEY (`idM`) REFERENCES mot (`idM`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+DROP TABLE IF EXISTS `production`;
 CREATE TABLE `production` (
-  `idP` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nomP` VARCHAR(255) NOT NULL,
-  `idU` int UNSIGNED NOT NULL,
-  `commentaire` text DEFAULT NULL,
+  `idP` int(10) UNSIGNED NOT NULL,
+  `nomP` varchar(255) NOT NULL,
+  `idU` int(10) UNSIGNED NOT NULL,
+  `commentaire` text,
   `dateP` date NOT NULL,
-  `audio` VARCHAR(255) NOT NULL COMMENT 'nom du fichier son',
-  PRIMARY KEY (`idP`),
-  FOREIGN KEY (`idU`) REFERENCES utilisateur (`idU`)
+  `audio` varchar(255) NOT NULL COMMENT 'nom du fichier son'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `recueil` (
-  `idR` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nomR` VARCHAR(255) NOT NULL,
-  `descriptionR` text DEFAULT NULL,
-  `dateR` date NOT NULL,
-  PRIMARY KEY (`idR`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Dumping data for table `production`
+--
 
-CREATE TABLE `audioRec` (
-  `idR` int UNSIGNED NOT NULL,
-  `idU` int UNSIGNED NOT NULL,
-  `audio` VARCHAR(255) NOT NULL COMMENT 'nom du fichier son',
-  PRIMARY KEY (`idR`, `idU`),
-  FOREIGN KEY (`idR`) REFERENCES recueil (`idR`),
-  FOREIGN KEY (`idU`) REFERENCES utilisateur (`idU`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `production` (`idP`, `nomP`, `idU`, `commentaire`, `dateP`, `audio`) VALUES
+(1, 'Prononciation de \"pizza\"', 1, 'Bonne prononciation !\r\nBravo :)', '2020-01-09', 'rec-1-lucas.mp3');
 
-CREATE TABLE `motPerso` (
-  `idU` int UNSIGNED NOT NULL,
-  `idM` int UNSIGNED NOT NULL,
-  `audio` VARCHAR(255) NOT NULL COMMENT 'nom du fichier son',
-  `commentaire` text DEFAULT NULL,
-  PRIMARY KEY (`idU`, `idM`),
-  FOREIGN KEY (`idU`) REFERENCES utilisateur (`idU`),
-  FOREIGN KEY (`idM`) REFERENCES mot (`idM`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Indexes for dumped tables
+--
 
-CREATE TABLE `classe` (
-  `idC` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `nom` VARCHAR(255) NOT NULL,
-  `idUEnseignant` int UNSIGNED NOT NULL,
-  `annee` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`idC`),
-  FOREIGN KEY (`idUEnseignant`) REFERENCES utilisateur (`idU`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Indexes for table `production`
+--
+ALTER TABLE `production`
+  ADD PRIMARY KEY (`idP`),
+  ADD KEY `idU` (`idU`);
 
-CREATE TABLE `eleve` (
-  `idC` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `idU` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`idC`, `idU`),
-  FOREIGN KEY (`idU`) REFERENCES utilisateur (`idU`),
-  FOREIGN KEY (`idC`) REFERENCES classe (`idC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `production`
+--
+ALTER TABLE `production`
+  MODIFY `idP` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `production`
+--
+ALTER TABLE `production`
+  ADD CONSTRAINT `production_ibfk_1` FOREIGN KEY (`idU`) REFERENCES `utilisateur` (`idU`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
