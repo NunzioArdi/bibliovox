@@ -4,13 +4,12 @@ use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
-use bibliovox\models\DicoContient;
+use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\models\Production;
 use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Slim;
-use bibliovox\models\Dictionnaire;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -129,22 +128,22 @@ $app->get('/production', function () {
     echoHead('Productions');
     echo "<h1>Retrouve ici tes productions !</h1>";
     $prods = Production::allCheck(1);
-    ControleurProduction::renderProdctions($prods);
+    ControleurProduction::renderProductions($prods);
 
 })->name('productions');
 
 
 $app->get('/about', function () {
     echoHead('À propos');
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/eucalyp\" title=\"Eucalyp\">Eucalyp</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/ddara' title='dDara'>dDara</a> from <a href=''https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/itim2101\" title=\"itim2101\">itim2101</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/eucalyp\" title=\"Eucalyp\">Eucalyp</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
-    echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/ddara' title='dDara'>dDara</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/itim2101' title='itim2101'>itim2101</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
+    echo "<div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
 })->name('about');
 
 
@@ -163,12 +162,12 @@ HEAD;
     echo "<body>\n";
 
     echo "<nav><ul>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img class ='icn' src='" . PATH . "/media/img/icn/logo.png'></a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img src='" . PATH . "/media/img/icn/home.png'>Accueil</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'><img src='" . PATH . "/media/img/icn/dico.png'>Dictionnaires</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('recueils') . "'><img src='" . PATH . "/media/img/icn/recueil.png'>Recueils</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('productions') . "'><img src='" . PATH . "/media/img/icn/production.png'>Productions</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('compte') . "'><img src='" . PATH . "/media/img/icn/compte.png'>Compte</a></li>";
+    echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img class ='icn' src='" . PATH . "/media/img/icn/logo.png' alt='Logo'></a></li>";
+    echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img src='" . PATH . "/media/img/icn/home.png' alt='Accueil'>Accueil</a></li>";
+    echo "<li><a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'><img src='" . PATH . "/media/img/icn/dico.png' alt='Dictionnaires'>Dictionnaires</a></li>";
+    echo "<li><a href='" . Slim::getInstance()->urlFor('recueils') . "'><img src='" . PATH . "/media/img/icn/recueil.png' alt='Receuils'>Recueils</a></li>";
+    echo "<li><a href='" . Slim::getInstance()->urlFor('productions') . "'><img src='" . PATH . "/media/img/icn/production.png' alt='Productions'>Productions</a></li>";
+    echo "<li><a href='" . Slim::getInstance()->urlFor('compte') . "'><img src='" . PATH . "/media/img/icn/compte.png' alt='Compte'>Compte</a></li>";
     echo "</ul></nav>";
 
 }
