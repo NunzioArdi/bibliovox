@@ -18,6 +18,7 @@ out/
 *.iml
 *.ucls
 vendor/
+composer.lock
 
 # External tool builders
 .externalToolBuilders/
