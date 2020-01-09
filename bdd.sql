@@ -8,7 +8,7 @@
 -- PHP Version: 7.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+SET time_zone = "+01:00";
 
 --
 -- Database: `BibliOvox`
@@ -137,8 +137,8 @@ DROP TABLE IF EXISTS `mot`;
 CREATE TABLE `mot` (
   `idM` int(10) UNSIGNED NOT NULL,
   `texte` varchar(255) NOT NULL,
-  `audio` varchar(255) NOT NULL COMMENT 'nom du fichier son',
-  `image` varchar(255) NOT NULL COMMENT 'nom du fichier image'
+  `audio` varchar(255) NOT NULL COMMENT 'Nom du fichier son',
+  `image` varchar(255) NOT NULL COMMENT 'Nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -146,12 +146,12 @@ CREATE TABLE `mot` (
 --
 
 INSERT INTO `mot` (`idM`, `texte`, `audio`, `image`) VALUES
-(1, 'arbre', 'arbre.mp3', ''),
-(2, 'bus', 'bus.mp3', ''),
-(3, 'chateau', 'chateau.mp3', 'chateau.jpg'),
-(4, 'chevalier', 'chevalier.mp3', ''),
-(5, 'maison', 'maison.mp3', ''),
-(6, 'route', 'route.mp3', '');
+(1, 'Arbre', 'arbre.mp3', ''),
+(2, 'Bus', 'bus.mp3', ''),
+(3, 'Chateau', 'chateau.mp3', 'chateau.jpg'),
+(4, 'Chevalier', 'chevalier.mp3', ''),
+(5, 'Maison', 'maison.mp3', ''),
+(6, 'Route', 'route.mp3', '');
 
 -- --------------------------------------------------------
 
@@ -163,7 +163,7 @@ DROP TABLE IF EXISTS `motPerso`;
 CREATE TABLE `motPerso` (
   `idU` int(10) UNSIGNED NOT NULL,
   `idM` int(10) UNSIGNED NOT NULL,
-  `audio` varchar(255) NOT NULL COMMENT 'nom du fichier son',
+  `audio` varchar(255) NOT NULL COMMENT 'Nom du fichier son',
   `commentaire` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -180,7 +180,7 @@ CREATE TABLE `production` (
   `idU` int(10) UNSIGNED NOT NULL,
   `commentaire` text,
   `dateP` date NOT NULL,
-  `audio` varchar(255) NOT NULL COMMENT 'nom du fichier son'
+  `audio` varchar(255) NOT NULL COMMENT 'Nom du fichier son'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -239,7 +239,7 @@ CREATE TABLE `utilisateur` (
   `salt` varchar(255) NOT NULL,
   `mail` varchar(255) DEFAULT NULL,
   `idG` int(10) UNSIGNED NOT NULL,
-  `avatar` varchar(255) DEFAULT NULL COMMENT 'nom du fichier image'
+  `avatar` varchar(255) DEFAULT NULL COMMENT 'Nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
