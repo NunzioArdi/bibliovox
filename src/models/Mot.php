@@ -19,4 +19,9 @@ class Mot extends Model
     static function getByTxt(string $texte) {
         return Mot::where("texte", "=", "$texte")->first();
     }
+
+    public static function getById(int $idM)
+    {
+        return Mot::where("idM", "=", "$idM")->first();
+    }
 }

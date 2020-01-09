@@ -5,6 +5,7 @@ namespace bibliovox\controllers;
 
 
 use bibliovox\models\DicoContient;
+use bibliovox\models\Mot;
 use Slim\Slim;
 
 class ControleurDictionnaire
@@ -15,7 +16,8 @@ class ControleurDictionnaire
         //echo "<img src='".PATH."/media/img/img/dico/$dico->imageD'>";
         $mots = DicoContient::motContenuDico($_GET['id']);
         foreach ($mots as $m) {
-            echo "<h2><a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->texte'>$m->texte</a></h2>";
+            $texte = Mot::getById($m->idM)->texte;
+            echo "<h2><a href='" . PATH . "/dictionnaire/acces/$dico->idD/$m->idM'>$texte</a></h2>";
         }
     }
 

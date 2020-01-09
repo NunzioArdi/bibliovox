@@ -19,5 +19,10 @@ class Recueil extends Model
         return Recueil::where("idR", "=", "$idR")->first();
     }
 
+    public static function allCheck(int $idU)
+    {
+        return Recueil::where("idU", "=", "$idU");
+    }
+
 }
 

@@ -2,9 +2,11 @@
 
 use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
+use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Mot;
+use bibliovox\models\Production;
 use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Slim;
@@ -22,6 +24,7 @@ $db->bootEloquent();
 $app = new Slim();
 
 
+//Accueil
 $app->get('/', function () {
     echoHead('Accueil');
     echo "<p>Bibli O’vox a été imaginé par Christophe Buck, Sophie Deleys et Marie Lequèvre dans le cadre d’un master dans le domaine des sciences de l’éducation. Notre production s’appuiera sur les propositions résultant de ce travail. </p>";
@@ -31,6 +34,7 @@ $app->get('/', function () {
 })->name('home');
 
 
+//Compte
 $app->get('/compte', function () {
     echoHead('Compte');
     echo "account";
@@ -58,7 +62,7 @@ $app->get('/dictionnaire/acces', function () {
             $mots = Mot::allAlpha();
 
             foreach ($mots as $m) {
-                echo "<h2><a href='" . PATH . "/dictionnaire/acces/-1/$m->texte'>$m->texte</a></h2>";
+                echo "<h2><a href='" . PATH . "/dictionnaire/acces/-1/$m->idM'>$m->texte</a></h2>";
             }
         } else {
             $dico = Dictionnaire::getId($_GET['id']);
@@ -78,16 +82,56 @@ $app->get('/dictionnaire/acces', function () {
 
 
 //Mot du dictionnaire
-$app->get('/dictionnaire/acces/:idD/:texte', function (int $idD, string $texte) {
-    echoHead($texte);
-    $mot = Mot::getByTxt($texte);
+$app->get('/dictionnaire/acces/:idD/:idM', function (int $idD, int $idM) {
+    $mot = Mot::getById($idM);
+    echoHead($mot->texte);
     if ($mot != null) {
         ControleurMot::renderMot($mot);
     } else {
-        echo "<div class='erreur'>Le mot <i>$texte</i> n'existe pas dans ce dictionnaire";
+        echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
         echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
     }
 })->name('mot');
+
+
+//Recueil
+$app->get('/recueil', function () {
+    if (isset($_GET['id'])) {
+        if (Recueil::exist($_GET['id'])) {
+            $rec = Recueil::getById($_GET['id']);
+            echoHead($rec->nomR);
+            ControleurRecueil::renderRecueil($rec, 1);
+            exit();
+        } else
+            echo "<div class='erreur'>Recueil inconnu.</div>";
+    }
+    echoHead('Recueils');
+    echo "<h1>Tous les recueils</h1>";
+
+    $rec = Recueil::all();
+
+    ControleurRecueil::renderRecueils($rec);
+})->name('recueils');
+
+
+//Productions
+$app->get('/production', function () {
+
+    if (isset($_GET['id'])) {
+        if (Production::exist($_GET['id'], 1)) {
+            $prod = Production::getById($_GET['id']);
+            echoHead($prod->nomP);
+            ControleurProduction::renderProduction($prod);
+            exit();
+        } else
+            echo "<div class='erreur'>Recueil inconnu.</div>";
+    }
+    echoHead('Productions');
+    echo "<h1>Retrouve ici tes productions !</h1>";
+    $prods = Production::allCheck(1);
+    ControleurProduction::renderProdctions($prods);
+
+})->name('productions');
 
 
 $app->get('/about', function () {
@@ -102,34 +146,6 @@ $app->get('/about', function () {
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></div>";
 })->name('about');
-
-
-$app->get('/recueil', function () {
-    if (isset($_GET['id'])){
-        if (Recueil::exist($_GET['id'])) {
-            $rec = Recueil::getById($_GET['id']);
-            echoHead($rec->nomR);
-            ControleurRecueil::renderRecueil($rec);
-            exit();
-        } else
-            echo "<div class='erreur'>Recueil inconnu.</div>";
-
-    }
-    echoHead('Recueils');
-    echo "<h1>Tous vos recueils</h1>";
-
-    $rec = Recueil::all();
-
-    ControleurRecueil::renderRecueils($rec);
-
-
-})->name('recueils');
-
-
-$app->get('/productions', function () {
-    echoHead('Productions');
-
-})->name('productions');
 
 
 function echoHead(string $titre)
