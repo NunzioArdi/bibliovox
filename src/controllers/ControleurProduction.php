@@ -9,7 +9,7 @@ class ControleurProduction
     static function renderProdctions($prods) {
         if ($prods != null)
             foreach ($prods as $r) {
-                echo "<a href ='".PATH."production?id=$r->idP'><h2>$r->nomP</h2></a>";
+                echo "<a href ='" . PATH . "/production?id=$r->idP'><h2>$r->nomP</h2></a>";
             }
     }
 
