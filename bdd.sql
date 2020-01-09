@@ -44,10 +44,11 @@ CREATE TABLE `tuteur` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `mot` (
+  `idM` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `texte` VARCHAR(255) NOT NULL,
   `audio` VARCHAR(255) NOT NULL COMMENT 'nom du fichier son',
   `image` varchar(255) NOT NULL COMMENT 'nom du fichier image',
-  PRIMARY KEY (`texte`)
+  PRIMARY KEY (`idM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `dictionnaire` (
@@ -60,10 +61,10 @@ CREATE TABLE `dictionnaire` (
 
 CREATE TABLE `dicoContient` (
   `idD` int UNSIGNED NOT NULL,
-  `texte` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`idD`, `texte`),
+  `idM` int UNSIGNED NOT NULL,
+  PRIMARY KEY (`idD`, `idM`),
   FOREIGN KEY (`idD`) REFERENCES dictionnaire (`idD`),
-  FOREIGN KEY (`texte`) REFERENCES mot (`texte`)
+  FOREIGN KEY (`idM`) REFERENCES mot (`idM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `production` (
@@ -96,12 +97,12 @@ CREATE TABLE `audioRec` (
 
 CREATE TABLE `motPerso` (
   `idU` int UNSIGNED NOT NULL,
-  `texte` VARCHAR(255) NOT NULL,
+  `idM` int UNSIGNED NOT NULL,
   `audio` VARCHAR(255) NOT NULL COMMENT 'nom du fichier son',
   `commentaire` text DEFAULT NULL,
   PRIMARY KEY (`idU`, `texte`),
   FOREIGN KEY (`idU`) REFERENCES utilisateur (`idU`),
-  FOREIGN KEY (`texte`) REFERENCES mot (`texte`)
+  FOREIGN KEY (`idM`) REFERENCES mot (`idM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `classe` (

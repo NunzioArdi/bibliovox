@@ -17,6 +17,7 @@ out/
 .idea
 *.iml
 *.ucls
+vendor/
 
 # External tool builders
 .externalToolBuilders/
