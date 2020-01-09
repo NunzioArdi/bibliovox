@@ -100,7 +100,7 @@ CREATE TABLE `motPerso` (
   `idM` int UNSIGNED NOT NULL,
   `audio` VARCHAR(255) NOT NULL COMMENT 'nom du fichier son',
   `commentaire` text DEFAULT NULL,
-  PRIMARY KEY (`idU`, `texte`),
+  PRIMARY KEY (`idU`, `idM`),
   FOREIGN KEY (`idU`) REFERENCES utilisateur (`idU`),
   FOREIGN KEY (`idM`) REFERENCES mot (`idM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
