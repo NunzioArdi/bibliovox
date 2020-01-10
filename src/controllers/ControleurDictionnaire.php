@@ -17,7 +17,7 @@ class ControleurDictionnaire
         $mots = DicoContient::motContenuDico($_GET['id']);
         foreach ($mots as $m) {
             $texte = Mot::getById($m->idM)->texte;
-            echo "<h2><a href='" . Slim::getInstance()->urlFor('mot', ['idD'=>$dico->idD, 'idM'=>$m->idM]) . "/'>$texte</a></h2>";
+            echo "<h2><a href='" . Slim::getInstance()->urlFor('mot', ['idD' => $dico->idD, 'idM' => $m->idM]) . "'>$texte</a></h2>";
         }
     }
 
