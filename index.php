@@ -61,7 +61,7 @@ $app->get('/dictionnaire/acces', function () {
             $mots = Mot::allAlpha();
 
             foreach ($mots as $m) {
-                echo "<h2><a href='" . PATH . "/dictionnaire/acces/-1/$m->idM'>$m->texte</a></h2>";
+                echo "<h2><a href='" . Slim::getInstance()->urlFor("mot", ["idD" => -1, "idM" => $m->idM]) . "'>$m->texte</a></h2>";
             }
         } else {
             $dico = Dictionnaire::getId($_GET['id']);
