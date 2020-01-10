@@ -100,16 +100,16 @@ $app->get('/recueil', function () {
             $rec = Recueil::getById($_GET['id']);
             echoHead($rec->nomR);
             ControleurRecueil::renderRecueil($rec, 1);
-            exit();
         } else
             echo "<div class='erreur'>Recueil inconnu.</div>";
+    } else {
+        echoHead('Recueils');
+        echo "<h1>Tous les recueils</h1>";
+
+        $rec = Recueil::all();
+
+        ControleurRecueil::renderRecueils($rec);
     }
-    echoHead('Recueils');
-    echo "<h1>Tous les recueils</h1>";
-
-    $rec = Recueil::all();
-
-    ControleurRecueil::renderRecueils($rec);
 })->name('recueils');
 
 
