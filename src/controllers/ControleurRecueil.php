@@ -4,12 +4,14 @@
 namespace bibliovox\controllers;
 
 
+use Slim\Slim;
+
 class ControleurRecueil
 {
     static function renderRecueils( $recs) {
         if ($recs != null)
         foreach ($recs as $r) {
-            echo "<a href ='" . PATH . "/recueil?id=$r->idR'><h2>$r->nomR</h2></a>";
+            echo "<a href ='" . Slim::getInstance()->urlFor('recueils') . "?id=$r->idR'><h2>$r->nomR</h2></a>";
         }
 
     }

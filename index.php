@@ -81,7 +81,7 @@ $app->get('/dictionnaire/acces', function () {
 
 
 //Mot du dictionnaire
-$app->get('/dictionnaire/acces/:idD/:idM', function (int $idD, int $idM) {
+$app->get('/dictionnaire/acces/:idD/:idM/', function (int $idD, int $idM) {
     $mot = Mot::getById($idM);
     echoHead($mot->texte);
     if ($mot != null) {
