@@ -22,7 +22,7 @@ class ControleurProduction
             echo "<div class='erreur'>Production inconnue.</div>";
         } else {
             echo "<h1>Production: <i>$prod->nomP</i></h1>";
-            $date = $prod->dateP;
+            $date = explode('-', $prod->dateP);
             echo "<div class='date'>Créé le: ". $date['2'] ."/". $date['1'] ."/". $date['0'] ."</div>";
             echo "<cite>$prod->commentaire</cite>";
 
