@@ -19,7 +19,7 @@ class ControleurAudioRecueil
             echo "<source src='" . PATH . "/media/aud/rec/" . $ar->audio . "' type='audio/mp3'>";
             echo "</audio></div>";
         } else {
-            echo "<div class='comm'>Eneregistre toi ! </div>";
+            echo "<div class='comm'>Enregistre toi ! </div>";
         }
 
     }
