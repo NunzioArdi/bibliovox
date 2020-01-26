@@ -1,6 +1,7 @@
 <?php
 
 namespace bibliovox\models;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Dictionnaire extends Model
 {
-
+    public $timestamps = false;
     protected $table = 'dictionnaire';
     protected $primaryKey = 'idD';
 
@@ -36,7 +37,7 @@ class Dictionnaire extends Model
             } else {
                 return "L'extension du fichier n'est pas autorisé ('jpg', 'jpeg', 'png', 'JPG', 'JPEG' uniquement)";
             }
-        }
+        } else $newDico->imageD = '';
 
         $newDico->save();
         return $newDico;
