@@ -40,7 +40,7 @@ class Dictionnaire extends Model
         } else $newDico->imageD = '';
 
         $newDico->save();
-        return $newDico;
+        return $newDico->get()->last();
     }
 
 }
