@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static orderBy(string $nomColone, string $mode)
  * @method static where(string $nomColone, string $comparateur, string $valeur)
+ * @method get()
  */
 class Dictionnaire extends Model
 {
