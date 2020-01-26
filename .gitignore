@@ -19,6 +19,7 @@ out/
 *.ucls
 vendor/
 composer.lock
+test.php
 
 # External tool builders
 .externalToolBuilders/
