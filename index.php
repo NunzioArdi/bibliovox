@@ -152,8 +152,45 @@ $app->get('/recueil', function () {
         $rec = Recueil::all();
 
         ControleurRecueil::renderRecueils($rec);
+
+        echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_recueil") . "'>+</a>";
     }
 })->name('recueils');
+
+$app->get('/recueil/create', function () {
+    echoHead('Nouveau recueil');
+
+    if (array_key_exists('err', $_GET))
+        switch ($_GET['err']) {
+            default:
+                echo "<div class='erreur'>Erreur inconnue</div>";
+                break;
+        }
+
+    echo "<h1>Créer un nouveau recueil</h1>";
+    $path = Slim::getInstance()->urlFor("new_recueil_process");
+
+    echo <<<FORM
+<form id='new_recueil' method='post' action='$path' enctype="multipart/form-data">
+<label>Nom du recueil</label>
+<input type='text' name='nom' placeholder='Nom' required>
+<label>Texte</label>
+<textarea name='texte' class='cite' placeholder='Texte' lang='fr' required></textarea>
+<input class='bouton' type="reset" value="Annuler">
+<input class="bouton" type="submit" value="Valider">
+</form>
+FORM;
+})->name('new_recueil');
+
+$app->post('/recueil/create/process', function () {
+    $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
+
+    if (is_int($res))
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_recueil') . "?err=$res");
+    else
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("recueils") . "?id=$res->idR");
+
+})->name('new_recueil_process');
 
 
 //Productions
