@@ -28,7 +28,7 @@ class ControleurProduction
 
             echo "<div class='comm'>Ton enregistrement: </div>";
             echo "<audio controls>";
-            echo "<source src='" . PATH . "/media/aud/rec/" . $prod->audio . "' type='audio/mp3'>";
+            echo "<source src='" . PATH . "/media/aud/prod/" . $prod->audio . "' type='audio/mp3'>";
             echo "</audio></div>";
         }
     }
