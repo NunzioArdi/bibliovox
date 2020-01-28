@@ -36,27 +36,21 @@ class Production extends Model
     {
         /* Futur Test de l'utilisateur ici*/
         if (true) {
-            if (isset($_FILES['Audio']) AND $_FILES['Audio']['error'] == 0) {
-                $extension_upload = pathinfo($_FILES['Audio']['name'])['extension'];
-                $extensions_autorisees = array('mp3');
+            if (isset($_FILES['audio']) AND $_FILES['audio']['error'] == 0) {
 
-                if (in_array($extension_upload, $extensions_autorisees)) {
-                    $fileName = rand() . filter_var($_FILES['Audio']['name'], FILTER_SANITIZE_URL);
-                    move_uploaded_file($_FILES['Audio']['tmp_name'], 'media/aud/prod/' . $fileName);
+                $fileName = rand() . filter_var($_FILES['audio']['name'], FILTER_SANITIZE_URL);
+                move_uploaded_file($_FILES['audio']['tmp_name'], 'media/aud/prod/' . $fileName);
 
-                    $newProduction = new Production();
+                $newProduction = new Production();
 
 
-                    $newProduction->audio = $fileName;
-                    $newProduction->nom = filter_var($nom, FILTER_SANITIZE_STRING);
-                    $newProduction->idU = $idUtilisateur;
-                    $newProduction->dateP = date('Y-m-d');
-                    $newProduction->save();
-                    $newProduction->get()->last();
+                $newProduction->audio = $fileName;
+                $newProduction->nom = filter_var($nom, FILTER_SANITIZE_STRING);
+                $newProduction->idU = $idUtilisateur;
+                $newProduction->dateP = date('Y-m-d');
+                $newProduction->save();
+                $newProduction->get()->last();
 
-                } else {
-                    return "L'extension du fichier n'est pas autorisé ('mp3' uniquement)";
-                }
             } else return "Aucun fichier uploadé !";
         }
     }
