@@ -102,8 +102,10 @@ $app->get('/recueil', function () {
             $rec = Recueil::getById($_GET['id']);
             echoHead($rec->nomR);
             ControleurRecueil::renderRecueil($rec, 1);
-        } else
+        } else {
+            echoHead("ERREUR");
             echo "<div class='erreur'>Recueil inconnu.</div>";
+        }
     } else {
         echoHead('Recueils');
         echo "<h1>Tous les recueils</h1>";
