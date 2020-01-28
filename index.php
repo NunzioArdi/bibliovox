@@ -47,8 +47,44 @@ $app->get('/dictionnaires/', function () {
     $dico = Dictionnaire::all();
     ControleurDictionnaire::renderDictionnaires($dico);
 
+    echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_dictionnaire") . "'>+</a>";
+
 })->name('dictionnaires');
 
+//Creation dictionnaire
+$app->get('/dictionnaire/create', function () {
+    echoHead('Nouveau dictionnaire');
+    echo "<h1>Créer un nouveau dictionnaire</h1>";
+    $path = Slim::getInstance()->urlFor("new_dictionnaire_process");
+
+    if (array_key_exists('err', $_GET))
+        if ($_GET['err'] == 1)
+            echo "<div class='erreur'>Le fichier envoyé n'est pas une image</div>";
+
+    echo <<<FORM
+<form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
+<label>Nom du dictionnaire</label>
+<input type='text' name='nom' placeholder='Nom' required>
+<label>Description</label>
+<textarea name='description' placeholder='Description' lang='fr' required></textarea>
+<label>Illustration du dictionnaire (facultatif)</label>
+<input type='file' name='image' accept="image/*">
+<input class='bouton' type="reset" value="Annuler">
+<input class="bouton" type="submit" value="Valider">
+</form>
+FORM;
+})->name('new_dictionnaire');
+
+$app->post('/dictionnaire/create/process', function () {
+    var_dump($_POST);
+    $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
+
+    if (is_string($res))
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_dictionnaire') . "?err=$res");
+    else
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("dictionnaire_acces") . "?id=$res->idD");
+
+})->name('new_dictionnaire_process');
 
 //Accès à un dictionnaire
 $app->get('/dictionnaire/acces', function () {
