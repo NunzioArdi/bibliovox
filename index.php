@@ -54,12 +54,19 @@ $app->get('/dictionnaires', function () {
 //Creation dictionnaire
 $app->get('/dictionnaire/create', function () {
     echoHead('Nouveau dictionnaire');
-    echo "<h1>Créer un nouveau dictionnaire</h1>";
-    $path = Slim::getInstance()->urlFor("new_dictionnaire_process");
 
     if (array_key_exists('err', $_GET))
-        if ($_GET['err'] == 1)
-            echo "<div class='erreur'>Le fichier envoyé n'est pas une image</div>";
+        switch ($_GET['err']) {
+            case 1:
+                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
+                break;
+            default:
+                echo "<div class='erreur'>Erreur inconnue</div>";
+                break;
+        }
+
+    echo "<h1>Créer un nouveau dictionnaire</h1>";
+    $path = Slim::getInstance()->urlFor("new_dictionnaire_process");
 
     echo <<<FORM
 <form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
@@ -76,10 +83,10 @@ FORM;
 })->name('new_dictionnaire');
 
 $app->post('/dictionnaire/create/process', function () {
-    var_dump($_POST);
+
     $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
 
-    if (is_string($res))
+    if (is_int($res))
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_dictionnaire') . "?err=$res");
     else
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor("dictionnaire_acces") . "?id=$res->idD");
