@@ -46,16 +46,16 @@ class Production extends Model
                     $newProduction = new Production();
 
                     $newProduction->audio = $fileName;
-                    $newProduction->nom = filter_var($nom, FILTER_SANITIZE_STRING);
+                    $newProduction->nomP = filter_var($nom, FILTER_SANITIZE_STRING);
                     $newProduction->idU = $idUtilisateur;
                     $newProduction->dateP = date('Y-m-d');
                     $newProduction->save();
-                    $newProduction->get()->last();
+                    return $newProduction->get()->last();
                 } else {
                     return 1;
                 }
 
-            } else return "Aucun fichier uploadé !";
+            } else return 2;
         }
     }
 }
