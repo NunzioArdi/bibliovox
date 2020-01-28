@@ -41,7 +41,7 @@ $app->get('/compte', function () {
 
 
 //Dictionnaires
-$app->get('/dictionnaires/', function () {
+$app->get('/dictionnaires', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
