@@ -4,6 +4,7 @@ use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
+use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\models\Production;
@@ -83,10 +84,11 @@ $app->get('/dictionnaire/acces', function () {
 //Mot du dictionnaire
 $app->get('/dictionnaire/acces/:idD/:idM/', function (int $idD, int $idM) {
     $mot = Mot::getById($idM);
-    echoHead($mot->texte);
-    if ($mot != null) {
+    if ($mot != null && DicoContient::matchIDs($idM, $idD)) {
+        echoHead($mot->texte);
         ControleurMot::renderMot($mot);
     } else {
+        echoHead('ERREUR');
         echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
         echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
     }
