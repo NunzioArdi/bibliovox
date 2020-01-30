@@ -313,3 +313,6 @@ HEAD;
 }
 
 $app->run();
+
+echo "</body>";
+echo "</html>";
