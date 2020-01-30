@@ -42,14 +42,57 @@ $app->get('/compte', function () {
 
 
 //Dictionnaires
-$app->get('/dictionnaires/', function () {
+$app->get('/dictionnaires', function () {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
     ControleurDictionnaire::renderDictionnaires($dico);
 
+    echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_dictionnaire") . "'>+</a>";
+
 })->name('dictionnaires');
 
+//Creation dictionnaire
+$app->get('/dictionnaire/create', function () {
+    echoHead('Nouveau dictionnaire');
+
+    if (array_key_exists('err', $_GET))
+        switch ($_GET['err']) {
+            case 1:
+                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
+                break;
+            default:
+                echo "<div class='erreur'>Erreur inconnue</div>";
+                break;
+        }
+
+    echo "<h1>Créer un nouveau dictionnaire</h1>";
+    $path = Slim::getInstance()->urlFor("new_dictionnaire_process");
+
+    echo <<<FORM
+<form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
+<label>Nom du dictionnaire</label>
+<input type='text' name='nom' placeholder='Nom' required>
+<label>Description</label>
+<textarea name='description' placeholder='Description' lang='fr' required></textarea>
+<label>Illustration du dictionnaire (facultatif)</label>
+<input type='file' name='image' accept="image/*">
+<input class='bouton' type="reset" value="Annuler">
+<input class="bouton" type="submit" value="Valider">
+</form>
+FORM;
+})->name('new_dictionnaire');
+
+$app->post('/dictionnaire/create/process', function () {
+
+    $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
+
+    if (is_int($res))
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_dictionnaire') . "?err=$res");
+    else
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("dictionnaire_acces") . "?id=$res->idD");
+
+})->name('new_dictionnaire_process');
 
 //Accès à un dictionnaire
 $app->get('/dictionnaire/acces', function () {
@@ -103,7 +146,7 @@ $app->get('/recueil', function () {
             echoHead($rec->nomR);
             ControleurRecueil::renderRecueil($rec, 1);
         } else {
-            echoHead("ERREUR");
+            echoHead('Recueils - Erreur');
             echo "<div class='erreur'>Recueil inconnu.</div>";
         }
     } else {
@@ -113,12 +156,52 @@ $app->get('/recueil', function () {
         $rec = Recueil::all();
 
         ControleurRecueil::renderRecueils($rec);
+
+        echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_recueil") . "'>+</a>";
     }
 })->name('recueils');
+
+$app->get('/recueil/create', function () {
+    echoHead('Nouveau recueil');
+
+    if (array_key_exists('err', $_GET))
+        switch ($_GET['err']) {
+            default:
+                echo "<div class='erreur'>Erreur inconnue</div>";
+                break;
+        }
+
+    echo "<h1>Créer un nouveau recueil</h1>";
+    $path = Slim::getInstance()->urlFor("new_recueil_process");
+
+    echo <<<FORM
+<form id='new_recueil' method='post' action='$path' enctype="multipart/form-data">
+<label>Nom du recueil</label>
+<input type='text' name='nom' placeholder='Nom' required>
+<label>Texte</label>
+<textarea name='texte' class='cite' placeholder='Texte' lang='fr' required></textarea>
+<input class='bouton' type="reset" value="Annuler">
+<input class="bouton" type="submit" value="Valider">
+</form>
+FORM;
+})->name('new_recueil');
+
+$app->post('/recueil/create/process', function () {
+    $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
+
+    if (is_int($res))
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_recueil') . "?err=$res");
+    else
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("recueils") . "?id=$res->idR");
+
+})->name('new_recueil_process');
 
 
 //Productions
 $app->get('/production', function () {
+
+    /* idU utilisé en attente de la fonction des comptes */
+    $idU = 1;
 
     if (isset($_GET['id'])) {
         if (Production::exist($_GET['id'], 1)) {
@@ -131,10 +214,63 @@ $app->get('/production', function () {
     }
     echoHead('Productions');
     echo "<h1>Retrouve ici tes productions !</h1>";
-    $prods = Production::allCheck(1);
+    $prods = Production::allCheck($idU);
     ControleurProduction::renderProductions($prods);
 
+    /* L'idU est temporairement passé dans le GET */
+    echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_production") . "?idU=$idU'>+</a>";
+
 })->name('productions');
+
+$app->get('/production/create', function () {
+
+    /* Récupération temporaire de l'idU */
+    $idU = $_GET['idU'];
+
+    echoHead('Nouvelle production');
+
+    if (array_key_exists('err', $_GET))
+        switch ($_GET['err']) {
+            case 1:
+                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
+                break;
+            case 2:
+                echo "<div class='erreur'>Aucun fichier uploadé</div>";
+                break;
+            default:
+                echo "<div class='erreur'>Erreur inconnue</div>";
+                break;
+        }
+
+    echo "<h1>Créer une nouvelle production</h1>";
+    $path = Slim::getInstance()->urlFor("new_production_process") . "?idU=$idU";
+
+    echo <<<FORM
+<form id='new_production' method='post' action='$path' enctype="multipart/form-data">
+<label>Titre de la production</label>
+<input type='text' name='nom' placeholder='Titre' required>
+<label>Audio</label>
+<input type='file' name='audio' accept="audio/*" required>
+<input class='bouton' type="reset" value="Annuler">
+<input class="bouton" type="submit" value="Valider">
+</form>
+FORM;
+
+})->name('new_production');
+
+$app->post('/production/create/process', function () {
+
+    /* Récupération temporaire de l'idU */
+    $idU = $_GET['idU'];
+
+    $res = Production::createNew($_POST['nom'], $idU);
+
+    if (is_int($res))
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_production') . "?err=$res&idU=$idU");
+    else
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("productions") . "?id=$res->idP");
+
+})->name('new_production_process');
 
 
 $app->get('/about', function () {
