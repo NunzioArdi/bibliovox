@@ -204,10 +204,13 @@ $app->get('/production', function () {
     $idU = 1;
 
     if (isset($_GET['id'])) {
-        if (Production::exist($_GET['id'], 1)) {
-            $prod = Production::getById($_GET['id']);
+        $idP = $_GET['id'];
+        if (Production::exist($idP, 1)) {
+            $prod = Production::getById($idP);
             echoHead($prod->nomP);
             ControleurProduction::renderProduction($prod);
+            //L'idU est stocké en get temporairement (jusqu'à la gestion du compte)
+            echo "<a class='boutton' href='" . Slim::getInstance()->urlFor("edit_production") . "?idP=$idP&idU=$idU'>Editer</a>";
             exit();
         } else
             echo "<div class='erreur'>Recueil inconnu.</div>";
@@ -218,7 +221,7 @@ $app->get('/production', function () {
     ControleurProduction::renderProductions($prods);
 
     /* L'idU est temporairement passé dans le GET */
-    echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_production") . "?idU=$idU'>+</a>";
+    echo "<div class='createNew'><a class='boutton' href='" . Slim::getInstance()->urlFor("new_production") . "?idU=$idU'>+</a>";
 
 })->name('productions');
 
@@ -259,6 +262,7 @@ FORM;
 })->name('new_production');
 
 $app->post('/production/create/process', function () {
+    echoHead("Création");
 
     /* Récupération temporaire de l'idU */
     $idU = $_GET['idU'];
@@ -271,6 +275,75 @@ $app->post('/production/create/process', function () {
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor("productions") . "?id=$res->idP");
 
 })->name('new_production_process');
+
+$app->get('/production/edit', function () {
+    echoHead("Édition");
+    $idU = $_GET['idU'];
+
+    if (isset($_GET['err'])) {
+        switch ($_GET['err']) {
+            case 1:
+                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
+                break;
+            case 2:
+                echo "<div class='erreur'>Utilisateur non autorisé</div>";
+                break;
+            default:
+                echo "<div class='erreur'>Erreur inconnue</div>";
+                break;
+        }
+    }
+
+    if (isset($_GET['idP'])) {
+        $idP = $_GET['idP'];
+        if (Production::exist($idP, $idU)) {
+            $url = Slim::getInstance()->urlFor("edit_production_process") . "?idP=$idP&idU=$idU";
+            $prod = Production::getById($idP);
+            echo <<<FORMTOP
+<form id='edit_production' method='post' action='$url' enctype="multipart/form-data">
+<label>Titre de la production</label>
+<input type='text' name='nom' placeholder='Titre' value='$prod->nomP'>
+<label>Audio</label>
+<input type='file' name='audio' accept="audio/*">
+FORMTOP;
+            //Test : Est-ce un prof? TODO
+            if (true) {
+                echo "<label>Commentaire</label><textArea name='comm'>$prod->commentaire</textArea>";
+            }
+            echo <<<FORMBOT
+<br>
+<input class='bouton' type="reset" value="Annuler modifications">
+<input class="bouton" type="submit" value="Valider modifications">
+</form>
+FORMBOT;
+
+        }
+
+    } else
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('productions'));
+
+})->name('edit_production');
+
+$app->post('/production/edit/process', function () {
+    echoHead("Édition");
+
+    /* Récupération temporaire de l'idU */
+    $idU = $_GET['idU'];
+    if (isset($_GET['idP'])) {
+        $idP = $_GET['idP'];
+
+        $res = Production::updateProd($idP, $_POST['nom'], $idU, $_POST['comm']);
+
+        if (is_int($res))
+            Slim::getInstance()->redirect(Slim::getInstance()->urlFor('edit_productions') . "?err=$res");
+        else
+            Slim::getInstance()->redirect(Slim::getInstance()->urlFor('productions') . "?id=$idP");
+    } else {
+        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('productions'));
+    }
+
+
+})->name('edit_production_process');
 
 
 $app->get('/about', function () {

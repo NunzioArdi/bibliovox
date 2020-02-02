@@ -58,4 +58,35 @@ class Production extends Model
             } else return 2;
         }
     }
+
+    public static function updateProd(int $idProduction, string $nom, int $idUtilisateur, string $comm)
+    {
+        $prod = Production::where("idP", "=", "$idProduction")->first();
+
+        /* Futur Test de l'utilisateur ici cad Prof seulement*/
+        if (true) {
+            echo "TTTT";
+            $prod->commentaire = filter_var($comm, FILTER_SANITIZE_STRING);
+            /* Futur Test de l'utilisateur ici cad élève ou TODO prof*/
+        }
+        if (true OR self::allCheck($idUtilisateur)) {
+            $prod->nomP = filter_var($nom, FILTER_SANITIZE_STRING);
+            echo "OUI";
+            if (isset($_FILES['audio']) AND $_FILES['audio']['error'] == 0) {
+                $extension_upload = pathinfo($_FILES['audio']['name'])['extension'];
+                $extensions_autorisees = array('mp3');
+                if (in_array($extension_upload, $extensions_autorisees)) {
+                    $fileName = rand() . filter_var($_FILES['audio']['name'], FILTER_SANITIZE_URL);
+                    move_uploaded_file($_FILES['audio']['tmp_name'], 'media/aud/prod/' . $fileName);
+                    $prod->audio = $fileName;
+                } else {
+                    return 1;
+                }
+            }
+            $prod->update();
+            return $prod;
+        }
+        return 2;
+    }
+
 }
