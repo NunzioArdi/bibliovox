@@ -10,7 +10,7 @@ use bibliovox\models\Mot;
 use bibliovox\models\Production;
 use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
-use Slim\Slim;
+use Slim\App as Slim;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
