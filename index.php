@@ -11,6 +11,8 @@ use bibliovox\models\Production;
 use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -42,7 +44,7 @@ $app->get('/compte', function () {
 
 
 //Dictionnaires
-$app->get('/dictionnaires', function () {
+$app->get('/dictionnaires', function (Request $req, Response $res, $args = []) {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
@@ -53,7 +55,7 @@ $app->get('/dictionnaires', function () {
 })->setName('dictionnaires');
 
 //Creation dictionnaire
-$app->get('/dictionnaire/create', function () {
+$app->get('/dictionnaire/create', function (Request $req, Response $res, $args = []) {
     echoHead('Nouveau dictionnaire');
 
     if (array_key_exists('err', $_GET))
@@ -83,7 +85,7 @@ $app->get('/dictionnaire/create', function () {
 FORM;
 })->setName('new_dictionnaire');
 
-$app->post('/dictionnaire/create/process', function () {
+$app->post('/dictionnaire/create/process', function (Request $req, Response $res, $args = []) {
 
     $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
 
@@ -95,7 +97,7 @@ $app->post('/dictionnaire/create/process', function () {
 })->setName('new_dictionnaire_process');
 
 //Accès à un dictionnaire
-$app->get('/dictionnaire/acces', function () {
+$app->get('/dictionnaire/acces', function (Request $req, Response $res, $args = []) {
     if (isset($_GET['id'])) {
         if ($_GET['id'] == -1) {
             echoHead('Tous les mots');
@@ -125,9 +127,9 @@ $app->get('/dictionnaire/acces', function () {
 
 
 //Mot du dictionnaire
-$app->get('/dictionnaire/acces/{idD}/{idM}/', function (int $idD, int $idM) {
-    $mot = Mot::getById($idM);
-    if ($mot != null && DicoContient::matchIDs($idM, $idD)) {
+$app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $res, $args = []) {
+    $mot = Mot::getById($args["idM"]);
+    if ($mot != null && DicoContient::matchIDs($args["idM"], $args["idD"])) {
         echoHead($mot->texte);
         ControleurMot::renderMot($mot);
     } else {
@@ -139,7 +141,7 @@ $app->get('/dictionnaire/acces/{idD}/{idM}/', function (int $idD, int $idM) {
 
 
 //Recueil
-$app->get('/recueil', function () {
+$app->get('/recueil', function (Request $req, Response $res, $args = []) {
     if (isset($_GET['id'])) {
         if (Recueil::exist($_GET['id'])) {
             $rec = Recueil::getById($_GET['id']);
@@ -161,7 +163,7 @@ $app->get('/recueil', function () {
     }
 })->setName('recueils');
 
-$app->get('/recueil/create', function () {
+$app->get('/recueil/create', function (Request $req, Response $res, $args = []) {
     echoHead('Nouveau recueil');
 
     if (array_key_exists('err', $_GET))
@@ -186,7 +188,7 @@ $app->get('/recueil/create', function () {
 FORM;
 })->setName('new_recueil');
 
-$app->post('/recueil/create/process', function () {
+$app->post('/recueil/create/process', function (Request $req, Response $res, $args = []) {
     $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
 
     if (is_int($res))
@@ -198,7 +200,7 @@ $app->post('/recueil/create/process', function () {
 
 
 //Productions
-$app->get('/production', function () {
+$app->get('/production', function (Request $req, Response $res, $args = []) {
 
     /* idU utilisé en attente de la fonction des comptes */
     $idU = 1;
@@ -225,7 +227,7 @@ $app->get('/production', function () {
 
 })->setName('productions');
 
-$app->get('/production/create', function () {
+$app->get('/production/create', function (Request $req, Response $res, $args = []) {
 
     /* Récupération temporaire de l'idU */
     $idU = $_GET['idU'];
@@ -261,7 +263,7 @@ FORM;
 
 })->setName('new_production');
 
-$app->post('/production/create/process', function () {
+$app->post('/production/create/process', function (Request $req, Response $res, $args = []) {
     echoHead("Création");
 
     /* Récupération temporaire de l'idU */
@@ -276,7 +278,7 @@ $app->post('/production/create/process', function () {
 
 })->setName('new_production_process');
 
-$app->get('/production/edit', function () {
+$app->get('/production/edit', function (Request $req, Response $res, $args = []) {
     echoHead("Édition");
     $idU = $_GET['idU'];
 
@@ -324,7 +326,7 @@ FORMBOT;
 
 })->setName('edit_production');
 
-$app->post('/production/edit/process', function () {
+$app->post('/production/edit/process', function (Request $req, Response $res, $args = []) {
     echoHead("Édition");
 
     /* Récupération temporaire de l'idU */
@@ -346,7 +348,7 @@ $app->post('/production/edit/process', function () {
 })->setName('edit_production_process');
 
 
-$app->get('/about', function () {
+$app->get('/about', function (Request $req, Response $res, $args = []) {
     echoHead('À propos');
     echo "<div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href='https://www.flaticon.com/authors/ddara' title='dDara'>dDara</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
