@@ -31,14 +31,14 @@ $app->get('/', function () {
     echo "<p>Bibli O’vox est un outil qui a pour but de favoriser le développement du langage oral dans un cadre scolaire. </p>";
     echo "<p>Ce système a une visée éducative, cela signifie que les principaux utilisateurs de ce système seront des élèves de maternelle et primaire dans un premier temps. Il faudra donc s’assurer de la simplicité d’utilisation. Le système doit combler un manque constaté par plusieurs enseignants, celui de la communication orale qu’il soit en classe ou à la maison. L’outil concernera tout élève rencontrant des difficultés pour s’exprimer en langue française dans un premier temps. Cependant il visera plus particulièrement les élèves allophones (le français n’étant pas leur langue maternelle) ou étrangers (ne communiquant pas forcément en français avec leur entourage). Un outil permettant d’exploiter le français à l’oral dans leur foyer pourrait alors se révéler profitable. En effet, les parents pourraient bénéficier de ce nouveau dispositif, puisque la vie orale en classe, ne peut être partagée avec un cahier du jour classique écrit. </p>";
     echo "<p>Bibli O’vox est donc un cahier de vie oral permettant un suivi des activités des enfants, et ce, jour après jour, que cela soit par les enfants pour constater leur progrès dans l’apprentissage de la langue française ou par les parents afin d’avoir un aperçu de la vie que mène leur enfant au sein de la classe durant la journée et qu’ils puissent eux aussi s’investir dans les devoirs de leur enfant. Cela renforcera le lien entre l’école et le foyer en partageant ce qui a été étudié en classe.</p>";
-})->name('home');
+})->setName('home');
 
 
 //Compte
 $app->get('/compte', function () {
     echoHead('Compte');
     echo "account";
-})->name('compte');
+})->setName('compte');
 
 
 //Dictionnaires
@@ -50,7 +50,7 @@ $app->get('/dictionnaires', function () {
 
     echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_dictionnaire") . "'>+</a>";
 
-})->name('dictionnaires');
+})->setName('dictionnaires');
 
 //Creation dictionnaire
 $app->get('/dictionnaire/create', function () {
@@ -81,7 +81,7 @@ $app->get('/dictionnaire/create', function () {
 <input class="bouton" type="submit" value="Valider">
 </form>
 FORM;
-})->name('new_dictionnaire');
+})->setName('new_dictionnaire');
 
 $app->post('/dictionnaire/create/process', function () {
 
@@ -92,7 +92,7 @@ $app->post('/dictionnaire/create/process', function () {
     else
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor("dictionnaire_acces") . "?id=$res->idD");
 
-})->name('new_dictionnaire_process');
+})->setName('new_dictionnaire_process');
 
 //Accès à un dictionnaire
 $app->get('/dictionnaire/acces', function () {
@@ -121,7 +121,7 @@ $app->get('/dictionnaire/acces', function () {
         }
     } else
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor('dictionnaires'));
-})->name('dictionnaire_acces');
+})->setName('dictionnaire_acces');
 
 
 //Mot du dictionnaire
@@ -135,7 +135,7 @@ $app->get('/dictionnaire/acces/:idD/:idM/', function (int $idD, int $idM) {
         echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
         echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
     }
-})->name('mot');
+})->setName('mot');
 
 
 //Recueil
@@ -159,7 +159,7 @@ $app->get('/recueil', function () {
 
         echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_recueil") . "'>+</a>";
     }
-})->name('recueils');
+})->setName('recueils');
 
 $app->get('/recueil/create', function () {
     echoHead('Nouveau recueil');
@@ -184,7 +184,7 @@ $app->get('/recueil/create', function () {
 <input class="bouton" type="submit" value="Valider">
 </form>
 FORM;
-})->name('new_recueil');
+})->setName('new_recueil');
 
 $app->post('/recueil/create/process', function () {
     $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
@@ -194,7 +194,7 @@ $app->post('/recueil/create/process', function () {
     else
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor("recueils") . "?id=$res->idR");
 
-})->name('new_recueil_process');
+})->setName('new_recueil_process');
 
 
 //Productions
@@ -223,7 +223,7 @@ $app->get('/production', function () {
     /* L'idU est temporairement passé dans le GET */
     echo "<div class='createNew'><a class='boutton' href='" . Slim::getInstance()->urlFor("new_production") . "?idU=$idU'>+</a>";
 
-})->name('productions');
+})->setName('productions');
 
 $app->get('/production/create', function () {
 
@@ -259,7 +259,7 @@ $app->get('/production/create', function () {
 </form>
 FORM;
 
-})->name('new_production');
+})->setName('new_production');
 
 $app->post('/production/create/process', function () {
     echoHead("Création");
@@ -274,7 +274,7 @@ $app->post('/production/create/process', function () {
     else
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor("productions") . "?id=$res->idP");
 
-})->name('new_production_process');
+})->setName('new_production_process');
 
 $app->get('/production/edit', function () {
     echoHead("Édition");
@@ -322,7 +322,7 @@ FORMBOT;
     } else
         Slim::getInstance()->redirect(Slim::getInstance()->urlFor('productions'));
 
-})->name('edit_production');
+})->setName('edit_production');
 
 $app->post('/production/edit/process', function () {
     echoHead("Édition");
@@ -343,7 +343,7 @@ $app->post('/production/edit/process', function () {
     }
 
 
-})->name('edit_production_process');
+})->setName('edit_production_process');
 
 
 $app->get('/about', function () {
@@ -357,7 +357,7 @@ $app->get('/about', function () {
     echo "<div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
-})->name('about');
+})->setName('about');
 
 
 function echoHead(string $titre)
