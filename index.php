@@ -100,9 +100,9 @@ $app->post('/dictionnaire/create/process', function (Request $req, Response $res
     $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
 
     if (is_int($res))
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_dictionnaire') . "?err=$res");
+        return $resp->withRedirect($GLOBALS["router"]->urlFor('new_dictionnaire') . "?err=$res");
     else
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("dictionnaire_acces") . "?id=$res->idD");
+        return $resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces") . "?id=$res->idD");
 
 })->setName('new_dictionnaire_process');
 
@@ -202,9 +202,9 @@ $app->post('/recueil/create/process', function (Request $req, Response $resp, $a
     $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
 
     if (is_int($res))
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_recueil') . "?err=$res");
+        return $resp->withRedirect($GLOBALS["router"]->urlFor('new_recueil') . "?err=$res");
     else
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("recueils") . "?id=$res->idR");
+        return $resp->withRedirect($GLOBALS["router"]->urlFor("recueils") . "?id=$res->idR");
 
 })->setName('new_recueil_process');
 
@@ -282,9 +282,9 @@ $app->post('/production/create/process', function (Request $req, Response $resp,
     $res = Production::createNew($_POST['nom'], $idU);
 
     if (is_int($res))
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('new_production') . "?err=$res&idU=$idU");
+        return $resp->withRedirect($GLOBALS["router"]->urlFor('new_production') . "?err=$res&idU=$idU");
     else
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor("productions") . "?id=$res->idP");
+        return $resp->withRedirect($GLOBALS["router"]->urlFor("productions") . "?id=$res->idP");
 
 })->setName('new_production_process');
 
@@ -332,7 +332,7 @@ FORMBOT;
         }
 
     } else
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('productions'));
+        return $resp->withRedirect($GLOBALS["router"]->urlFor('productions'));
 
 })->setName('edit_production');
 
@@ -347,11 +347,11 @@ $app->post('/production/edit/process', function (Request $req, Response $resp, $
         $res = Production::updateProd($idP, $_POST['nom'], $idU, $_POST['comm']);
 
         if (is_int($res))
-            Slim::getInstance()->redirect(Slim::getInstance()->urlFor('edit_productions') . "?err=$res");
+            return $resp->withRedirect($GLOBALS["router"]->urlFor('edit_productions') . "?err=$res");
         else
-            Slim::getInstance()->redirect(Slim::getInstance()->urlFor('productions') . "?id=$idP");
+            return $resp->withRedirect($GLOBALS["router"]->urlFor('productions') . "?id=$idP");
     } else {
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('productions'));
+        return $resp->withRedirect($GLOBALS["router"]->urlFor('productions'));
     }
 
 
