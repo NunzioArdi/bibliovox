@@ -54,7 +54,7 @@ $app->get('/compte', function () {
 
 
 //Dictionnaires
-$app->get('/dictionnaires', function (Request $req, Response $res, $args = []) {
+$app->get('/dictionnaires', function (Request $req, Response $resp, $args = []) {
     echoHead('Dictionnaires');
     echo "<h1>Les Dictionnaires</h1>";
     $dico = Dictionnaire::all();
@@ -65,7 +65,7 @@ $app->get('/dictionnaires', function (Request $req, Response $res, $args = []) {
 })->setName('dictionnaires');
 
 //Creation dictionnaire
-$app->get('/dictionnaire/create', function (Request $req, Response $res, $args = []) {
+$app->get('/dictionnaire/create', function (Request $req, Response $resp, $args = []) {
     echoHead('Nouveau dictionnaire');
 
     if (array_key_exists('err', $_GET))
@@ -95,7 +95,7 @@ $app->get('/dictionnaire/create', function (Request $req, Response $res, $args =
 FORM;
 })->setName('new_dictionnaire');
 
-$app->post('/dictionnaire/create/process', function (Request $req, Response $res, $args = []) {
+$app->post('/dictionnaire/create/process', function (Request $req, Response $resp, $args = []) {
 
     $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
 
@@ -107,7 +107,7 @@ $app->post('/dictionnaire/create/process', function (Request $req, Response $res
 })->setName('new_dictionnaire_process');
 
 //Accès à un dictionnaire
-$app->get('/dictionnaire/acces', function (Request $req, Response $res, $args = []) {
+$app->get('/dictionnaire/acces', function (Request $req, Response $resp, $args = []) {
     if (isset($_GET['id'])) {
         if ($_GET['id'] == -1) {
             echoHead('Tous les mots');
@@ -132,12 +132,12 @@ $app->get('/dictionnaire/acces', function (Request $req, Response $res, $args = 
             }
         }
     } else
-        Slim::getInstance()->redirect(Slim::getInstance()->urlFor('dictionnaires'));
+        return $resp->withRedirect($GLOBALS["router"]->urlFor('dictionnaires'));
 })->setName('dictionnaire_acces');
 
 
 //Mot du dictionnaire
-$app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $res, $args = []) {
+$app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $resp, $args = []) {
     $mot = Mot::getById($args["idM"]);
     if ($mot != null && DicoContient::matchIDs($args["idM"], $args["idD"])) {
         echoHead($mot->texte);
@@ -151,7 +151,7 @@ $app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $
 
 
 //Recueil
-$app->get('/recueil', function (Request $req, Response $res, $args = []) {
+$app->get('/recueil', function (Request $req, Response $resp, $args = []) {
     if (isset($_GET['id'])) {
         if (Recueil::exist($_GET['id'])) {
             $rec = Recueil::getById($_GET['id']);
@@ -173,7 +173,7 @@ $app->get('/recueil', function (Request $req, Response $res, $args = []) {
     }
 })->setName('recueils');
 
-$app->get('/recueil/create', function (Request $req, Response $res, $args = []) {
+$app->get('/recueil/create', function (Request $req, Response $resp, $args = []) {
     echoHead('Nouveau recueil');
 
     if (array_key_exists('err', $_GET))
@@ -198,7 +198,7 @@ $app->get('/recueil/create', function (Request $req, Response $res, $args = []) 
 FORM;
 })->setName('new_recueil');
 
-$app->post('/recueil/create/process', function (Request $req, Response $res, $args = []) {
+$app->post('/recueil/create/process', function (Request $req, Response $resp, $args = []) {
     $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
 
     if (is_int($res))
@@ -210,7 +210,7 @@ $app->post('/recueil/create/process', function (Request $req, Response $res, $ar
 
 
 //Productions
-$app->get('/production', function (Request $req, Response $res, $args = []) {
+$app->get('/production', function (Request $req, Response $resp, $args = []) {
 
     /* idU utilisé en attente de la fonction des comptes */
     $idU = 1;
@@ -237,7 +237,7 @@ $app->get('/production', function (Request $req, Response $res, $args = []) {
 
 })->setName('productions');
 
-$app->get('/production/create', function (Request $req, Response $res, $args = []) {
+$app->get('/production/create', function (Request $req, Response $resp, $args = []) {
 
     /* Récupération temporaire de l'idU */
     $idU = $_GET['idU'];
@@ -273,7 +273,7 @@ FORM;
 
 })->setName('new_production');
 
-$app->post('/production/create/process', function (Request $req, Response $res, $args = []) {
+$app->post('/production/create/process', function (Request $req, Response $resp, $args = []) {
     echoHead("Création");
 
     /* Récupération temporaire de l'idU */
@@ -288,7 +288,7 @@ $app->post('/production/create/process', function (Request $req, Response $res, 
 
 })->setName('new_production_process');
 
-$app->get('/production/edit', function (Request $req, Response $res, $args = []) {
+$app->get('/production/edit', function (Request $req, Response $resp, $args = []) {
     echoHead("Édition");
     $idU = $_GET['idU'];
 
@@ -336,7 +336,7 @@ FORMBOT;
 
 })->setName('edit_production');
 
-$app->post('/production/edit/process', function (Request $req, Response $res, $args = []) {
+$app->post('/production/edit/process', function (Request $req, Response $resp, $args = []) {
     echoHead("Édition");
 
     /* Récupération temporaire de l'idU */
@@ -358,7 +358,7 @@ $app->post('/production/edit/process', function (Request $req, Response $res, $a
 })->setName('edit_production_process');
 
 
-$app->get('/about', function (Request $req, Response $res, $args = []) {
+$app->get('/about', function (Request $req, Response $resp, $args = []) {
     echoHead('À propos');
     echo "<div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
     echo "<div>Icons made by <a href='https://www.flaticon.com/authors/ddara' title='dDara'>dDara</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>";
