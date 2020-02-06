@@ -3,16 +3,13 @@
 
 namespace bibliovox\controllers;
 
-
-use Slim\Slim;
-
 class ControleurProduction
 {
     static function renderProductions($prods)
     {
         if ($prods != null)
             foreach ($prods as $r) {
-                echo "<a href ='" . Slim::getInstance()->urlFor('productions') . "?id=$r->idP'><h2>$r->nomP</h2></a>";
+                echo "<a href ='" . $GLOBALS["router"]->urlFor('productions') . "?id=$r->idP'><h2>$r->nomP</h2></a>";
             }
     }
 
