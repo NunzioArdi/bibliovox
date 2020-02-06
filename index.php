@@ -11,6 +11,7 @@ use bibliovox\models\Production;
 use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
+use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -23,7 +24,16 @@ $db->addConnection(parse_ini_file('src/conf/conf.ini'));
 $db->setAsGlobal();
 $db->bootEloquent();
 
-$app = new Slim();
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$c = new Container($configuration);
+$app = new Slim($c);
+global $router;
+$router = $app->getContainer()->get('router');
 
 
 //Accueil
