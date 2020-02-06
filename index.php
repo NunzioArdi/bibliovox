@@ -60,7 +60,7 @@ $app->get('/dictionnaires', function (Request $req, Response $res, $args = []) {
     $dico = Dictionnaire::all();
     ControleurDictionnaire::renderDictionnaires($dico);
 
-    echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_dictionnaire") . "'>+</a>";
+    echo "<div class='createNew'><a href='" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "'>+</a>";
 
 })->setName('dictionnaires');
 
@@ -79,7 +79,7 @@ $app->get('/dictionnaire/create', function (Request $req, Response $res, $args =
         }
 
     echo "<h1>Créer un nouveau dictionnaire</h1>";
-    $path = Slim::getInstance()->urlFor("new_dictionnaire_process");
+    $path = $GLOBALS["router"]->urlFor("new_dictionnaire_process");
 
     echo <<<FORM
 <form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
@@ -117,7 +117,7 @@ $app->get('/dictionnaire/acces', function (Request $req, Response $res, $args = 
             $mots = Mot::allAlpha();
 
             foreach ($mots as $m) {
-                echo "<h2><a href='" . Slim::getInstance()->urlFor("mot", ["idD" => -1, "idM" => $m->idM]) . "'>$m->texte</a></h2>";
+                echo "<h2><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => -1, "idM" => $m->idM]) . "'>$m->texte</a></h2>";
             }
         } else {
             $dico = Dictionnaire::getId($_GET['id']);
@@ -128,7 +128,7 @@ $app->get('/dictionnaire/acces', function (Request $req, Response $res, $args = 
             } else {
                 echoHead('');
                 echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
-                echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'><h1><- Retour</h1></a>";
+                echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'><h1><- Retour</h1></a>";
             }
         }
     } else
@@ -145,7 +145,7 @@ $app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $
     } else {
         echoHead('ERREUR');
         echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
-        echo "<a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
+        echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
     }
 })->setName('mot');
 
@@ -169,7 +169,7 @@ $app->get('/recueil', function (Request $req, Response $res, $args = []) {
 
         ControleurRecueil::renderRecueils($rec);
 
-        echo "<div class='createNew'><a href='" . Slim::getInstance()->urlFor("new_recueil") . "'>+</a>";
+        echo "<div class='createNew'><a href='" . $GLOBALS["router"]->urlFor("new_recueil") . "'>+</a>";
     }
 })->setName('recueils');
 
@@ -184,7 +184,7 @@ $app->get('/recueil/create', function (Request $req, Response $res, $args = []) 
         }
 
     echo "<h1>Créer un nouveau recueil</h1>";
-    $path = Slim::getInstance()->urlFor("new_recueil_process");
+    $path = $GLOBALS["router"]->urlFor("new_recueil_process");
 
     echo <<<FORM
 <form id='new_recueil' method='post' action='$path' enctype="multipart/form-data">
@@ -222,7 +222,7 @@ $app->get('/production', function (Request $req, Response $res, $args = []) {
             echoHead($prod->nomP);
             ControleurProduction::renderProduction($prod);
             //L'idU est stocké en get temporairement (jusqu'à la gestion du compte)
-            echo "<a class='boutton' href='" . Slim::getInstance()->urlFor("edit_production") . "?idP=$idP&idU=$idU'>Editer</a>";
+            echo "<a class='boutton' href='" . $GLOBALS["router"]->urlFor("edit_production") . "?idP=$idP&idU=$idU'>Editer</a>";
             exit();
         } else
             echo "<div class='erreur'>Recueil inconnu.</div>";
@@ -233,7 +233,7 @@ $app->get('/production', function (Request $req, Response $res, $args = []) {
     ControleurProduction::renderProductions($prods);
 
     /* L'idU est temporairement passé dans le GET */
-    echo "<div class='createNew'><a class='boutton' href='" . Slim::getInstance()->urlFor("new_production") . "?idU=$idU'>+</a>";
+    echo "<div class='createNew'><a class='boutton' href='" . $GLOBALS["router"]->urlFor("new_production") . "?idU=$idU'>+</a>";
 
 })->setName('productions');
 
@@ -258,7 +258,7 @@ $app->get('/production/create', function (Request $req, Response $res, $args = [
         }
 
     echo "<h1>Créer une nouvelle production</h1>";
-    $path = Slim::getInstance()->urlFor("new_production_process") . "?idU=$idU";
+    $path = $GLOBALS["router"]->urlFor("new_production_process") . "?idU=$idU";
 
     echo <<<FORM
 <form id='new_production' method='post' action='$path' enctype="multipart/form-data">
@@ -309,7 +309,7 @@ $app->get('/production/edit', function (Request $req, Response $res, $args = [])
     if (isset($_GET['idP'])) {
         $idP = $_GET['idP'];
         if (Production::exist($idP, $idU)) {
-            $url = Slim::getInstance()->urlFor("edit_production_process") . "?idP=$idP&idU=$idU";
+            $url = $GLOBALS["router"]->urlFor("edit_production_process") . "?idP=$idP&idU=$idU";
             $prod = Production::getById($idP);
             echo <<<FORMTOP
 <form id='edit_production' method='post' action='$url' enctype="multipart/form-data">
@@ -387,12 +387,12 @@ HEAD;
     echo "<body>\n";
 
     echo "<nav><ul>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img class ='icn' src='" . PATH . "/media/img/icn/logo.png' alt='Logo'></a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('home') . "'><img src='" . PATH . "/media/img/icn/home.png' alt='Accueil'>Accueil</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('dictionnaires') . "'><img src='" . PATH . "/media/img/icn/dico.png' alt='Dictionnaires'>Dictionnaires</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('recueils') . "'><img src='" . PATH . "/media/img/icn/recueil.png' alt='Receuils'>Recueils</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('productions') . "'><img src='" . PATH . "/media/img/icn/production.png' alt='Productions'>Productions</a></li>";
-    echo "<li><a href='" . Slim::getInstance()->urlFor('compte') . "'><img src='" . PATH . "/media/img/icn/compte.png' alt='Compte'>Compte</a></li>";
+    echo "<li><a href='" . $GLOBALS["router"]->urlFor('home') . "'><img class ='icn' src='" . PATH . "/media/img/icn/logo.png' alt='Logo'></a></li>";
+    echo "<li><a href='" . $GLOBALS["router"]->urlFor('home') . "'><img src='" . PATH . "/media/img/icn/home.png' alt='Accueil'>Accueil</a></li>";
+    echo "<li><a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'><img src='" . PATH . "/media/img/icn/dico.png' alt='Dictionnaires'>Dictionnaires</a></li>";
+    echo "<li><a href='" . $GLOBALS["router"]->urlFor('recueils') . "'><img src='" . PATH . "/media/img/icn/recueil.png' alt='Receuils'>Recueils</a></li>";
+    echo "<li><a href='" . $GLOBALS["router"]->urlFor('productions') . "'><img src='" . PATH . "/media/img/icn/production.png' alt='Productions'>Productions</a></li>";
+    echo "<li><a href='" . $GLOBALS["router"]->urlFor('compte') . "'><img src='" . PATH . "/media/img/icn/compte.png' alt='Compte'>Compte</a></li>";
     echo "</ul></nav>";
 
 }
