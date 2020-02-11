@@ -4,6 +4,7 @@ use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
+use bibliovox\controllers\ControlleurHome;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
@@ -17,8 +18,10 @@ use Slim\Http\Response;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-define('PATH', parse_ini_file('src/conf/conf_path.ini')['path']);
-
+//define('PATH', parse_ini_file('src/conf/conf_path.ini')['path']);
+global $PATH;
+$PATH = parse_ini_file('src/conf/conf_path.ini')['path'];
+echo $PATH;
 $db = new DB();
 $db->addConnection(parse_ini_file('src/conf/conf.ini'));
 $db->setAsGlobal();
@@ -38,15 +41,12 @@ $router = $app->getContainer()->get('router');
 
 //Accueil
 $app->get('/', function () {
-    echoHead('Accueil');
-    echo "<p>Bibli O’vox a été imaginé par Christophe Buck, Sophie Deleys et Marie Lequèvre dans le cadre d’un master dans le domaine des sciences de l’éducation. Notre production s’appuiera sur les propositions résultant de ce travail. </p>";
-    echo "<p>Bibli O’vox est un outil qui a pour but de favoriser le développement du langage oral dans un cadre scolaire. </p>";
-    echo "<p>Ce système a une visée éducative, cela signifie que les principaux utilisateurs de ce système seront des élèves de maternelle et primaire dans un premier temps. Il faudra donc s’assurer de la simplicité d’utilisation. Le système doit combler un manque constaté par plusieurs enseignants, celui de la communication orale qu’il soit en classe ou à la maison. L’outil concernera tout élève rencontrant des difficultés pour s’exprimer en langue française dans un premier temps. Cependant il visera plus particulièrement les élèves allophones (le français n’étant pas leur langue maternelle) ou étrangers (ne communiquant pas forcément en français avec leur entourage). Un outil permettant d’exploiter le français à l’oral dans leur foyer pourrait alors se révéler profitable. En effet, les parents pourraient bénéficier de ce nouveau dispositif, puisque la vie orale en classe, ne peut être partagée avec un cahier du jour classique écrit. </p>";
-    echo "<p>Bibli O’vox est donc un cahier de vie oral permettant un suivi des activités des enfants, et ce, jour après jour, que cela soit par les enfants pour constater leur progrès dans l’apprentissage de la langue française ou par les parents afin d’avoir un aperçu de la vie que mène leur enfant au sein de la classe durant la journée et qu’ils puissent eux aussi s’investir dans les devoirs de leur enfant. Cela renforcera le lien entre l’école et le foyer en partageant ce qui a été étudié en classe.</p>";
+    $cont = new ControlleurHome();
+    $cont ->index();
 })->setName('home');
 
 
-//Compte
+//TODO Compte
 $app->get('/compte', function () {
     echoHead('Compte');
     echo "account";
@@ -55,13 +55,8 @@ $app->get('/compte', function () {
 
 //Dictionnaires
 $app->get('/dictionnaires', function (Request $req, Response $resp, $args = []) {
-    echoHead('Dictionnaires');
-    echo "<h1>Les Dictionnaires</h1>";
-    $dico = Dictionnaire::all();
-    ControleurDictionnaire::renderDictionnaires($dico);
-
-    echo "<div class='createNew'><a href='" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "'>+</a>";
-
+    $cont = new ControleurDictionnaire();
+    $cont -> allDico();
 })->setName('dictionnaires');
 
 //Creation dictionnaire
@@ -381,8 +376,8 @@ function echoHead(string $titre)
 <meta charset="utf-8"/>
 <title>Bibli O'Vox - $titre</title>\n
 HEAD;
-    echo "<link rel='stylesheet' href='" . PATH . "/web/css/bibliovox.css'>\n";
-    echo "<link rel='icon' href='" . PATH . "/media/img/icn/logo.png'>\n";
+    echo "<link rel='stylesheet' href='" . $GLOBALS["PATH"]. "/web/css/bibliovox.css'>\n";
+    echo "<link rel='icon' href='" . $GLOBALS["PATH"] . "/media/img/icn/logo.png'>\n";
     echo "</head>\n";
     echo "<body>\n";
 
@@ -399,5 +394,5 @@ HEAD;
 
 $app->run();
 
-echo "</body>";
-echo "</html>";
+//echo "</body>";
+//echo "</html>";

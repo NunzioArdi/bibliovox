@@ -5,7 +5,9 @@ namespace bibliovox\controllers;
 
 
 use bibliovox\models\DicoContient;
+use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
+use bibliovox\views\VueDico;
 
 class ControleurDictionnaire
 {
@@ -20,16 +22,14 @@ class ControleurDictionnaire
         }
     }
 
-    public static function renderDictionnaires($dictionnaires)
+    /**
+     * Récupère la liste complète de tout les dictionnaires
+     */
+    public function allDico()
     {
-        echo "<div class='dico'><a href='" . $GLOBALS["router"]->urlFor('dictionnaire_acces') . "?id=-1'><img src='" . PATH . "/media/img/img/dico/alpha.png'><h2>Dictionnaire alphabétique</h2></a></div>";
-
-        foreach ($dictionnaires as $d) {
-            if ($d->imageD != null)
-                echo "<div class='dico'><a href='" . $GLOBALS["router"]->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='" . PATH . "/media/img/img/dico/$d->imageD'><h2>$d->nomD</h2></a></div>";
-            else
-                echo "<div class='dico'><a href='" . $GLOBALS["router"]->urlFor('dictionnaire_acces') . "?id=$d->idD'><img src='" . PATH . "/media/img/img/dico/dico.png'><h2>$d->nomD</h2></a></div>";
-        }
+        $dico = Dictionnaire::all();
+        $vue = new VueDico($dico);
+        $vue->views('all');
     }
 
 }
