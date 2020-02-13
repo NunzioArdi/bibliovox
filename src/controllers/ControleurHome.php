@@ -6,7 +6,7 @@ namespace bibliovox\controllers;
 
 use bibliovox\views\HomeView;
 
-class ControlleurHome extends Controlleur
+class ControleurHome extends Controleur
 {
 
     public function index(){

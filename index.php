@@ -4,10 +4,8 @@ use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
-use bibliovox\controllers\ControlleurHome;
-use bibliovox\models\DicoContient;
+use bibliovox\controllers\ControleurHome;
 use bibliovox\models\Dictionnaire;
-use bibliovox\models\Mot;
 use bibliovox\models\Production;
 use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -41,8 +39,8 @@ $router = $app->getContainer()->get('router');
 
 //Accueil
 $app->get('/', function () {
-    $cont = new ControlleurHome();
-    $cont ->index();
+    $cont = new ControleurHome();
+    $cont->index();
 })->setName('home');
 
 
@@ -54,42 +52,29 @@ $app->get('/compte', function () {
 
 
 //Dictionnaires
-$app->get('/dictionnaires', function (Request $req, Response $resp, $args = []) {
+$app->get('/dictionnaires', function () {
     $cont = new ControleurDictionnaire();
-    $cont -> allDico();
+    $cont->allDico();
 })->setName('dictionnaires');
 
 //Creation dictionnaire
 $app->get('/dictionnaire/create', function (Request $req, Response $resp, $args = []) {
-    echoHead('Nouveau dictionnaire');
-
-    if (array_key_exists('err', $_GET))
-        switch ($_GET['err']) {
-            case 1:
-                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
-                break;
-            default:
-                echo "<div class='erreur'>Erreur inconnue</div>";
-                break;
-        }
-
-    echo "<h1>Créer un nouveau dictionnaire</h1>";
-    $path = $GLOBALS["router"]->urlFor("new_dictionnaire_process");
-
-    echo <<<FORM
-<form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
-<label>Nom du dictionnaire</label>
-<input type='text' name='nom' placeholder='Nom' required>
-<label>Description</label>
-<textarea name='description' placeholder='Description' lang='fr' required></textarea>
-<label>Illustration du dictionnaire (facultatif)</label>
-<input type='file' name='image' accept="image/*">
-<input class='bouton' type="reset" value="Annuler">
-<input class="bouton" type="submit" value="Valider">
-</form>
-FORM;
+    $cont = new ControleurDictionnaire();
+    $cont->createDico();
+    /* //TODO a mettre (dna sune class erreur?)
+        if (array_key_exists('err', $_GET))
+            switch ($_GET['err']) {
+                case 1:
+                    echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
+                    break;
+                default:
+                    echo "<div class='erreur'>Erreur inconnue</div>";
+                    break;
+            }
+    */
 })->setName('new_dictionnaire');
 
+//TODO MVC
 $app->post('/dictionnaire/create/process', function (Request $req, Response $resp, $args = []) {
 
     $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
@@ -102,74 +87,39 @@ $app->post('/dictionnaire/create/process', function (Request $req, Response $res
 })->setName('new_dictionnaire_process');
 
 //Accès à un dictionnaire
-$app->get('/dictionnaire/acces', function (Request $req, Response $resp, $args = []) {
-    if (isset($_GET['id'])) {
-        if ($_GET['id'] == -1) {
-            echoHead('Tous les mots');
-            echo "<h1>Tous les mots par ordre alphabétique</h1>";
-            //On veut l'image?
-            //echo "<img src='".PATH."/media/img/img/dico/alpha.png'>";
-            $mots = Mot::allAlpha();
-
-            foreach ($mots as $m) {
-                echo "<h2><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => -1, "idM" => $m->idM]) . "'>$m->texte</a></h2>";
-            }
-        } else {
-            $dico = Dictionnaire::getId($_GET['id']);
-
-            if ($dico != null) {
-                echoHead("$dico->nomD");
-                ControleurDictionnaire::renderDictionnaire($dico);
-            } else {
-                echoHead('');
-                echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
-                echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'><h1><- Retour</h1></a>";
-            }
-        }
-    } else
-        return $resp->withRedirect($GLOBALS["router"]->urlFor('dictionnaires'));
+$app->get('/dictionnaire/acces/{idD}[/]', function (Request $req, Response $resp, $args) {
+    ;
+    if ($args["idD"] == 0) {                          // dico alphabet
+        $cont = new ControleurDictionnaire();
+        $cont->getDicoAlphabet();
+    } elseif ($args["idD"] > 0) {                      // dico thème
+        $cont = new ControleurDictionnaire();
+        $cont->getDicoTheme($args["idD"]);
+    }
 })->setName('dictionnaire_acces');
 
 
 //Mot du dictionnaire
 $app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $resp, $args = []) {
-    $mot = Mot::getById($args["idM"]);
-    if ($mot != null && DicoContient::matchIDs($args["idM"], $args["idD"])) {
-        echoHead($mot->texte);
-        ControleurMot::renderMot($mot);
-    } else {
-        echoHead('ERREUR');
-        echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
-        echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
-    }
+    $cont = new ControleurMot();
+    $cont->getMotDico($args["idM"], $args["idD"]);
 })->setName('mot');
 
 
-//Recueil
-$app->get('/recueil', function (Request $req, Response $resp, $args = []) {
-    if (isset($_GET['id'])) {
-        if (Recueil::exist($_GET['id'])) {
-            $rec = Recueil::getById($_GET['id']);
-            echoHead($rec->nomR);
-            ControleurRecueil::renderRecueil($rec, 1);
-        } else {
-            echoHead('Recueils - Erreur');
-            echo "<div class='erreur'>Recueil inconnu.</div>";
-        }
+//Recueil //TODO MVC
+$app->get('/recueil[/[{id}]]', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurRecueil();
+    if (isset($args["id"]) && is_numeric($args["id"])) {
+        $cont->recueil($args["id"]);
     } else {
-        echoHead('Recueils');
-        echo "<h1>Tous les recueils</h1>";
-
-        $rec = Recueil::all();
-
-        ControleurRecueil::renderRecueils($rec);
-
-        echo "<div class='createNew'><a href='" . $GLOBALS["router"]->urlFor("new_recueil") . "'>+</a>";
+        $cont->allRecueil();
     }
 })->setName('recueils');
 
-$app->get('/recueil/create', function (Request $req, Response $resp, $args = []) {
-    echoHead('Nouveau recueil');
+$app->get('/recueil/create/', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurRecueil();
+    $cont->creerRecueil();
+ /*   echoHead('Nouveau recueil');
 
     if (array_key_exists('err', $_GET))
         switch ($_GET['err']) {
@@ -177,20 +127,7 @@ $app->get('/recueil/create', function (Request $req, Response $resp, $args = [])
                 echo "<div class='erreur'>Erreur inconnue</div>";
                 break;
         }
-
-    echo "<h1>Créer un nouveau recueil</h1>";
-    $path = $GLOBALS["router"]->urlFor("new_recueil_process");
-
-    echo <<<FORM
-<form id='new_recueil' method='post' action='$path' enctype="multipart/form-data">
-<label>Nom du recueil</label>
-<input type='text' name='nom' placeholder='Nom' required>
-<label>Texte</label>
-<textarea name='texte' class='cite' placeholder='Texte' lang='fr' required></textarea>
-<input class='bouton' type="reset" value="Annuler">
-<input class="bouton" type="submit" value="Valider">
-</form>
-FORM;
+*/
 })->setName('new_recueil');
 
 $app->post('/recueil/create/process', function (Request $req, Response $resp, $args = []) {
@@ -376,7 +313,7 @@ function echoHead(string $titre)
 <meta charset="utf-8"/>
 <title>Bibli O'Vox - $titre</title>\n
 HEAD;
-    echo "<link rel='stylesheet' href='" . $GLOBALS["PATH"]. "/web/css/bibliovox.css'>\n";
+    echo "<link rel='stylesheet' href='" . $GLOBALS["PATH"] . "/web/css/bibliovox.css'>\n";
     echo "<link rel='icon' href='" . $GLOBALS["PATH"] . "/media/img/icn/logo.png'>\n";
     echo "</head>\n";
     echo "<body>\n";

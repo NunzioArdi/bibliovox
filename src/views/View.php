@@ -45,7 +45,7 @@ abstract class view {
     /**
      * Affiche le contenue de la page
      */
-    public function afficher(){
+    protected function afficher(){
         echo <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
@@ -61,7 +61,7 @@ abstract class view {
             {$this->showNav()}
         </ul>
     </nav>
-    $this->content
+$this->content
 </body>
 </html>
 HTML;

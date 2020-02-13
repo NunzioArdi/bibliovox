@@ -17,10 +17,17 @@ class Recueil extends Model
     protected $primaryKey = 'idR';
     protected $table = 'recueil';
 
-    static function exist(int $idR)
+    /**
+     * Test si un id de recueil existe
+     *
+     * @param int $idR id recueil
+     * @return bool true si recueiil existe
+     */
+    static function exist(int $idR) : bool
     {
         return (Recueil::where("idR", "=", "$idR")->first() != null);
     }
+
 
     static function getById(int $idR)
     {

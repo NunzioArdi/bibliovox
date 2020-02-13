@@ -6,7 +6,7 @@ namespace bibliovox\controllers;
 
 use Slim\App;
 
-abstract class Controlleur
+abstract class Controleur
 {
     protected $app;
 
