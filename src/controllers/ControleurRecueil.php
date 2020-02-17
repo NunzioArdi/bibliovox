@@ -49,5 +49,15 @@ class ControleurRecueil
     {
         $vue =  new VueRecueil();
         $vue->views('creer');
+
+        /*   echoHead('Nouveau recueil');
+
+   if (array_key_exists('err', $_GET))
+       switch ($_GET['err']) {
+           default:
+               echo "<div class='erreur'>Erreur inconnue</div>";
+               break;
+       }
+*/
     }
 }

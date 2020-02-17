@@ -27,7 +27,13 @@ class Production extends Model
         return Production::where("idU", "=", "$idU")->get();
     }
 
-    public static function exist($idP, $idU)
+    /**
+     * Test si une production donné pour un utilisateur donné existe
+     * @param $idP int l'id de la production
+     * @param $idU int l'id utilisateur
+     * @return bool true si existe
+     */
+    public static function exist(int $idP,int $idU)
     {
         return Production::where("idP", "=", "$idP")->where("idU", "=", "$idU")->first() != null;
     }

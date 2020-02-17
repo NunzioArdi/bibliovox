@@ -41,6 +41,18 @@ class ControleurDictionnaire
         //TODO accès en focntion des types de compte
         $vue = new VueDico();
         $vue->views('createDico');
+
+        /* //TODO a mettre (dna sune class erreur?)
+    if (array_key_exists('err', $_GET))
+        switch ($_GET['err']) {
+            case 1:
+                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
+                break;
+            default:
+                echo "<div class='erreur'>Erreur inconnue</div>";
+                break;
+        }
+*/
     }
 
     public function getDicoAlphabet()

@@ -40,6 +40,11 @@ abstract class view {
         ];
     }
 
+    /**
+     * Sélectionne la vue à afficher. Dois appeler la fonction afficher à la fin.
+     * @param string $view le nom de la vue
+     * @return void
+     */
     public abstract function views(string $view);
 
     /**

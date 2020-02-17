@@ -13,4 +13,9 @@ class ControleurHome extends Controleur
         $view = new HomeView();
         $view->views('index');
     }
+
+    public function about(){
+        $view = new HomeView();
+        $view->views('about');
+    }
 }
