@@ -7,7 +7,7 @@ namespace bibliovox\views;
  * Afficheur des productions individuel des utilisateurs.
  * @package bibliovox\views
  */
-class VueProduction extends View
+class VueProduction extends Vue
 {
 
     /**
@@ -72,16 +72,16 @@ class VueProduction extends View
         $this->content .= "</audio></div>";
 
         //L'idU est stocké en get temporairement (jusqu'à la gestion du compte)
-        $this->content .= "<a class=\"boutton\" href=\" ". $GLOBALS["router"]->urlFor("edit_production", $data = ['idP' => $prod->idP]) . " \">Editer</a>";
+        $this->content .= "<a class=\"boutton\" href=\" " . $GLOBALS["router"]->urlFor("edit_production", $data = ['idP' => $prod->idP]) . " \">Editer</a>";
     }
 
     private function editProd()
     {
         $prod = $this->res[0];
         $url = $this->res[1];
-        $this->title="Édition";
+        $this->title = "Édition";
 
-        $this->content.= <<<END
+        $this->content .= <<<END
     <form id="edit_production" method="post" action="$url" enctype="multipart/form-data">
         <label>Titre de la production</label>
         <input type="text" name="nom" placeholder="Titre" value="$prod->nomP">
@@ -98,12 +98,12 @@ END;
 
     private function create()
     {
-        $this->title='Nouvelle production';
-        $this->content.= "<h1>Créer une nouvelle production</h1>";
+        $this->title = 'Nouvelle production';
+        $this->content .= "<h1>Créer une nouvelle production</h1>";
 
         $path = $GLOBALS["router"]->urlFor("new_production_process") . "?idU=$this->res";
 
-        $this->content.= <<<FORM
+        $this->content .= <<<FORM
 <form id='new_production' method='post' action='$path' enctype="multipart/form-data">
 <label>Titre de la production</label>
 <input type='text' name='nom' placeholder='Titre' required>

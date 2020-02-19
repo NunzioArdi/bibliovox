@@ -3,14 +3,15 @@
 namespace bibliovox\views;
 
 
-class VueCompte extends View{
+class VueCompte extends Vue
+{
 
     /**
      * @inheritDoc
      */
     public function views(string $view)
     {
-        switch ($view){
+        switch ($view) {
             case 'compte':
                 $this->compte();
                 break;
@@ -22,7 +23,7 @@ class VueCompte extends View{
 
     private function compte()
     {
-        $this->title='Compte';
-        $this->content.="account";
+        $this->title = 'Compte';
+        $this->content .= "account";
     }
 }

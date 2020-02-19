@@ -4,7 +4,7 @@
 namespace bibliovox\views;
 
 
-class VueMot extends View
+class VueMot extends Vue
 {
 
     public function views(string $view)
@@ -30,11 +30,11 @@ class VueMot extends View
         $this->content .= "<div class = \"mot\">";
         $this->content .= "<h1>$texte</h1>";
         if ($mot->image != null)
-            $this->content .= "<img src=\"{$GLOBALS["PATH"]}/media/img/img/mot/" . $mot->image . "\"  alt=\"img\">";
+            $this->content .= "<img src=\" " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "\"  alt=\"img\">";
 
         if ($mot->audio != null) {
             $this->content .= "<audio controls>";
-            $this->content .= "<source src=\" {$GLOBALS["PATH"]}/media/aud/dico/" . $mot->audio . "\" type=\"audio/mp3\">";
+            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/media/aud/dico/" . $mot->audio . "\" type=\"audio/mp3\">";
             $this->content .= "</audio></div>";
         } else {
             $this->content .= "<h2>Enregistre toi !</h2>";

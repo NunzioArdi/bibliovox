@@ -4,7 +4,7 @@
 namespace bibliovox\views;
 
 
-class VueRecueil extends View
+class VueRecueil extends Vue
 {
     public function views(string $view)
     {
@@ -52,19 +52,19 @@ class VueRecueil extends View
         $this->content = "<h1>Tous les recueils</h1>";
         if ($this->res != null)
             foreach ($this->res as $r) {
-                $this->content .= "<a href =\"{$GLOBALS["router"]->urlFor('recueils')}$r->idR\"><h2>$r->nomR</h2></a>";
+                $this->content .= "<a href =\"" . $GLOBALS["router"]->urlFor('recueils') . "$r->idR\"><h2>$r->nomR</h2></a>";
             }
-        $this->content .= "<div class=\"createNew\"><a href=\" {$GLOBALS["router"]->urlFor("new_recueil")}  \">Nouveau Recueil</a>";
+        $this->content .= "<div class=\"createNew\"><a href=\" " . $GLOBALS["router"]->urlFor("new_recueil") . "  \">Nouveau Recueil</a>";
     }
 
     private function create()
     {
-        $this->title="Nouveau recueil";
+        $this->title = "Nouveau recueil";
 
-        $this->content.= "<h1>Créer un nouveau recueil</h1>";
+        $this->content .= "<h1>Créer un nouveau recueil</h1>";
         $path = $GLOBALS["router"]->urlFor("new_recueil_process");
 
-        $this->content.= <<<FORM
+        $this->content .= <<<FORM
 <form id='new_recueil' method='post' action='$path' enctype="multipart/form-data">
 <label>Nom du recueil</label>
 <input type='text' name='nom' placeholder='Nom' required>

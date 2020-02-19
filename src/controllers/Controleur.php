@@ -3,19 +3,21 @@
 
 namespace bibliovox\controllers;
 
-
-use Slim\App;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 abstract class Controleur
 {
-    protected $app;
 
-    /**
-     * controlleur constructor.
-     * @param App $app Object slim injecté dans le controlleur
-     */
-    public function __construct($app = NULL)
+
+    protected $req;
+    protected $resp;
+    protected $args;
+
+    public function __construct(Request $req = null, Response $resp = null, $args = null)
     {
-        $this->app=$app;
+        $this->req=$req;
+        $this->resp=$resp;
+        $this->args=$args;
     }
 }

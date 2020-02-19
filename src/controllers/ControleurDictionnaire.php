@@ -1,30 +1,24 @@
 <?php
 
-
 namespace bibliovox\controllers;
-
 
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\views\VueDico;
-use Illuminate\Support\Facades\View;
+use bibliovox\views\VueErreur;
+use Slim\Http\Response;
 
-class ControleurDictionnaire
+/**
+ * Controleur des dictionnaires
+ * @package bibliovox\controllers
+ */
+class ControleurDictionnaire extends Controleur
 {
-    static function renderDictionnaire($dico) {
-        echo "<h1>Accès au dictionnaire <i>$dico->nomD</i></h1>";
-        //On veut l'image ?
-        //echo "<img src='".PATH."/media/img/img/dico/$dico->imageD'>";
-        $mots = DicoContient::motContenuDico($_GET['id']);
-        foreach ($mots as $m) {
-            $texte = Mot::getById($m->idM)->texte;
-            echo "<h2><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $dico->idD, 'idM' => $m->idM]) . "'>$texte</a></h2>";
-        }
-    }
 
     /**
-     * Récupère la liste complète de tout les dictionnaires
+     * Accès à tous les dictionnaires
+     * @return void
      */
     public function allDico()
     {
@@ -34,38 +28,32 @@ class ControleurDictionnaire
     }
 
     /**
-     * Appelle la vue de création de dictionnaire en fonction des autorisations
+     * Accès à la création des dictionnaires
+     * @return void
+     * @todo Accès à cette fonctionnalité en fonction des privilège du compte
      */
     public function createDico()
     {
-        //TODO accès en focntion des types de compte
         $vue = new VueDico();
         $vue->views('createDico');
-
-        /* //TODO a mettre (dna sune class erreur?)
-    if (array_key_exists('err', $_GET))
-        switch ($_GET['err']) {
-            case 1:
-                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
-                break;
-            default:
-                echo "<div class='erreur'>Erreur inconnue</div>";
-                break;
-        }
-*/
     }
 
+    /**
+     * Accès au dictionnaire alphabétique
+     * @return void
+     */
     public function getDicoAlphabet()
     {
-
-        //On veut l'image?
-        //echo "<img src='".PATH."/media/img/img/dico/alpha.png'>";
         $mots = Mot::allAlpha();
         $vue = new VueDico($mots);
         $vue->views('alphabet');
-
     }
 
+    /**
+     * Accès au dictionnaire thématique
+     * @param int $idDico l'id du thème
+     * @return void
+     */
     public function getDicoTheme(int $idDico)
     {
         $dico = Dictionnaire::getId($idDico);
@@ -79,11 +67,26 @@ class ControleurDictionnaire
             $vue = new VueDico($rep);
             $vue->views("theme");
         } else {
-            //TODO erreur
-            echoHead('');
-            echo "<div class='erreur'>Ce dictionnaire n'existe pas.</div>";
-            echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'><h1><- Retour</h1></a>";
+            $err = new VueErreur();
+            $err->views('getDico');
         }
+    }
+
+    /**
+     * Traitement des informations de la création d'un dictionnaire
+     * @return Response réponse slim
+     */
+    public function processCreate() : Response
+    {
+        $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
+
+        if (is_int($res)) {
+            $err = new VueErreur([$res]);
+            $err->views('createDico');
+            return $this->resp->withStatus(500);
+        }
+        else
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces") . "$res->idD");
     }
 
 }

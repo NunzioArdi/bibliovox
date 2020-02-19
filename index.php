@@ -6,9 +6,6 @@ use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\controllers\ControleurHome;
-use bibliovox\models\Dictionnaire;
-use bibliovox\models\Production;
-use bibliovox\models\Recueil;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
 use Slim\Container;
@@ -101,7 +98,7 @@ $app->get('/production/create', function (Request $req, Response $resp, $args = 
     $cont->createProduction();
 })->setName('new_production');
 
-$app->get('/production/edit/{idP}', function (Request $req, Response $resp, $args) {
+$app->get('/production/{idP}/edit[/]', function (Request $req, Response $resp, $args) {
     $cont = new ControleurProduction();
     $cont->editProduction($args['idP']);
 })->setName('edit_production');
@@ -115,64 +112,31 @@ $app->get('/production[/[{id}]]', function (Request $req, Response $resp, $args 
     }
 })->setName('productions');
 
-//TODO MVC
-$app->post('/recueil/create/process', function (Request $req, Response $resp, $args = []) {
-    $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
 
-    if (is_int($res))
-        return $resp->withRedirect($GLOBALS["router"]->urlFor('new_recueil') . "?err=$res");
-    else
-        return $resp->withRedirect($GLOBALS["router"]->urlFor("recueils") . "?id=$res->idR");
+/********************************
+*             POST              *
+*********************************/
 
+$app->post('/recueil/create/process', function (Request $req, Response $resp) {
+    $cont = new ControleurRecueil($req, $resp);
+    return $cont->processCreate();
 })->setName('new_recueil_process');
 
-//TODO MVC
-$app->post('/dictionnaire/create/process', function (Request $req, Response $resp, $args = []) {
-
-    $res = Dictionnaire::createNew($_POST['nom'], $_POST['description']);
-
-    if (is_int($res))
-        return $resp->withRedirect($GLOBALS["router"]->urlFor('new_dictionnaire') . "?err=$res");
-    else
-        return $resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces") . "?id=$res->idD");
-
+$app->post('/dictionnaire/create/process', function (Request $req, Response $resp) {
+    $cont = new ControleurDictionnaire($req, $resp);
+    return $cont->processCreate();
 })->setName('new_dictionnaire_process');
 
-$app->post('/production/create/process', function (Request $req, Response $resp, $args = []) {
-    echoHead("Création");
 
-    /* Récupération temporaire de l'idU */
-    $idU = $_GET['idU'];
-
-    $res = Production::createNew($_POST['nom'], $idU);
-
-    if (is_int($res))
-        return $resp->withRedirect($GLOBALS["router"]->urlFor('new_production') . "?err=$res&idU=$idU");
-    else
-        return $resp->withRedirect($GLOBALS["router"]->urlFor("productions") . "?id=$res->idP");
-
+$app->post('/production/create/process', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurProduction($req, $resp, $args);
+    return $cont->processCreateProduction();
 })->setName('new_production_process');
 
 
-$app->post('/production/edit/process', function (Request $req, Response $resp, $args = []) {
-    echoHead("Édition");
-
-    /* Récupération temporaire de l'idU */
-    $idU = $_GET['idU'];
-    if (isset($_GET['idP'])) {
-        $idP = $_GET['idP'];
-
-        $res = Production::updateProd($idP, $_POST['nom'], $idU, $_POST['comm']);
-
-        if (is_int($res))
-            return $resp->withRedirect($GLOBALS["router"]->urlFor('edit_productions') . "?err=$res");
-        else
-            return $resp->withRedirect($GLOBALS["router"]->urlFor('productions') . "?id=$idP");
-    } else {
-        return $resp->withRedirect($GLOBALS["router"]->urlFor('productions'));
-    }
-
-
+$app->post('/production/{idP}/edit/process', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurProduction($req, $resp, $args);
+    return $cont->processEditProduction($args['idP']);
 })->setName('edit_production_process');
 
 

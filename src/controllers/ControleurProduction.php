@@ -1,38 +1,24 @@
 <?php
 
-
 namespace bibliovox\controllers;
 
 use bibliovox\models\Production;
+use bibliovox\views\VueErreur;
 use bibliovox\views\VueProduction;
+use Slim\Http\Response;
 
-class ControleurProduction
+/**
+ * Controleur des productions
+ * @package bibliovox\controllers
+ * @todo accès au production des utilisateurs authentifier
+ */
+class ControleurProduction extends Controleur
 {
-    static function renderProductions($prods)
-    {
-        if ($prods != null)
-            foreach ($prods as $r) {
-                echo "<a href ='" . $GLOBALS["router"]->urlFor('productions') . "?id=$r->idP'><h2>$r->nomP</h2></a>";
-            }
-    }
 
-    static function renderProduction($prod)
-    {
-        if ($prod == null) {
-            echo "<div class='erreur'>Production inconnue.</div>";
-        } else {
-            echo "<h1>Production: <i>$prod->nomP</i></h1>";
-            $date = explode('-', $prod->dateP);
-            echo "<div class='date'>Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
-            echo "<cite>$prod->commentaire</cite>";
-
-            echo "<div class='comm'>Ton enregistrement: </div>";
-            echo "<audio controls>";
-            echo "<source src='" . PATH . "/media/aud/prod/" . $prod->audio . "' type='audio/mp3'>";
-            echo "</audio></div>";
-        }
-    }
-
+    /**
+     * Accès à toutes les productions d'un utilisateur
+     * @return void
+     */
     public function allProduction()
     {
         /* idU utilisé en attente de la fonction des comptes */
@@ -41,10 +27,13 @@ class ControleurProduction
         $prods = json_decode(Production::allCheck($idU));
         $vue = new VueProduction([$prods, $idU]);
         $vue->views('all');
-
-
     }
 
+    /**
+     * Accès à une production
+     * @param int $idP l'id de la production
+     * @return void
+     */
     public function production(int $idP)
     {
         /* idU utilisé en attente de la fonction des comptes */
@@ -54,42 +43,31 @@ class ControleurProduction
             $prod = json_decode(Production::getById($idP));
             $vue = new VueProduction($prod);
             $vue->views('prod');
-//            echoHead($prod->nomP);
-//            ControleurProduction::renderProduction($prod);
-            //L'idU est stocké en get temporairement (jusqu'à la gestion du compte)
-//            echo "<a class='boutton' href='" . $GLOBALS["router"]->urlFor("edit_production") . "?idP=$idP&idU=$idU'>Editer</a>";
-            exit();
-        } else
-            //TODO Erreur
-            echo "<div class='erreur'>Recueil inconnu.</div>";
+        } else {
+            $err = new VueErreur();
+            $err->views('idProd');
+        }
     }
 
+    /**
+     * Accès à l'édition d'une production
+     * @param int $idP l'id de la production
+     * @return void
+     */
     public function editProduction(int $idP)
     {
         /* idU utilisé en attente de la fonction des comptes */
         $idU = 1;
 
         if (Production::exist($idP, $idU)) {
-            $url = $GLOBALS["router"]->urlFor("edit_production_process") . "?idP=$idP&idU=$idU";
+            $url = $GLOBALS["router"]->urlFor("edit_production_process", ['idP' => $idP]) . "?idU=$idU";
             $prod = json_decode(Production::getById($idP));
             $vue = new VueProduction([$prod, $url]);
             $vue->views('editProd');
+        } else {
+            $err = new VueErreur();
+            $err->views('idProd');
         }
-
-        //TODO erreur
-        /*  if (isset($_GET['err'])) {
-              switch ($_GET['err']) {
-                  case 1:
-                      echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
-                      break;
-                  case 2:
-                      echo "<div class='erreur'>Utilisateur non autorisé</div>";
-                      break;
-                  default:
-                      echo "<div class='erreur'>Erreur inconnue</div>";
-                      break;
-              }
-          }*/
     }
 
     public function createProduction()
@@ -99,21 +77,41 @@ class ControleurProduction
 
         $vue = new VueProduction($idU);
         $vue->views('create');
+    }
 
-        //TODO Erreur
-        /* if (array_key_exists('err', $_GET))
-        switch ($_GET['err']) {
-            case 1:
-                echo "<div class='erreur'>L'extension du fichier n'est pas autorisée</div>";
-                break;
-            case 2:
-                echo "<div class='erreur'>Aucun fichier uploadé</div>";
-                break;
-            default:
-                echo "<div class='erreur'>Erreur inconnue</div>";
-                break;
+    /**
+     * Traitement des informations de la création d'une production
+     * @return Response réponse slim
+     */
+    public function processEditProduction($idP): Response
+    {
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
+
+        $res = Production::updateProd($idP, $_POST['nom'], $idU, $_POST['comm']);
+
+        if (is_int($res)) {
+            $err = new VueErreur([$res, $idP]);
+            $err->views('prodProcess');
+            return $this->resp->withStatus(500);
+        } else {
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor('productions') . "$idP");
         }
-        */
+    }
+
+    public function processCreateProduction()
+    {
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
+
+        $res = Production::createNew($this->req->getParsedBody()['nom'], $idU);
+
+        if (is_int($res)){
+            $err = new VueErreur($res);
+            $err->views('prodProcess');
+            return $this->resp->withStatus(500);
+        } else
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("productions") . "$res->idP");
 
     }
 

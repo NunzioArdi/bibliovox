@@ -4,12 +4,15 @@
 namespace bibliovox\views;
 
 
-class HomeView extends View
+class HomeView extends Vue
 {
 
+    /**
+     * @inheritDoc
+     */
     public function views(string $view)
     {
-        switch ($view){
+        switch ($view) {
             case 'index':
                 $this->index();
                 break;
@@ -26,7 +29,7 @@ class HomeView extends View
     {
         $this->title = "Accueil";
 
-        $this->content.= <<<HTML
+        $this->content .= <<<HTML
             <p>Bibli O’vox a été imaginé par Christophe Buck, Sophie Deleys et Marie Lequèvre dans le cadre d’un master 
                 dans le domaine des sciences de l’éducation. Notre production s’appuiera sur les propositions résultant 
                 de ce travail. </p>
@@ -52,9 +55,9 @@ HTML;
 
     private function about()
     {
-        $this->title="À propos";
+        $this->title = "À propos";
 
-        $this->content.=<<<END
+        $this->content .= <<<END
         <div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href='https://www.flaticon.com/authors/ddara' title='dDara'>dDara</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
