@@ -2,24 +2,16 @@
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost
--- Généré le :  jeu. 20 fév. 2020 à 22:15
--- Version du serveur :  5.5.64-MariaDB
--- Version de PHP :  7.0.33
+-- Hôte : localhost:8889
+-- Généré le :  jeu. 20 fév. 2020 à 23:00
+-- Version du serveur :  5.7.26
+-- Version de PHP :  7.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
--- Base de données :  `bernar323u`
+-- Base de données :  `BibliOvox`
 --
 
 -- --------------------------------------------------------
@@ -28,12 +20,13 @@ SET time_zone = "+00:00";
 -- Structure de la table `audio`
 --
 
+DROP TABLE IF EXISTS `audio`;
 CREATE TABLE `audio` (
   `idAudio` int(11) NOT NULL,
   `idU` int(11) NOT NULL,
-  `dateCreation` date NOT NULL,
+  `dateCreation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `chemin` varchar(255) NOT NULL,
-  `commentaire` int(11) DEFAULT NULL
+  `commentaire` varchar(265) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -42,18 +35,12 @@ CREATE TABLE `audio` (
 -- Structure de la table `audioRec`
 --
 
+DROP TABLE IF EXISTS `audioRec`;
 CREATE TABLE `audioRec` (
   `idR` int(10) UNSIGNED NOT NULL,
   `idU` int(10) UNSIGNED NOT NULL,
   `idAudio` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `audioRec`
---
-
-INSERT INTO `audioRec` (`idR`, `idU`, `idAudio`) VALUES
-(1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -61,6 +48,7 @@ INSERT INTO `audioRec` (`idR`, `idU`, `idAudio`) VALUES
 -- Structure de la table `classe`
 --
 
+DROP TABLE IF EXISTS `classe`;
 CREATE TABLE `classe` (
   `idC` int(10) UNSIGNED NOT NULL,
   `nom` varchar(255) NOT NULL,
@@ -74,24 +62,11 @@ CREATE TABLE `classe` (
 -- Structure de la table `dicoContient`
 --
 
+DROP TABLE IF EXISTS `dicoContient`;
 CREATE TABLE `dicoContient` (
   `idD` int(10) UNSIGNED NOT NULL,
   `idM` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `dicoContient`
---
-
-INSERT INTO `dicoContient` (`idD`, `idM`) VALUES
-(1, 1),
-(1, 3),
-(1, 4),
-(1, 6),
-(2, 1),
-(2, 2),
-(2, 5),
-(2, 6);
 
 -- --------------------------------------------------------
 
@@ -99,6 +74,7 @@ INSERT INTO `dicoContient` (`idD`, `idM`) VALUES
 -- Structure de la table `dictionnaire`
 --
 
+DROP TABLE IF EXISTS `dictionnaire`;
 CREATE TABLE `dictionnaire` (
   `idD` int(10) UNSIGNED NOT NULL,
   `nomD` varchar(255) NOT NULL,
@@ -106,20 +82,13 @@ CREATE TABLE `dictionnaire` (
   `imageD` varchar(255) NOT NULL COMMENT 'nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `dictionnaire`
---
-
-INSERT INTO `dictionnaire` (`idD`, `nomD`, `descriptionD`, `imageD`) VALUES
-(1, 'Le Moyen Age', 'Mots sur le moyen age et les chateaux, chevaliers, princes & princesses', 'chateau.jpg'),
-(2, 'La Ville', 'Les mots de la ville et des villages', '');
-
 -- --------------------------------------------------------
 
 --
 -- Structure de la table `eleve`
 --
 
+DROP TABLE IF EXISTS `eleve`;
 CREATE TABLE `eleve` (
   `idC` int(10) UNSIGNED NOT NULL,
   `idU` int(10) UNSIGNED NOT NULL
@@ -131,17 +100,11 @@ CREATE TABLE `eleve` (
 -- Structure de la table `grade`
 --
 
+DROP TABLE IF EXISTS `grade`;
 CREATE TABLE `grade` (
   `idG` int(1) UNSIGNED NOT NULL,
   `type` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `grade`
---
-
-INSERT INTO `grade` (`idG`, `type`) VALUES
-(1, 'Eleve');
 
 -- --------------------------------------------------------
 
@@ -149,6 +112,7 @@ INSERT INTO `grade` (`idG`, `type`) VALUES
 -- Structure de la table `mot`
 --
 
+DROP TABLE IF EXISTS `mot`;
 CREATE TABLE `mot` (
   `idM` int(10) UNSIGNED NOT NULL,
   `texte` varchar(255) NOT NULL,
@@ -156,24 +120,13 @@ CREATE TABLE `mot` (
   `image` varchar(255) NOT NULL COMMENT 'Nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `mot`
---
-
-INSERT INTO `mot` (`idM`, `texte`, `idAudio`, `image`) VALUES
-(1, 'Arbre', 0, ''),
-(2, 'Bus', 0, ''),
-(3, 'Chateau', 0, 'chateau.jpg'),
-(4, 'Chevalier', 0, ''),
-(5, 'Maison', 0, ''),
-(6, 'Route', 0, '');
-
 -- --------------------------------------------------------
 
 --
 -- Structure de la table `production`
 --
 
+DROP TABLE IF EXISTS `production`;
 CREATE TABLE `production` (
   `idP` int(11) NOT NULL,
   `idAudio` int(11) NOT NULL,
@@ -187,6 +140,7 @@ CREATE TABLE `production` (
 -- Structure de la table `recueil`
 --
 
+DROP TABLE IF EXISTS `recueil`;
 CREATE TABLE `recueil` (
   `idR` int(10) UNSIGNED NOT NULL,
   `nomR` varchar(255) NOT NULL,
@@ -194,20 +148,13 @@ CREATE TABLE `recueil` (
   `dateR` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `recueil`
---
-
-INSERT INTO `recueil` (`idR`, `nomR`, `descriptionR`, `dateR`) VALUES
-(1, 'Première poésie : Demain dès l\'Aubre', 'Demain, dès l’aube, à l’heure où blanchit la campagne,\r\nJe partirai. Vois-tu, je sais que tu m’attends.\r\nJ’irai par la forêt, j’irai par la montagne.\r\nJe ne puis demeurer loin de toi plus longtemps.\r\n\r\nJe marcherai les yeux fixés sur mes pensées,\r\nSans rien voir au dehors, sans entendre aucun bruit,\r\nSeul, inconnu, le dos courbé, les mains croisées,\r\nTriste, et le jour pour moi sera comme la nuit.\r\n\r\nJe ne regarderai ni l’or du soir qui tombe,\r\nNi les voiles au loin descendant vers Harfleur,\r\nEt quand j’arriverai, je mettrai sur ta tombe\r\nUn bouquet de houx vert et de bruyère en fleur.\r\n\r\nVictor Hugo, extrait du recueil «Les Contemplations» (1856)', '2020-01-21'),
-(2, 'Pomme de reinette et pomme d\'api', 'C\'est à la halle\r\nQue je m\'installe\r\nC\'est à Paris\r\nQue je vends mes fruits\r\nC\'est à Paris la capitale de France\r\nC\'est à Paris\r\nQue je vends mes fruits.\r\n\r\n(Refrain :)\r\nPomme de reinette et pomme d\'api\r\nD\'api d\'api rouge\r\nPomme de reinette et pomme d\'api\r\nD\'api d\'api gris.\r\n\r\nCache ton poing derrière ton dos\r\nOu je te donne un coup de marteau!', '2020-01-07');
-
 -- --------------------------------------------------------
 
 --
 -- Structure de la table `tuteur`
 --
 
+DROP TABLE IF EXISTS `tuteur`;
 CREATE TABLE `tuteur` (
   `idUEnfant` int(10) UNSIGNED NOT NULL,
   `idUTuteur` int(10) UNSIGNED NOT NULL
@@ -219,6 +166,7 @@ CREATE TABLE `tuteur` (
 -- Structure de la table `utilisateur`
 --
 
+DROP TABLE IF EXISTS `utilisateur`;
 CREATE TABLE `utilisateur` (
   `idU` int(10) UNSIGNED NOT NULL,
   `nom` varchar(255) NOT NULL,
@@ -229,13 +177,6 @@ CREATE TABLE `utilisateur` (
   `idG` int(10) UNSIGNED NOT NULL,
   `avatar` varchar(255) DEFAULT NULL COMMENT 'Nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `utilisateur`
---
-
-INSERT INTO `utilisateur` (`idU`, `nom`, `prenom`, `password`, `salt`, `mail`, `idG`, `avatar`) VALUES
-(1, 'Sanzey', 'Lucas', 'none', 'none', 'none', 1, 'none');
 
 --
 -- Index pour les tables déchargées
@@ -344,7 +285,7 @@ ALTER TABLE `classe`
 -- AUTO_INCREMENT pour la table `dictionnaire`
 --
 ALTER TABLE `dictionnaire`
-  MODIFY `idD` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idD` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `eleve`
@@ -356,7 +297,7 @@ ALTER TABLE `eleve`
 -- AUTO_INCREMENT pour la table `mot`
 --
 ALTER TABLE `mot`
-  MODIFY `idM` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idM` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `production`
@@ -368,13 +309,13 @@ ALTER TABLE `production`
 -- AUTO_INCREMENT pour la table `recueil`
 --
 ALTER TABLE `recueil`
-  MODIFY `idR` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idR` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `idU` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idU` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
@@ -419,8 +360,3 @@ ALTER TABLE `tuteur`
 --
 ALTER TABLE `utilisateur`
   ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idG`) REFERENCES `grade` (`idG`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
