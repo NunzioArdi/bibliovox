@@ -3,7 +3,7 @@
 
 namespace bibliovox\controllers;
 
-
+use bibliovox\controllers\ControleurAudio;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
@@ -40,7 +40,6 @@ class ControleurMot extends Controleur
             $vue->views('motDico');
         } //TODO erreur
         else {
-            echoHead('ERREUR');
             echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
             echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
         }
@@ -55,7 +54,8 @@ class ControleurMot extends Controleur
 
     public function processCreateMot()
     {
-        $ret = Mot::createNew($_POST['mot'], '', '', '');
+        $res = ControleurAudio::createAudio(1, '');
+        $ret = Mot::createNew($_POST['mot'], $res, '');
         if (is_int($ret)){
             //TODO lancer erreur
         } else {
@@ -67,8 +67,8 @@ class ControleurMot extends Controleur
                 //TODO lancer erreur
             }
         }
-        //REDIRECTION VERS LE MOT DANS UN DES DICTIONNAIRES SELECTIONNÉ
-        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("mot", ["idD" => $_POST['dico'][1], "idM" => $ret->idM]));
+        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("mot", ["idD" => -1, "idM" => $ret->idM]));
+
     }
 
 }

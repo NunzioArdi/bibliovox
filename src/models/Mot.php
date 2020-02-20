@@ -33,7 +33,7 @@ class Mot extends Model
     }
 
     //TODO checker les paramètres nécessaires
-    public static function createNew(String $texte, String $Newaudio, String $Oldaudio, String $img)
+    public static function createNew(String $texte, int $idAudio, String $img)
     {
         $new = new Mot();
         $new->texte = filter_var($texte, FILTER_SANITIZE_STRING);
@@ -51,22 +51,7 @@ class Mot extends Model
 
         } else $new->image = '';
 
-        if (isset($_FILES['newAudio']) AND $_FILES['newAudio']['error'] == 0) {
-            $extension_upload = pathinfo($_FILES['newAudio']['name'])['extension'];
-            $extensions_autorisees = array('mp3');
-            if (in_array($extension_upload, $extensions_autorisees)) {
-                $fileName = rand() . filter_var($_FILES['newAudio']['name'], FILTER_SANITIZE_URL);
-                move_uploaded_file($_FILES['newAudio']['tmp_name'], 'media/aud/dico/' . $fileName);
-
-                $new->audio = $fileName;
-            } else {
-                return 1;
-            }
-
-        } else if (isset($oldAudio))
-            $new->audio = $Oldaudio;
-        else
-            $new->audio = '';
+        $new->idAudio = $idAudio;
         $new->save();
 
         return Mot::all()->last();
