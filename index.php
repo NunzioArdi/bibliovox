@@ -1,6 +1,7 @@
 <?php
 
 use bibliovox\controllers\ControleurCompte;
+use bibliovox\controllers\ControleurDicoContient;
 use bibliovox\controllers\ControleurDictionnaire;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
@@ -150,6 +151,10 @@ $app->post('/dictionnaires/nouveauMot/process', function (Request $req, Response
     return $cont->processCreateMot();
 })->setName('new_mot_process');
 
+$app->post('/dictionnaires/access/{idM}/majAppartenanceMots/process', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurDicoContient($req, $resp, $args);
+    return $cont->processUpdate($args["idM"]);
+})->setName('update_dico_contient');
 
 $app->get('/about', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurHome();

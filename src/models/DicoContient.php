@@ -21,6 +21,11 @@ class DicoContient extends Model
         return DicoContient::where('idD', '=', "$idDico")->get();
     }
 
+    public static function allDicoMot(int $idMot)
+    {
+        return DicoContient::where('idM', '=', "$idMot")->get();
+    }
+
     public static function matchIDs(int $idMot, int $idDico): bool
     {
         if ($idDico == -1) {
@@ -37,5 +42,11 @@ class DicoContient extends Model
         $new->idM = $idM;
 
         $new->save();
+    }
+
+    public static function deleteBiIdM($idM)
+    {
+        DicoContient::where("idM", "=", "$idM")->delete();
+
     }
 }

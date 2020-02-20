@@ -4,6 +4,7 @@
 namespace bibliovox\views;
 
 
+use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 
 class VueMot extends Vue
@@ -45,6 +46,51 @@ class VueMot extends Vue
             //TODO
             //Appel à l'enregistreur
         }
+
+        //TODO controler qu'il s'agit d'un prof/admin
+        if (true) {
+            $this->editDicosMot($mot->idM);
+        }
+    }
+
+    private function editDicosMot(int $idM)
+    {
+        $dico = DicoContient::allDicoMot($idM);
+        $all = Dictionnaire::all();
+
+        $path = $GLOBALS["router"]->urlFor("update_dico_contient", ["idM" => $idM]);
+
+        $_POST['idM'] = $idM;
+        $this->content .= <<<FORM
+<form class="form-horizontal" method='post' action='$path' enctype="multipart/form-data">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Mot dans les dictionnaires suivants :</legend>
+
+<!-- Select Multiple -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="dico"></label>
+  <div class="col-md-4">
+    <select id="dico" name="dico[]" class="form-control" multiple="multiple">
+FORM;
+
+        foreach ($all as $r) {
+            $bool = false;
+            foreach ($dico as $d) {
+                if ($r->idD == $d->idD) {
+                    $bool = true;
+                }
+            }
+            if ($bool)
+                $this->content .= "<option value=\"" . $r->idD . "\"selected>" . $r->nomD . "</option>";
+            else
+                $this->content .= "<option value=\"" . $r->idD . "\">" . $r->nomD . "</option>";
+        }
+        $this->content .= "</select></div></div> <button type = \"submit\" id=\"valid\" name=\"valid\" class=\"btn btn-primary btn-primary\"\"></span> Enregistrer les modifications</button>
+ </fieldset></form>";
+
+
     }
 
     private function creMot()
@@ -74,10 +120,9 @@ class VueMot extends Vue
     <select id="dico" name="dico[]" class="form-control" multiple="multiple">
 FORM;
         foreach ($this->res['dico'] as $d) {
-            if ($this->res['idD'] == $d->idD){
+            if ($this->res['idD'] == $d->idD) {
                 $this->content .= "<option value=\"" . $d->idD . "\"selected>" . $d->nomD . "</option>";
-            }
-            else
+            } else
                 $this->content .= "<option value=\"" . $d->idD . "\">" . $d->nomD . "</option>";
         }
         $this->content .= <<<FORM
