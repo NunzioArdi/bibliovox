@@ -17,8 +17,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 //define('PATH', parse_ini_file('src/conf/conf_path.ini')['path']);
 global $PATH;
 $PATH = parse_ini_file('src/conf/conf_path.ini')['path'];
-echo $PATH;
 $db = new DB();
+
 $db->addConnection(parse_ini_file('src/conf/conf.ini'));
 $db->setAsGlobal();
 $db->bootEloquent();

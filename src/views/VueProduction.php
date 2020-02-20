@@ -44,7 +44,7 @@ class VueProduction extends Vue
 
         if ($this->res[0] != null) {
             foreach ($this->res[0] as $r) {
-                $this->content .= "<a href ='" . $GLOBALS["router"]->urlFor('productions') . "$r->idP'><h2>$r->nomP</h2></a>";
+                $this->content .= "<a href =\"" . $GLOBALS["router"]->urlFor('productions') . "$r->idP\"><h2>$r->nomP</h2></a>";
             }
         } else {
             $this->content .= '<p>Aucune production</p>';
@@ -52,7 +52,7 @@ class VueProduction extends Vue
 
         //    L'idU est temporairement passé dans le GET
         $this->content .= "<div class='createNew'>
-            <a class='boutton' href='" . $GLOBALS["router"]->urlFor("new_production") . "?idU=$this->res[1]'>Ajout</a>";
+            <a class='boutton' href=\"" . $GLOBALS["router"]->urlFor("new_production") . "?idU={$this->res[1]}\">Ajout</a>";
 
     }
 
@@ -63,12 +63,12 @@ class VueProduction extends Vue
 
         $this->content .= "<h1>Production: <i>$prod->nomP</i></h1>";
         $date = explode('-', $prod->dateP);
-        $this->content .= "<div class='date'>Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
+        $this->content .= "<div class=\"date\">Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
         $this->content .= "<cite>$prod->commentaire</cite>";
 
-        $this->content .= "<div class='comm'>Ton enregistrement: </div>";
+        $this->content .= "<div class=\"comm\">Ton enregistrement: </div>";
         $this->content .= "<audio controls>";
-        $this->content .= "<source src='" . $GLOBALS["PATH"] . "/media/aud/prod/" . $prod->audio . "' type='audio/mp3'>";
+        $this->content .= "<source src=\"" . $GLOBALS["PATH"] . "/media/aud/prod/" . $prod->audio . "\" type=\"audio/mp3\">";
         $this->content .= "</audio></div>";
 
         //L'idU est stocké en get temporairement (jusqu'à la gestion du compte)

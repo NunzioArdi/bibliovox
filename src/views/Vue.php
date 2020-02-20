@@ -77,7 +77,6 @@ $this->content
 </body>
 </html>
 HTML;
-
     }
 
     /**
