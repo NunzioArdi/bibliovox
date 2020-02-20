@@ -1,30 +1,73 @@
 <?php
 
-
 namespace bibliovox\controllers;
 
+use bibliovox\models\Recueil;
+use bibliovox\views\VueErreur;
+use bibliovox\views\VueRecueil;
+use Slim\Http\Response;
 
-class ControleurRecueil
+/**
+ * Controleur des recueils
+ *
+ * @package bibliovox\controllers
+ */
+class ControleurRecueil extends Controleur
 {
-    static function renderRecueils( $recs) {
-        if ($recs != null)
-        foreach ($recs as $r) {
-            echo "<a href ='" . $GLOBALS["router"]->urlFor('recueils') . "?id=$r->idR'><h2>$r->nomR</h2></a>";
+    /**
+     * Accès à un recueil
+     * @param $id l'id du recueil
+     * @return void
+     */
+    public function recueil($id)
+    {
+
+        if (Recueil::exist($id)) {
+            $rec = Recueil::getById($id);
+            $vue = new VueRecueil(json_decode($rec));
+            $vue->views('recueil');
+        } else {
+            $err = new VueErreur();
+            $err->views('idRecueil');
         }
+    }
+
+    /**
+     * Accès à tous les recueils
+     * @return void
+     */
+    public function allRecueil()
+    {
+        $rec = Recueil::all();
+        $vue = new VueRecueil(json_decode($rec));
+        $vue->views('allrecueil');
 
     }
 
-    public static function renderRecueil($rec, int $idU)
+    /**
+     * Accès à la création d'un recueil
+     * @return void
+     */
+    public function creerRecueil()
     {
-        $date =explode('-', $rec->dateR);
+        $vue =  new VueRecueil();
+        $vue->views('creer');
+    }
 
-        echo "<h1>Recueil: <i>$rec->nomR</i></h1>";
-        echo "<div class='date'>Créé le: ". $date['2'] ."/". $date['1'] ."/". $date['0'] ."</div>";
-        echo "<textarea readonly class='cite'>$rec->descriptionR</textarea>";
+    /**
+     * Traitement des informations de la création du recueil
+     * @return Response réponse slim
+     */
+    public function processCreate() : Response
+    {
+        try {
+            $res = Recueil::createNew($_POST['nom'], $_POST['texte']);
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("recueils") . "$res->idR");
+        }catch (\Exception $e){
+            $err = new VueErreur();
+            $err->views('createRecueil');
+            return $this->resp->withStatus(500);
+        }
 
-
-        //TODO
-        //Ajouter une recherche suivant l'utilisateru connecté
-        ControleurAudioRecueil::renderAudio($rec->idR, $idU);
     }
 }

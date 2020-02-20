@@ -4,7 +4,9 @@
 namespace bibliovox\controllers;
 
 
+use bibliovox\models\DicoContient;
 use bibliovox\models\Mot;
+use bibliovox\views\VueMot;
 
 class ControleurMot
 {
@@ -25,6 +27,23 @@ class ControleurMot
             //Appel à l'enregistreur
         }
 
+    }
+
+    public function getMotDico(int $idM, int $idD)
+    {
+        $mot = Mot::getById($idM);
+        if ($mot != null && (DicoContient::matchIDs($idM, $idD) || $idD==0)) {
+//        echoHead($mot->texte);
+//        ControleurMot::renderMot($mot);
+            $vue = new VueMot($mot);
+            $vue->views('motDico');
+        }
+        //TODO erreur
+else {
+        echoHead('ERREUR');
+        echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
+        echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
+    }
     }
 
 }

@@ -1,32 +1,118 @@
 <?php
 
-
 namespace bibliovox\controllers;
 
-class ControleurProduction
+use bibliovox\models\Production;
+use bibliovox\views\VueErreur;
+use bibliovox\views\VueProduction;
+use Slim\Http\Response;
+
+/**
+ * Controleur des productions
+ * @package bibliovox\controllers
+ * @todo accès au production des utilisateurs authentifier
+ */
+class ControleurProduction extends Controleur
 {
-    static function renderProductions($prods)
+
+    /**
+     * Accès à toutes les productions d'un utilisateur
+     * @return void
+     */
+    public function allProduction()
     {
-        if ($prods != null)
-            foreach ($prods as $r) {
-                echo "<a href ='" . $GLOBALS["router"]->urlFor('productions') . "?id=$r->idP'><h2>$r->nomP</h2></a>";
-            }
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
+
+        $prods = json_decode(Production::allCheck($idU));
+        $vue = new VueProduction([$prods, $idU]);
+        $vue->views('all');
     }
 
-    static function renderProduction($prod)
+    /**
+     * Accès à une production
+     * @param int $idP l'id de la production
+     * @return void
+     */
+    public function production(int $idP)
     {
-        if ($prod == null) {
-            echo "<div class='erreur'>Production inconnue.</div>";
-        } else {
-            echo "<h1>Production: <i>$prod->nomP</i></h1>";
-            $date = explode('-', $prod->dateP);
-            echo "<div class='date'>Créé le: ". $date['2'] ."/". $date['1'] ."/". $date['0'] ."</div>";
-            echo "<cite>$prod->commentaire</cite>";
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
 
-            echo "<div class='comm'>Ton enregistrement: </div>";
-            echo "<audio controls>";
-            echo "<source src='" . PATH . "/media/aud/prod/" . $prod->audio . "' type='audio/mp3'>";
-            echo "</audio></div>";
+        if (Production::exist($idP, $idU)) {
+            $prod = json_decode(Production::getById($idP));
+            $vue = new VueProduction($prod);
+            $vue->views('prod');
+        } else {
+            $err = new VueErreur();
+            $err->views('idProd');
         }
     }
+
+    /**
+     * Accès à l'édition d'une production
+     * @param int $idP l'id de la production
+     * @return void
+     */
+    public function editProduction(int $idP)
+    {
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
+
+        if (Production::exist($idP, $idU)) {
+            $url = $GLOBALS["router"]->urlFor("edit_production_process", ['idP' => $idP]) . "?idU=$idU";
+            $prod = json_decode(Production::getById($idP));
+            $vue = new VueProduction([$prod, $url]);
+            $vue->views('editProd');
+        } else {
+            $err = new VueErreur();
+            $err->views('idProd');
+        }
+    }
+
+    public function createProduction()
+    {
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
+
+        $vue = new VueProduction($idU);
+        $vue->views('create');
+    }
+
+    /**
+     * Traitement des informations de la création d'une production
+     * @return Response réponse slim
+     */
+    public function processEditProduction($idP): Response
+    {
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
+
+        $res = Production::updateProd($idP, $_POST['nom'], $idU, $_POST['comm']);
+
+        if (is_int($res)) {
+            $err = new VueErreur([$res, $idP]);
+            $err->views('prodProcess');
+            return $this->resp->withStatus(500);
+        } else {
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor('productions') . "$idP");
+        }
+    }
+
+    public function processCreateProduction()
+    {
+        /* idU utilisé en attente de la fonction des comptes */
+        $idU = 1;
+
+        $res = Production::createNew($this->req->getParsedBody()['nom'], $idU);
+
+        if (is_int($res)){
+            $err = new VueErreur($res);
+            $err->views('prodProcess');
+            return $this->resp->withStatus(500);
+        } else
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("productions") . "$res->idP");
+
+    }
+
 }
