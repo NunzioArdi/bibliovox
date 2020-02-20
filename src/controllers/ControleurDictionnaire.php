@@ -86,7 +86,7 @@ class ControleurDictionnaire extends Controleur
             return $this->resp->withStatus(500);
         }
         else
-            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces") . "$res->idD");
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces", ["idD" => $res->idD]));
     }
 
 }

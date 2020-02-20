@@ -64,8 +64,8 @@ abstract class Vue
 <head>
     <meta charset="utf-8"/>
     <title>$this->title</title>
-    <link rel="stylesheet" href="${$GLOBALS["PATH"]}/web/css/bibliovox.css">
-    <link rel="icon" href="${$GLOBALS["PATH"]}/media/img/icn/logo.png">
+    <link rel="stylesheet" href="{$GLOBALS["PATH"]}/web/css/bibliovox.css">
+    <link rel="icon" href="{$GLOBALS["PATH"]}/media/img/icn/logo.png">
 </head>
 <body>
     <nav>
