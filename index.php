@@ -76,6 +76,12 @@ $app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $
     $cont->getMotDico($args["idM"], $args["idD"]);
 })->setName('mot');
 
+//Créer un mot
+$app->get('/dictionnaire/acces/{idD}/nouveauMot', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurMot();
+    $cont->createMot($args['idD']);
+})->setName('new_mot');
+
 
 //Recueil
 $app->get('/recueil[/[{id}]]', function (Request $req, Response $resp, $args = []) {
@@ -138,6 +144,11 @@ $app->post('/production/{idP}/edit/process', function (Request $req, Response $r
     $cont = new ControleurProduction($req, $resp, $args);
     return $cont->processEditProduction($args['idP']);
 })->setName('edit_production_process');
+
+$app->post('/dictionnaires/nouveauMot/process', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurMot($req, $resp, $args);
+    return $cont->processCreateMot();
+})->setName('new_mot_process');
 
 
 $app->get('/about', function (Request $req, Response $resp, $args = []) {

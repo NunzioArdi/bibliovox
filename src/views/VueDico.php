@@ -25,6 +25,7 @@ class VueDico extends Vue
             case "theme":
                 $this->theme();
                 break;
+
             default:
                 break;
         }
@@ -96,6 +97,8 @@ FORM;
         foreach ($this->res as $m) {
             $this->content .= "<h2><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => 0, "idM" => $m->idM]) . "'>$m->texte</a></h2>\n";
         }
+        $this->content.= "<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => 0]) . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\"></span> Nouveau mot</a>";
+
     }
 
     private function theme()
@@ -105,5 +108,9 @@ FORM;
         foreach ($this->res[2] as $m) {
             $this->content .= "<h2><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2>\n";
         }
+        $this->content.= "<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => $this->res[0]]) . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\"></span> Nouveau mot</a>";
+
     }
+
+
 }

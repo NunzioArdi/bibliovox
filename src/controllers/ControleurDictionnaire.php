@@ -89,4 +89,6 @@ class ControleurDictionnaire extends Controleur
             return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces", ["idD" => $res->idD]));
     }
 
+
+
 }

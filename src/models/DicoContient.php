@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DicoContient extends Model
 {
+
+    public $timestamps = false;
     protected $table = 'dicoContient';
 
     public static function motContenuDico(int $idDico)
@@ -27,5 +29,13 @@ class DicoContient extends Model
         else {
             return DicoContient::where('idD', '=', "$idDico")->where("idM", "=", "$idMot")->first() != null;
         }
+    }
+
+    public static function create(int $idD, int $idM){
+        $new = new DicoContient();
+        $new->idD = $idD;
+        $new->idM = $idM;
+
+        $new->save();
     }
 }
