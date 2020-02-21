@@ -163,6 +163,17 @@ $app->get('/about', function (Request $req, Response $resp, $args = []) {
 
 
 
+/********************************
+ *      MÉTHODES POUR AJAX      *
+ ********************************/
+
+// Suppression d'un mot
+$app->get("/deleteMot", function (Request $req, Response $resp, $args){
+    $idM = $_REQUEST['idM'];
+    $cont = new ControleurMot($req, $resp, $args);
+    return $cont->deleteMot($idM);
+})->setName("delete_mot");
+
 
 $app->run();
 

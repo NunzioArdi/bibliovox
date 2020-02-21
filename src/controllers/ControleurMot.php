@@ -51,4 +51,10 @@ class ControleurMot extends Controleur
 
     }
 
+    public function deleteMot(int $idM) {
+        ControleurDicoContient::deleteMot($idM);
+        Mot::supprimer($idM);
+        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaires"));
+    }
+
 }

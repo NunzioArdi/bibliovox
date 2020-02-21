@@ -179,14 +179,14 @@ CARD;
 
 
         // Bouton de suppression :
-
+        $path = $GLOBALS["router"]->urlFor("delete_mot")."?idM=".$idM;
         $this->content .= <<<CARD
 <div class="card border-danger mb-3" style="min-width: 18rem;">
   <div class="card-header">Supprimer le mot</div>
   <div class="card-body text-danger">
     <h5 class="card-title">Cette action est définitive</h5>
     <p></p>
-    <a href="#" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+    <a href="$path" id="bttnDltWrd" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
   </div>
 </div>
 

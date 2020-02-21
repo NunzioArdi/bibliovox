@@ -10,6 +10,11 @@ class ControleurDicoContient extends Controleur
 {
 
 
+    public static function deleteMot(int $idM)
+    {
+        DicoContient::where("idM", "=", "$idM")->delete();
+    }
+
     public function processUpdate(int $idM)
     {
         if (isset($_POST['dico'], $idM)){

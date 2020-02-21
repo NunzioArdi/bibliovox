@@ -56,4 +56,9 @@ class Mot extends Model
 
         return Mot::all()->last();
     }
+
+    public static function supprimer(int $idM)
+    {
+        Mot::where("idM", "=", "$idM")->delete();
+    }
 }
