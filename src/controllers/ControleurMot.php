@@ -3,27 +3,25 @@
 
 namespace bibliovox\controllers;
 
-use bibliovox\controllers\ControleurAudio;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
+use bibliovox\views\VueErreur;
 use bibliovox\views\VueMot;
 
 class ControleurMot extends Controleur
 {
-    
+
     public function getMotDico(int $idM, int $idD)
     {
         $mot = Mot::getById($idM);
         if ($mot != null && (DicoContient::matchIDs($idM, $idD) || $idD == 0)) {
-//        echoHead($mot->texte);
-//        ControleurMot::renderMot($mot);
             $vue = new VueMot($mot);
             $vue->views('motDico');
-        } //TODO erreur
+        }
         else {
-            echo "<div class='erreur'>Ce mot n'existe pas dans ce dictionnaire ";
-            echo "<a href='" . $GLOBALS["router"]->urlFor('dictionnaires') . "'>Retour aux dictionnaires.</a>";
+           $err = new VueErreur($idD);
+           $err->views('getMotDico');
         }
     }
 

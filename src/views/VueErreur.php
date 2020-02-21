@@ -23,6 +23,9 @@ class VueErreur extends Vue
             case 'getDico':
                 $this->getDico();
                 break;
+            case 'getMotDico':
+                $this->getMotDico();
+                break;
             case 'createDico':
                 $this->createDico();
                 break;
@@ -70,6 +73,11 @@ class VueErreur extends Vue
 
         $this->content .= "<div class=\"erreur\">Ce dictionnaire n'existe pas.</div>";
         $this->content .= "<a href=\"" . $GLOBALS["router"]->urlFor('dictionnaires') . "\"><h1><- Retour</h1></a>";
+    }
+
+    private function getMotDico(){
+        $this->content.= "<div class=\"erreur\">Ce mot n'existe pas dans ce dictionnaire ";
+        $this->content.= "<a href=\"" . $GLOBALS["router"]->urlFor('dictionnaire_acces', ['idD' => $this->res]) . "\">Retour au dictionnaire.</a>";
     }
 
     /**
