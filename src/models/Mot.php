@@ -42,7 +42,7 @@ class Mot extends Model
             $extensions_autorisees = array('jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'gif');
             if (in_array($extension_upload, $extensions_autorisees)) {
                 $fileName = rand() . filter_var($_FILES['image']['name'], FILTER_SANITIZE_URL);
-                move_uploaded_file($_FILES['image']['tmp_name'], 'media/img/img/dico/' . $fileName);
+                move_uploaded_file($_FILES['image']['tmp_name'], 'media/img/img/mot/' . $fileName);
 
                 $new->image = $fileName;
             } else {

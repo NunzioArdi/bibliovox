@@ -61,19 +61,25 @@ class VueMot extends Vue
         $path = $GLOBALS["router"]->urlFor("update_dico_contient", ["idM" => $idM]);
 
         $_POST['idM'] = $idM;
-        $this->content .= <<<FORM
-<form class="form-horizontal" method='post' action='$path' enctype="multipart/form-data">
+        $this->content .= <<<CARD
+<div class="card-deck">
+
+<div class="card border-primary mb-3" style="min-width: 18rem;">
+  <div class="card-header">Dictionnaires associés</div>
+  <div class="card-body text-info">
+    <p class="text-body">Visualisez les dictionnaires contenants ce mot ou modifiez les.</p>
+    <form class="form-horizontal" method='post' action='$path' enctype="multipart/form-data">
 <fieldset>
 
-<!-- Form Name -->
-<legend>Mot dans les dictionnaires suivants :</legend>
 
 <!-- Select Multiple -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="dico"></label>
-  <div class="col-md-4">
+  <div class="col-md-auto">
     <select id="dico" name="dico[]" class="form-control" multiple="multiple">
-FORM;
+
+
+
+CARD;
 
         foreach ($all as $r) {
             $bool = false;
@@ -87,8 +93,107 @@ FORM;
             else
                 $this->content .= "<option value=\"" . $r->idD . "\">" . $r->nomD . "</option>";
         }
-        $this->content .= "</select></div></div> <button type = \"submit\" id=\"valid\" name=\"valid\" class=\"btn btn-primary btn-primary\"\"></span> Enregistrer les modifications</button>
- </fieldset></form>";
+        $this->content .= <<<END
+</select>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-primary">Valider</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+</div>
+</div>
+END;
+
+        // Modifier mot :
+        $this->content .= <<<CARD
+<div class="card border-success mb-3" style="min-width: 18rem;">
+  <div class="card-header">Corriger l'orthographe</div>
+  <div class="card-body text-success">
+    <form class="form-horizontal">
+<fieldset>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <div class="col-md-auto">
+  <input id="textinput" name="textinput" type="text" placeholder="correction" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-success">Valider</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+  </div>
+</div>
+
+</div>  
+CARD;
+
+        // Modifier ou Ajouter une Image
+        $this->content .= <<<CARD
+<div class="card-deck">
+
+<div class="card border-warning mb-3" style="min-width: 18rem;">
+  <div class="card-header">Modifier ou ajouter une image</div>
+  <div class="card-body text-warning">
+   <form class="form-horizontal">
+<fieldset>
+
+<!-- File Button --> 
+<div class="form-group">
+  <div class="col-md-4">
+    <input id="image" name="image" class="input-file" type="file">
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-warning">Valider</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+  </div>
+</div>
+CARD;
+
+
+
+        // Bouton de suppression :
+
+        $this->content .= <<<CARD
+<div class="card border-danger mb-3" style="min-width: 18rem;">
+  <div class="card-header">Supprimer le mot</div>
+  <div class="card-body text-danger">
+    <h5 class="card-title">Cette action est définitive</h5>
+    <p></p>
+    <a href="#" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+  </div>
+</div>
+
+     </div>   
+         
+        
+CARD;
 
 
     }
