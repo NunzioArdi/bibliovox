@@ -1,0 +1,10 @@
+Validation / erreurs
+	-> Petites pastilles animées en cas de validation ou d'erreur
+	-> https://bootsnipp.com/snippets/2eEjz
+
+Pagination
+	-> https://bootsnipp.com/snippets/v8mxb
+
+Pagination Alphabétique
+	-> Présentation de tout l'alphabet
+	-> https://bootsnipp.com/snippets/klmbB
