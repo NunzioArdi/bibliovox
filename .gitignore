@@ -20,6 +20,7 @@ out/
 vendor/
 composer.lock
 test.php
+composer.phar
 
 # External tool builders
 .externalToolBuilders/
