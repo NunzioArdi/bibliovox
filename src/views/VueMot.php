@@ -265,8 +265,7 @@ FORM;
   </div>
 </div>
 
-</fieldset>
-</form>
+
 
 <!-- Modal -->
 <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -293,10 +292,21 @@ FORM;
         </ul>
         
         <div class="tab-content" id="pills-tabContent">
+        
+         <!--- Import d'un fichier audio --->
+            <div class="tab-pane fade" id="pills-import" role="tabpanel" aria-labelledby="pills-import-tab">
+                <div class="form-group">
+                  <label class="col-md-4 control-label" for="image">Importer un fichier audio</label>
+                  <div class="col-md-4">
+                    <input id="newAudio" name="newAudio" class="input-file" type="file">
+                  </div>
+                </div>
+            </div>
+            
             
             <!--- Tableau de recherche d'un audio --->
             <div class="tab-pane fade" id="pills-rechercher" role="tabpanel" aria-labelledby="pills-rechercher-tab">
-                <form class="form-horizontal">
+                
                     <fieldset>
                     
                         <!-- Form Name -->
@@ -305,31 +315,22 @@ FORM;
                         <!-- Text input-->
                         <div class="form-group">
                           <div class="col-md-6">
-                          <input id="searchBar" name="searchBar" type="text" placeholder="Recherche" class="form-control input-md">
+                          <input id="searchBar"  type="text" placeholder="Recherche" class="form-control input-md">
                           <span class="help-block">Cherchez par nom, prénom, courriel ou identifiant.</span>  
                           </div>
                         </div>
                     
                     </fieldset>
-                </form>
+                
                         <!-- Button -->
                         <div class="form-group">
                           <div class="col-md-4">
-                            <button id="searchButtn" name="singlebutton" class="btn btn-primary">Lancer la recherche</button>
+                            <a href="#" id="searchButtn" class="btn btn-primary">Lancer la recherche</a>
                           </div>
                         </div>
                     <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
 
                     
-            </div>
-             <!--- Import d'un fichier audio --->
-            <div class="tab-pane fade" id="pills-import" role="tabpanel" aria-labelledby="pills-import-tab">
-                <div class="form-group">
-                  <label class="col-md-4 control-label" for="image">Importer un fichier audio</label>
-                  <div class="col-md-4">
-                    <input id="newAudio" name="newAudio" class="input-file" type="file">
-                  </div>
-                </div>
             </div>
             <!--- Informations complémentaires --->
             <div class="tab-pane fade show active" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
@@ -351,6 +352,9 @@ FORM;
     </div>
   </div>
 </div>
+
+</fieldset>
+</form>
 
 
 FORM;
