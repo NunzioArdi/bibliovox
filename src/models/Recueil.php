@@ -70,7 +70,7 @@ class Recueil extends Model
         if ($res == false) {
             throw new Exception('Le recueil n\'a pu être créé');
         }
-        return $newRecueil->get()->last();
+        return $newRecueil;
     }
 
 }
