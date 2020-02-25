@@ -3,6 +3,9 @@
 
 namespace bibliovox\views;
 
+use Exception;
+use Throwable;
+
 /**
  * Afficheur des productions individuel des utilisateurs.
  * @package bibliovox\views
@@ -60,16 +63,22 @@ class VueProduction extends Vue
     {
         $prod = $this->res;
         $this->title = $prod->nomP;
+        $audio = $prod->audio();
 
         $this->content .= "<h1>Production: <i>$prod->nomP</i></h1>";
         $date = explode('-', $prod->dateP);
         $this->content .= "<div class=\"date\">Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
-        $this->content .= "<cite>$prod->commentaire</cite>";
 
         $this->content .= "<div class=\"comm\">Ton enregistrement: </div>";
-        $this->content .= "<audio controls>";
-        $this->content .= "<source src=\"" . $GLOBALS["PATH"] . "/media/aud/prod/" . $prod->audio . "\" type=\"audio/mp3\">";
-        $this->content .= "</audio></div>";
+        try {
+            throw_if($audio == null, new Exception("Audio introuvable"));
+            $this->content .= "<audio controls>";
+            $this->content .= "<source src=\"" . $GLOBALS["PATH"] . $audio->chemin . "\" type=\"audio/mp3\">";
+            $this->content .= "</audio></div>";
+        } catch (Throwable $e) {
+            $this->content .= "<div class='erreur'>Audio introuvable</div>";
+        }
+
 
         //L'idU est stocké en get temporairement (jusqu'à la gestion du compte)
         $this->content .= "<a class=\"boutton\" href=\" " . $GLOBALS["router"]->urlFor("edit_production", $data = ['idP' => $prod->idP]) . " \">Editer</a>";
@@ -88,12 +97,19 @@ class VueProduction extends Vue
         <label>Audio</label>
         <input type="file" name="audio" accept="audio/*">
         <label>Commentaire</label>
-        <textArea name='comm'>$prod->commentaire</textArea>
-        <br>
+END;
+        if ($prod->commentaire != null)
+            $this->content .= "<textArea name='comm'>$prod->commentaire</textArea>";
+        else
+            $this->content .= <<<END
+<textArea name='comm'></textArea>
+<br>
         <input class='bouton' type="reset" value="Annuler modifications">
         <input class="bouton" type="submit" value="Valider modifications">
     </form>
 END;
+
+
     }
 
     private function create()
@@ -108,7 +124,7 @@ END;
 <label>Titre de la production</label>
 <input type='text' name='nom' placeholder='Titre' required>
 <label>Audio</label>
-<input type='file' name='audio' accept="audio/*" required>
+<input type='file' name='newAudio' accept="audio/mp3" required>
 <input class='bouton' type="reset" value="Annuler">
 <input class="bouton" type="submit" value="Valider">
 </form>
