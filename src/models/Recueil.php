@@ -60,7 +60,6 @@ class Recueil extends Model
         $newRecueil = new Recueil();
         $newRecueil->nomR = filter_var($nom, FILTER_SANITIZE_STRING);
         $newRecueil->descriptionR = filter_var($texte, FILTER_SANITIZE_STRING);
-        $newRecueil->dateR = date('Y-m-d');
 
         try {
             $res = $newRecueil->save();
@@ -70,7 +69,7 @@ class Recueil extends Model
         if ($res == false) {
             throw new Exception('Le recueil n\'a pu être créé');
         }
-        return $newRecueil->get()->last();
+        return $newRecueil;
     }
 
 }

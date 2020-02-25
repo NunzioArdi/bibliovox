@@ -104,7 +104,7 @@ class VueErreur extends Vue
     {
         $this->title = 'Page non trouvé';
 
-        $this->content .= "<div class=\"erreur\">Recueil inconnu.</div>";
+        $this->content .= "<div class=\"erreur\">Production inconnue.</div>";
     }
 
     /**

@@ -54,7 +54,7 @@ class Mot extends Model
         $new->idAudio = $idAudio;
         $new->save();
 
-        return Mot::all()->last();
+        return $new;
     }
 
     public static function supprimer(int $idM)

@@ -41,7 +41,7 @@ class Dictionnaire extends Model
         } else $newDico->imageD = '';
 
         $newDico->save();
-        return $newDico->get()->last();
+        return $newDico;
     }
 
 }

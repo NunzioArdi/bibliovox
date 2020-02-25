@@ -6,6 +6,9 @@ namespace bibliovox\models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static get()
+ */
 class Audio extends Model
 {
     public $timestamps = false;
@@ -15,11 +18,10 @@ class Audio extends Model
     static function newAudio(String $nomFichier, int $idU, String $commentaire = null){
         $n = new Audio();
         $n->idU = $idU;
-        //$n->dateCreation = time();
         $n->chemin = "media/aud/" . $nomFichier;
         $n->commentaire = $commentaire;
 
         $n->save();
-        return Audio::get()->last();
+        return $n;
     }
 }

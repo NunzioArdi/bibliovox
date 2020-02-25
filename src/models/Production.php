@@ -24,45 +24,35 @@ class Production extends Model
 
     public static function allCheck(int $idU)
     {
-        return Production::where("idU", "=", "$idU")->get();
+        $res = [];
+        foreach (Production::all() as $prod) {
+            $audio = $prod->audio();
+            if ($audio != null && $audio->idU == $idU)
+                $res[] = $prod;
+        }
+        return $res;
     }
 
     /**
      * Test si une production donné pour un utilisateur donné existe
      * @param $idP int l'id de la production
-     * @param $idU int l'id utilisateur
      * @return bool true si existe
      */
-    public static function exist(int $idP,int $idU)
+    public static function exist(int $idP)
     {
-        return Production::where("idP", "=", "$idP")->where("idU", "=", "$idU")->first() != null;
+        return Production::where("idP", "=", "$idP")->first() != null;
     }
 
-    public static function createNew(string $nom, int $idUtilisateur)
+    public static function createNew(string $nom, int $idAudio)
     {
-        /* Futur Test de l'utilisateur ici*/
-        if (true) {
-            if (isset($_FILES['audio']) AND $_FILES['audio']['error'] == 0) {
-                $extension_upload = pathinfo($_FILES['audio']['name'])['extension'];
-                $extensions_autorisees = array('mp3');
-                if (in_array($extension_upload, $extensions_autorisees)) {
-                    $fileName = rand() . filter_var($_FILES['audio']['name'], FILTER_SANITIZE_URL);
-                    move_uploaded_file($_FILES['audio']['tmp_name'], 'media/aud/prod/' . $fileName);
+        $newProduction = new Production();
 
-                    $newProduction = new Production();
+        $newProduction->idAudio = $idAudio;
+        $newProduction->nomP = filter_var($nom, FILTER_SANITIZE_STRING);
+        $newProduction->save();
 
-                    $newProduction->audio = $fileName;
-                    $newProduction->nomP = filter_var($nom, FILTER_SANITIZE_STRING);
-                    $newProduction->idU = $idUtilisateur;
-                    $newProduction->dateP = date('Y-m-d');
-                    $newProduction->save();
-                    return $newProduction->get()->last();
-                } else {
-                    return 1;
-                }
+        return $newProduction;
 
-            } else return 2;
-        }
     }
 
     public static function updateProd(int $idProduction, string $nom, int $idUtilisateur, string $comm)
@@ -93,6 +83,11 @@ class Production extends Model
             return $prod;
         }
         return 2;
+    }
+
+    public function audio()
+    {
+        return $this->belongsTo("\bibliovox\models\Audio", "idAudio")->first();
     }
 
 }
