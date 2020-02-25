@@ -24,7 +24,13 @@ class Production extends Model
 
     public static function allCheck(int $idU)
     {
-        return Production::where("idU", "=", "$idU")->get();
+        $res = [];
+        foreach (Production::all() as $prod) {
+            $audio = $prod->audio();
+            if ($audio != null && $audio->idU == $idU)
+                $res[] = $prod;
+        }
+        return $res;
     }
 
     /**
@@ -81,7 +87,7 @@ class Production extends Model
 
     public function audio()
     {
-        return $this->belongsTo("\bibliovox\model\Audio", "idAudio");
+        return $this->belongsTo("\bibliovox\models\Audio", "idAudio")->first();
     }
 
 }

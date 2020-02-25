@@ -24,7 +24,7 @@ class ControleurProduction extends Controleur
         /* idU utilisé en attente de la fonction des comptes */
         $idU = 1;
 
-        $prods = json_decode(Production::allCheck($idU));
+        $prods = Production::allCheck($idU);
         $vue = new VueProduction([$prods, $idU]);
         $vue->views('all');
     }
@@ -39,8 +39,8 @@ class ControleurProduction extends Controleur
         /* idU utilisé en attente de la fonction des comptes */
         $idU = 1;
 
-        if (Production::exist($idP, $idU)) {
-            $prod = json_decode(Production::getById($idP));
+        if (Production::exist($idP)) {
+            $prod = Production::getById($idP);
             $vue = new VueProduction($prod);
             $vue->views('prod');
         } else {
@@ -59,9 +59,9 @@ class ControleurProduction extends Controleur
         /* idU utilisé en attente de la fonction des comptes */
         $idU = 1;
 
-        if (Production::exist($idP, $idU)) {
+        if (Production::exist($idP)) {
             $url = $GLOBALS["router"]->urlFor("edit_production_process", ['idP' => $idP]) . "?idU=$idU";
-            $prod = json_decode(Production::getById($idP));
+            $prod = Production::getById($idP);
             $vue = new VueProduction([$prod, $url]);
             $vue->views('editProd');
         } else {
@@ -104,9 +104,11 @@ class ControleurProduction extends Controleur
         /* idU utilisé en attente de la fonction des comptes */
         $idU = 1;
 
-        $res = Production::createNew($this->req->getParsedBody()['nom'], $idU);
+        $idAudio = ControleurAudio::createAudio($idU);
 
-        if (is_int($res)){
+        $res = Production::createNew($this->req->getParsedBody()['nom'], $idAudio);
+
+        if (is_int($res)) {
             $err = new VueErreur($res);
             $err->views('prodProcess');
             return $this->resp->withStatus(500);
