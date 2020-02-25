@@ -8,7 +8,7 @@ use bibliovox\models\Audio;
 
 class ControleurAudio extends Controleur
 {
-    public static function createAudio(int $idU, String $commentaire)
+    public static function createAudio(int $idU, String $commentaire = null)
     {
         if (isset($_FILES['newAudio']) AND $_FILES['newAudio']['error'] == 0) {
             $extension_upload = pathinfo($_FILES['newAudio']['name'])['extension'];
