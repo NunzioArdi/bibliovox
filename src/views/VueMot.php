@@ -237,22 +237,17 @@ FORM;
 
 
 
-<!-- Button -->
+<!-- Button trigger modal -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="idAudio">Choisir un fichier audio</label>
-  <div class="col-md-4">
-    <button id="oldAudio" name="oldAudio" class="btn btn-primary">Parcourir</button>
-    <a href="#" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-folder-open"></span> Parcourir</a>
+  <div class="col-md-5">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Ajouter un audio
+    </button>
   </div>
 </div>
 
-<!-- File Button --> 
-<div class="form-group">
-  <label class="col-md-4 control-label" for="audio">Importer un fichier audio</label>
-  <div class="col-md-4">
-    <input id="newAudio" name="newAudio" class="input-file" type="file">
-  </div>
-</div>
+
+
 
 <!-- File Button --> 
 <div class="form-group">
@@ -272,6 +267,91 @@ FORM;
 
 </fieldset>
 </form>
+
+<!-- Modal -->
+<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ajouter un audio</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-rechercher" role="tab" aria-controls="pills-rechercher" aria-selected="true">Recherche par utilisateur</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-import" role="tab" aria-controls="pills-import" aria-selected="false">Importer un fichier</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-info" role="tab" aria-controls="pills-info" aria-selected="false">Renseignements supplémentaires</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="pills-tabContent">
+            
+            <!--- Tableau de recherche d'un audio --->
+            <div class="tab-pane fade" id="pills-rechercher" role="tabpanel" aria-labelledby="pills-rechercher-tab">
+                <form class="form-horizontal">
+                    <fieldset>
+                    
+                        <!-- Form Name -->
+                        <legend>Formulaire de recherche</legend>
+                        
+                        <!-- Text input-->
+                        <div class="form-group">
+                          <div class="col-md-6">
+                          <input id="searchBar" name="searchBar" type="text" placeholder="Recherche" class="form-control input-md">
+                          <span class="help-block">Cherchez par nom, prénom, courriel ou identifiant.</span>  
+                          </div>
+                        </div>
+                    
+                    </fieldset>
+                </form>
+                        <!-- Button -->
+                        <div class="form-group">
+                          <div class="col-md-4">
+                            <button id="searchButtn" name="singlebutton" class="btn btn-primary">Lancer la recherche</button>
+                          </div>
+                        </div>
+                    <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
+
+                    
+            </div>
+             <!--- Import d'un fichier audio --->
+            <div class="tab-pane fade" id="pills-import" role="tabpanel" aria-labelledby="pills-import-tab">
+                <div class="form-group">
+                  <label class="col-md-4 control-label" for="image">Importer un fichier audio</label>
+                  <div class="col-md-4">
+                    <input id="newAudio" name="newAudio" class="input-file" type="file">
+                  </div>
+                </div>
+            </div>
+            <!--- Informations complémentaires --->
+            <div class="tab-pane fade show active" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
+                <p>Vous avez la possibilité de :</p>
+                <ul>
+                    <li>Sélectionner un fichier audio déjà existant en cherchant son créateur</li>
+                    <li>Importer un fichier audio au format mp3</li>
+                </ul>
+                <p>Attention, si vous importez un fichier audio, seul celui-ci sera pris en compte.</p>
+            </div>
+        </div>
+        
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Sauvegarder</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 FORM;
 
