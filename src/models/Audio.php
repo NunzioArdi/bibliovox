@@ -24,4 +24,12 @@ class Audio extends Model
         $n->save();
         return $n;
     }
+
+    static function getAudio($id){
+        $auds =  Audio::where("idU", "=", "$id")->get();
+        $res[] = null;
+        foreach ($auds as $r){
+            array_push($res, $r->chemin);
+        }
+    }
 }
