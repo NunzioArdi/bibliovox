@@ -33,4 +33,11 @@ class Audio extends Model
         }
         return $auds;
     }
+
+    static function getAudioById($idA){
+        return  Audio::where("idAudio", "=", "$idA")->first()->chemin;
+
+    }
+
+
 }

@@ -4,6 +4,7 @@
 namespace bibliovox\views;
 
 
+use bibliovox\models\Audio;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 
@@ -37,15 +38,18 @@ class VueMot extends Vue
         if ($mot->image != null)
             $this->content .= "<img src=\" " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "\"  alt=\"img\">";
 
-        if ($mot->audio != null) {
-            $this->content .= "<audio controls>";
-            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/media/aud/dico/" . $mot->audio . "\" type=\"audio/mp3\">";
-            $this->content .= "</audio></div>";
-        } else {
+        //TODO Gérer les plusieurs audio possibles
+
+                $this->content .= "<audio controls>";
+                $this->content .= "<source src=\" " . $GLOBALS["PATH"] ."/" . Audio::getAudioById($mot->idAudio) . "\" type=\"audio/mp3\">";
+                $this->content .= "</audio></div>";
+
+
+
             $this->content .= "<h2>Enregistre toi !</h2>";
             //TODO
             //Appel à l'enregistreur
-        }
+
 
         //TODO controler qu'il s'agit d'un prof/admin
         if (true) {
