@@ -35,7 +35,11 @@ class Audio extends Model
     }
 
     static function getAudioById($idA){
-        return  Audio::where("idAudio", "=", "$idA")->first()->chemin;
+        $aud = Audio::where("idAudio", "=", "$idA")->first();
+        if (! is_null($aud))
+            return $aud->chemin;
+        else
+            return null;
 
     }
 

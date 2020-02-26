@@ -40,10 +40,12 @@ class VueMot extends Vue
 
         //TODO Gérer les plusieurs audio possibles
 
-                $this->content .= "<audio controls>";
-                $this->content .= "<source src=\" " . $GLOBALS["PATH"] ."/" . Audio::getAudioById($mot->idAudio) . "\" type=\"audio/mp3\">";
-                $this->content .= "</audio></div>";
-
+        $chemin = Audio::getAudioById($mot->idAudio);
+        if (! is_null($chemin)) {
+            $this->content .= "<audio controls>";
+            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/" . $chemin . "\" type=\"audio/mp3\">";
+            $this->content .= "</audio></div>";
+        }
 
 
             $this->content .= "<h2>Enregistre toi !</h2>";
