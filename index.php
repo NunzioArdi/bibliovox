@@ -153,30 +153,38 @@ $app->post('/dictionnaires/nouveauMot/process', function (Request $req, Response
     return $cont->processCreateMot();
 })->setName('new_mot_process');
 
+/**
 $app->post('/dictionnaires/access/{idM}/majAppartenanceMots/process', function (Request $req, Response $resp, $args) {
     $cont = new ControleurDicoContient($req, $resp, $args);
     return $cont->processUpdate($args["idM"]);
 })->setName('update_dico_contient');
+**/
 
 $app->get('/about', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurHome();
     $cont->about();
 })->setName('about');
 
+// Suppression d'un mot
+$app->get("/deleteMot", function (Request $req, Response $resp, $args) {
+    $idM = $_REQUEST['idM'];
+    $cont = new ControleurMot($req, $resp, $args);
+    return $cont->deleteMot($idM);
+})->setName("delete_mot");
+
 
 /********************************
  *      MÉTHODES POUR AJAX      *
  ********************************/
 $app->post("/searchAudio", function () {
-    if (isset($_POST['words'])) {
-        $wods = explode(' ', $_POST['words']);
+    if (isset($_POST['data'])) {
+        $wods = explode(' ', $_POST['data']);
         $ids[] = null;
         foreach ($wods as $word) {
             foreach (Utilisateur::getID($word) as $id){
                 if (! is_null($id))
                 array_push($ids, $id);
             }
-
         }
 
         $chemins[] = null;
@@ -191,13 +199,18 @@ $app->post("/searchAudio", function () {
     }
 });
 
+$app->post("/changeDicoMot", function () {
+    if (isset($_POST['data'])){
+        $ids = explode(' ', $_POST['data']);
+        $cont = new ControleurDicoContient();
+        $cont->processUpdate(intval($_POST['idM']), $ids);
+    }
+    else
+    echo "ERREUR";
+});
 
-// Suppression d'un mot
-$app->get("/deleteMot", function (Request $req, Response $resp, $args) {
-    $idM = $_REQUEST['idM'];
-    $cont = new ControleurMot($req, $resp, $args);
-    return $cont->deleteMot($idM);
-})->setName("delete_mot");
+
+
 
 
 $app->run();

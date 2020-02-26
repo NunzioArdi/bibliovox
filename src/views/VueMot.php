@@ -63,8 +63,8 @@ class VueMot extends Vue
     {
         $dico = DicoContient::allDicoMot($idM);
         $all = Dictionnaire::all();
+        $mot = $this->res->texte;
 
-        $path = $GLOBALS["router"]->urlFor("update_dico_contient", ["idM" => $idM]);
 
         $_POST['idM'] = $idM;
         $this->content .= <<<CARD
@@ -74,15 +74,15 @@ class VueMot extends Vue
   <div class="card-header">Dictionnaires associés</div>
   <div class="card-body text-info">
     <p class="text-body">Visualisez les dictionnaires contenants ce mot ou modifiez les.</p>
-    <form class="form-horizontal" method='post' action='$path' enctype="multipart/form-data">
+    <form class="form-horizontal"  enctype="multipart/form-data">
 <fieldset>
 
 
 <!-- Select Multiple -->
 <div class="form-group">
   <div class="col-md-auto">
-    <select id="dico" name="dico[]" class="form-control" multiple="multiple">
-
+    <select id="selectedDico" name="dico" class="form-control" multiple="multiple">
+        <option value="-1">Supprimer des dictionnaires</option>
 
 
 CARD;
@@ -108,7 +108,7 @@ CARD;
 <div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
-    <button id="singlebutton" name="singlebutton" class="btn btn-primary">Valider</button>
+    <a href="#" id="dicoButtn" name="singlebutton" class="btn btn-primary">Valider</a>
   </div>
 </div>
 
@@ -130,7 +130,7 @@ END;
 <!-- Text input-->
 <div class="form-group">
   <div class="col-md-auto">
-  <input id="textinput" name="textinput" type="text" placeholder="correction" class="form-control input-md">
+  <input id="textinput" name="textinput" type="text" placeholder="correction" value="$mot" class="form-control input-md">
     
   </div>
 </div>
@@ -197,7 +197,9 @@ CARD;
 </div>
 
      </div>   
-         
+
+<script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
+  
         
 CARD;
 

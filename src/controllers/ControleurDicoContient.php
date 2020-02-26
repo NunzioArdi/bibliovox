@@ -15,14 +15,22 @@ class ControleurDicoContient extends Controleur
         DicoContient::where("idM", "=", "$idM")->delete();
     }
 
-    public function processUpdate(int $idM)
+    public function processUpdate(int $idM, $idD)
     {
-        if (isset($_POST['dico'], $idM)){
+        $bool = false;
+        if (isset($idD, $idM)){
             DicoContient::deleteBiIdM($idM);
-            foreach ($_POST['dico'] as $d){
-                DicoContient::create($d, $idM);
+            foreach ($idD as $r){
+                if ($r == "-1")
+                    $bool = true;
+            }
+            if ($bool == false)
+            foreach ($idD as $d){
+                if (intval($d) != 0){
+                    DicoContient::create(intval($d), $idM);
+                    echo($d);
+                }
             }
         }
-        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("mot", ["idD" => $_POST['dico'][0], "idM" => $idM]));
     }
 }
