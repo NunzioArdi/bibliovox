@@ -7,6 +7,8 @@ use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\controllers\ControleurHome;
+use bibliovox\models\Audio;
+use bibliovox\models\Utilisateur;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
 use Slim\Container;
@@ -166,6 +168,23 @@ $app->get('/about', function (Request $req, Response $resp, $args = []) {
 /********************************
  *      MÉTHODES POUR AJAX      *
  ********************************/
+$app->post("/searchAudio", function (){
+    if (isset($_POST['words'])) {
+        $wods = explode(' ', $_POST['words']);
+        $ids[] = null;
+        foreach ($wods as $word){
+            array_push($ids, Utilisateur::getID($word));
+        }
+
+        $chemins[] = null;
+        foreach ($ids as $row){
+            array_push($chemins, Audio::getAudio($row));
+        }
+
+        echo json_encode($chemins);
+    }
+});
+
 
 // Suppression d'un mot
 $app->get("/deleteMot", function (Request $req, Response $resp, $args){

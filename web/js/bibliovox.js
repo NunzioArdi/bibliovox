@@ -3,7 +3,7 @@ var PATH = "/s3a_s20_bernard_claude_conte_sallerin_allard";
 document.getElementById("searchButtn").onclick = function () {
     console.log(PATH);
     var words = document.getElementById("searchBar").value;
-    makeRequest(PATH + '/searchAudio.php', words)
+    makeRequest(PATH + '/searchAudio', words)
 }
 
 function printResultSearchAudio(e) {
