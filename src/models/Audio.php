@@ -31,5 +31,6 @@ class Audio extends Model
         foreach ($auds as $r){
             array_push($res, $r->chemin);
         }
+        return $auds;
     }
 }

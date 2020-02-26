@@ -123,8 +123,8 @@ $app->get('/production[/[{id}]]', function (Request $req, Response $resp, $args 
 
 
 /********************************
-*             POST              *
-*********************************/
+ *             POST              *
+ *********************************/
 
 $app->post('/recueil/create/process', function (Request $req, Response $resp) {
     $cont = new ControleurRecueil($req, $resp);
@@ -164,30 +164,41 @@ $app->get('/about', function (Request $req, Response $resp, $args = []) {
 })->setName('about');
 
 
-
 /********************************
  *      MÉTHODES POUR AJAX      *
  ********************************/
-$app->post("/searchAudio", function (){
+$app->post("/searchAudio", function () {
     if (isset($_POST['words'])) {
         $wods = explode(' ', $_POST['words']);
         $ids[] = null;
-        foreach ($wods as $word){
-            array_push($ids, Utilisateur::getID($word));
+        foreach ($wods as $word) {
+            foreach (Utilisateur::getID($word) as $id){
+                if (! is_null($id))
+                array_push($ids, $id);
+            }
+
         }
 
         $chemins[] = null;
-        foreach ($ids as $row){
-            array_push($chemins, Audio::getAudio($row));
+        foreach ($ids as $row) {
+            if (!is_null($row)) {
+                foreach (Audio::getAudio($row) as $chem){
+                    array_push($chemins, $chem);
+                }
+            }
         }
 
-        echo json_encode($chemins);
+        var_dump($chemins);
+
+
+
+            echo json_encode($chemins);
     }
 });
 
 
 // Suppression d'un mot
-$app->get("/deleteMot", function (Request $req, Response $resp, $args){
+$app->get("/deleteMot", function (Request $req, Response $resp, $args) {
     $idM = $_REQUEST['idM'];
     $cont = new ControleurMot($req, $resp, $args);
     return $cont->deleteMot($idM);

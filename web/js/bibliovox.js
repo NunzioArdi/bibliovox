@@ -7,7 +7,6 @@ document.getElementById("searchButtn").onclick = function () {
 }
 
 function printResultSearchAudio(e) {
-    console.log("tt");
     console.log(this.response);
 }
 
