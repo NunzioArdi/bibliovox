@@ -187,11 +187,6 @@ $app->post("/searchAudio", function () {
                 }
             }
         }
-
-        var_dump($chemins);
-
-
-
             echo json_encode($chemins);
     }
 });
