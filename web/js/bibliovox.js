@@ -36,10 +36,18 @@ function printResultSearchAudio(e) {
             }
 
             if (resp[0] !== "") {
+
+                txt = "<input type='text' name='cbnumber' hidden value='" + resp.length + "'>";
+
+                txt += "<p>Sélectionnez les audio que vous souhaitez associer au mot.</p>"
+
                 for (let i = 0; i < resp.length-1; i++) {
-                    txt = "<audio controls src = '" + PATH + "/" + resp[i] + "'>Erreur</audio><br>";
-                    $('#results').append(txt);
+                    txt += "<div>\n" +
+                        "  <input type='checkbox' name='" + i + "' id='checkox' value='" + resp[i] + "'>" +
+                        "  <label for='" + resp[i] + "'><audio controls src = '" + PATH + "/" + resp[i] + "'>Erreur</audio></label>" +
+                        "</div><br>";
                 }
+                $('#results').append(txt);
             } else {
                 board.append("Auncun Résultat");
             }

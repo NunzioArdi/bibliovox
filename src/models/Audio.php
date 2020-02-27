@@ -43,5 +43,10 @@ class Audio extends Model
 
     }
 
+    public static function getIdByPath(String $path)
+    {
+        return Audio::where("chemin", "=", "$path")->first()->idAudio;
+    }
+
 
 }

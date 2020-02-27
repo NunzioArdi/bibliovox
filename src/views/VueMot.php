@@ -217,6 +217,9 @@ CARD;
 
     }
 
+
+
+
     private function creMot()
     {
         $this->title = "Nouveau mot";
@@ -334,7 +337,7 @@ FORM;
                         <!-- Text input-->
                         <div class="form-group">
                           <div class="col-md-6">
-                          <input id="searchBar"  type="text" placeholder="Recherche" class="form-control input-md">
+                          <input id="searchBar"  type="text" placeholder="Recherche" class="form-control input-md" onkeypress="refuserToucheEntree(event);">
                           <span class="help-block">Cherchez par nom, prénom, courriel ou identifiant.</span>  
                           </div>
                         </div>
@@ -348,9 +351,8 @@ FORM;
                           </div>
                         </div>
                         
-                        <div id="results">
-                           
-                        </div>
+                        <div id="results"></div>
+                        
                     <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
                     <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js" ></script>
 
