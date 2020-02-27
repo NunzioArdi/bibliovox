@@ -37,11 +37,11 @@ class VueDico extends Vue
         $this->title = "Dictionnaires";
 
         $this->content .= "    <div class=\"dico\">
-        <a href=\"" . $GLOBALS["router"]->pathFor('dictionnaire_acces', $data = ['idD' => 0]) . "\">
+            <a href=\"" . $GLOBALS["router"]->pathFor('dictionnaire_acces', $data = ['idD' => 0]) . "\">
             <img src=\"" . $GLOBALS["PATH"] . "/media/img/img/dico/alpha.png\" alt=\"alphabet\">
             <h2>Dictionnaire alphabétique</h2>
-         </a>
-    </div>\n";
+            </a>
+            </div>\n";
 
         foreach ($this->res as $d) {
             $image = "/media/img/img/dico/";
@@ -50,16 +50,16 @@ class VueDico extends Vue
             else
                 $image .= "dico.png";
             $this->content .= "    <div class=\"dico\">
-        <a href=\"" . $GLOBALS["router"]->urlFor('dictionnaire_acces', $data = ['idD' => $d->idD]) . "\">
-            <img src=\"" . $GLOBALS["PATH"] . "$image\">
-            <h2>$d->nomD</h2>
-        </a>
-    </div>\n";
+                <a href=\"" . $GLOBALS["router"]->urlFor('dictionnaire_acces', $data = ['idD' => $d->idD]) . "\">
+                <img src=\"" . $GLOBALS["PATH"] . "$image\">
+                <h2>$d->nomD</h2>
+                </a>
+                </div>\n";
         }
 
         $this->content .= "    <div class=\"createNew\">
-        <a href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\">Nouveau Dico</a>
-     </div>";
+            <a href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\">Nouveau Dico</a>
+            </div>";
     }
 
     /**
@@ -72,16 +72,16 @@ class VueDico extends Vue
         $this->content .= "<h1>Créer un nouveau dictionnaire</h1>";
         $path = $GLOBALS["router"]->urlFor("new_dictionnaire_process");
         $this->content .= <<<FORM
-<form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
-<label>Nom du dictionnaire</label>
-<input type='text' name='nom' placeholder='Nom' required>
-<label>Description</label>
-<textarea name='description' placeholder='Description' lang='fr' required></textarea>
-<label>Illustration du dictionnaire (facultatif)</label>
-<input type='file' name='image' accept="image/*">
-<input class='bouton' type="reset" value="Annuler">
-<input class="bouton" type="submit" value="Valider">
-</form>
+            <form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
+            <label>Nom du dictionnaire</label> <br>
+            <input type='text' name='nom' placeholder='Nom' required> <br>
+            <label>Description</label> <br>
+            <textarea name='description' placeholder='Description' lang='fr' required></textarea><br>
+            <label>Illustration du dictionnaire (facultatif)</label> <br>
+            <input type='file' name='image' accept="image/*"> <br> <br>
+            <input class="bouton" type="submit" value="Valider">
+            <input class='bouton' type="reset" value="Annuler">
+            </form>
 FORM;
     }
 
@@ -104,6 +104,7 @@ FORM;
     private function theme()
     {
         $this->title = $this->res[1];
+        $this->content .= "<h1>$this->title</h1>";
 
         foreach ($this->res[2] as $m) {
             $this->content .= "<h2><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2>\n";

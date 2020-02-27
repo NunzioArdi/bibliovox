@@ -31,6 +31,7 @@ class VueMot extends Vue
 
         $this->title = $texte;
 
+
         $this->content .= "<div class = \"mot\">";
         $this->content .= "<h1>$texte</h1>";
         if ($mot->image != null)
