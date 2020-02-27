@@ -154,12 +154,10 @@ $app->post('/dictionnaires/nouveauMot/process', function (Request $req, Response
     return $cont->processCreateMot();
 })->setName('new_mot_process');
 
-/**
-$app->post('/dictionnaires/access/{idM}/majAppartenanceMots/process', function (Request $req, Response $resp, $args) {
-    $cont = new ControleurDicoContient($req, $resp, $args);
-    return $cont->processUpdate($args["idM"]);
-})->setName('update_dico_contient');
-**/
+$app->post("/dictionnaire/acces/{idD}/{idM}/editPic/", function (Request $req, Response $resp, $args) {
+    $cont = new ControleurMot($req, $resp, $args);
+    return $cont->updatePic($args["idD"], $args["idM"]);
+})->setName('update_pic');
 
 $app->get('/about', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurHome();
@@ -215,6 +213,8 @@ $app->post("/udpateWord", function () {
         Mot::updateMot($_POST['word'], $_POST['idM']);
     }
 });
+
+
 
 
 

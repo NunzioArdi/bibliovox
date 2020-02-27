@@ -169,13 +169,14 @@ END;
 CARD;
 
         // Modifier ou Ajouter une Image
+        $path = $GLOBALS["router"]->urlFor("update_pic", ["idD" => -1, "idM" => $idM]);
         $this->content .= <<<CARD
 <div class="card-deck">
 
 <div class="card border-warning mb-3" style="min-width: 18rem;">
   <div class="card-header">Modifier ou ajouter une image</div>
   <div class="card-body text-warning">
-   <form class="form-horizontal">
+   <form class="form-horizontal" method="post" action='$path' enctype="multipart/form-data">
 <fieldset>
 
 <!-- File Button --> 

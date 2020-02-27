@@ -12,6 +12,13 @@ use bibliovox\views\VueMot;
 class ControleurMot extends Controleur
 {
 
+    public function updatePic($idD, $idM)
+    {
+        Mot::updatePic($idM);
+        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("mot", ["idD" => $idD, "idM" => $idM]));
+
+    }
+
     public function getMotDico(int $idM, int $idD)
     {
         $mot = Mot::getById($idM);
@@ -35,7 +42,7 @@ class ControleurMot extends Controleur
     public function processCreateMot()
     {
         $res = ControleurAudio::createAudio(1, '');
-        $ret = Mot::createNew($_POST['mot'], $res, '');
+        $ret = Mot::createNew($_POST['mot'], $res);
         if (is_int($ret)){
             //TODO lancer erreur
         } else {
