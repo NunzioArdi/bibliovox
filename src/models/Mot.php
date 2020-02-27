@@ -80,7 +80,6 @@ class Mot extends Model
 
                 $mot->image = $fileName;
             } else {
-                echo "aie";
                 return 1;
             }
         }
