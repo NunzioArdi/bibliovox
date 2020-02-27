@@ -3,10 +3,9 @@
 
 namespace bibliovox\models;
 
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-use Illuminate\Database\Eloquent\Model;
-
-class AudioMot extends Model
+class AudioMot extends Pivot
 {
     public $timestamps = false;
     protected $table = 'audioMot';
