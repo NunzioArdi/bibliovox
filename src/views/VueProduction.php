@@ -73,7 +73,7 @@ class VueProduction extends Vue
         try {
             throw_if($audio == null, new Exception("Audio introuvable"));
             $this->content .= "<audio controls>";
-            $this->content .= "<source src=\"" . $GLOBALS["PATH"] . $audio->chemin . "\" type=\"audio/mp3\">";
+            $this->content .= "<source src=\"" . $GLOBALS["PATH"] . "/" . $audio->chemin . "\" type=\"audio/mp3\">";
             $this->content .= "</audio></div>";
         } catch (Throwable $e) {
             $this->content .= "<div class='erreur'>Audio introuvable</div>";
