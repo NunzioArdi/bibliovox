@@ -8,6 +8,7 @@ use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\controllers\ControleurHome;
 use bibliovox\models\Audio;
+use bibliovox\models\Mot;
 use bibliovox\models\Utilisateur;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
@@ -207,6 +208,12 @@ $app->post("/changeDicoMot", function () {
     }
     else
     echo "ERREUR";
+});
+
+$app->post("/udpateWord", function () {
+    if (isset($_POST['word'], $_POST['idM'])){
+        Mot::updateMot($_POST['word'], $_POST['idM']);
+    }
 });
 
 

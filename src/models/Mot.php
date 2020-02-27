@@ -61,4 +61,10 @@ class Mot extends Model
     {
         Mot::where("idM", "=", "$idM")->delete();
     }
+
+    public static function updateMot(String $word, int $idM){
+        $mot = Mot::where("idM", "=", "$idM")->first();
+        $mot->texte = $word;
+        $mot->update();
+    }
 }
