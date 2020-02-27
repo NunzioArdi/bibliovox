@@ -67,6 +67,18 @@ class VueMot extends Vue
 
         $_POST['idM'] = $idM;
         $this->content .= <<<CARD
+<div class="card text-center">
+  <div class="card-header">
+    <b>Outils d'édition</b>
+  </div>
+  <div class="card-body">
+    <p class="card-text">Certainnes modifications n'apparaiteront qu'une fois la page rechargée.</p>
+    <p class="card-text"> Pensez à actualiser la page une fois vos modifications effectuées.</p>
+    <input class="btn btn-block btn-success" type="button" value = "Rafraîchir" onclick="history.go(0)" />
+  </div>
+  <div class="card-footer text-muted">
+<input id="idM" value="$idM" hidden>
+
 <div class="card-deck">
 
 <div class="card border-primary mb-3" style="min-width: 18rem;">
@@ -129,8 +141,7 @@ END;
 <!-- Text input-->
 <div class="form-group">
   <div class="col-md-auto">
-  <input id="textinput" name="textinput" type="text" placeholder="correction" value="$mot" class="form-control input-md">
-    
+  <input id="newWord" name="newWord" type="text" placeholder="correction" value="$mot" class="form-control input-md" onkeypress="refuserToucheEntree(event);">    
   </div>
 </div>
 
@@ -138,8 +149,8 @@ END;
 <div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
-    <button id="singlebutton" name="singlebutton" class="btn btn-success">Valider</button>
-  </div>
+        <a id="buttnChangeWord" href="#" class="btn btn-success">Valider</a>
+    </div>
 </div>
 
 </fieldset>
@@ -151,13 +162,14 @@ END;
 CARD;
 
         // Modifier ou Ajouter une Image
+        $path = $GLOBALS["router"]->urlFor("update_pic", ["idD" => -1, "idM" => $idM]);
         $this->content .= <<<CARD
 <div class="card-deck">
 
 <div class="card border-warning mb-3" style="min-width: 18rem;">
   <div class="card-header">Modifier ou ajouter une image</div>
   <div class="card-body text-warning">
-   <form class="form-horizontal">
+   <form class="form-horizontal" method="post" action='$path' enctype="multipart/form-data">
 <fieldset>
 
 <!-- File Button --> 
@@ -184,7 +196,7 @@ CARD;
 
 
         // Bouton de suppression :
-        $path = $GLOBALS["router"]->urlFor("delete_mot")."?idM=".$idM;
+        $path = $GLOBALS["router"]->urlFor("delete_mot") . "?idM=" . $idM;
         $this->content .= <<<CARD
 <div class="card border-danger mb-3" style="min-width: 18rem;">
   <div class="card-header">Supprimer le mot</div>
@@ -199,7 +211,8 @@ CARD;
 
 <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
   
-        
+            </div>
+</div>    
 CARD;
 
 
