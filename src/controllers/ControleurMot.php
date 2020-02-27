@@ -3,6 +3,7 @@
 
 namespace bibliovox\controllers;
 
+use bibliovox\models\AudioMot;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
@@ -42,7 +43,8 @@ class ControleurMot extends Controleur
     public function processCreateMot()
     {
         $res = ControleurAudio::createAudio(1, '');
-        $ret = Mot::createNew($_POST['mot'], $res);
+        $ret = Mot::createNew($_POST['mot']);
+        AudioMot::createNew($res, $ret->idM);
         if (is_int($ret)){
             //TODO lancer erreur
         } else {
