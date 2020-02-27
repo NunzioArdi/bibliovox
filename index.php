@@ -8,6 +8,7 @@ use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\controllers\ControleurHome;
 use bibliovox\models\Audio;
+use bibliovox\models\Mot;
 use bibliovox\models\Utilisateur;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
@@ -153,12 +154,10 @@ $app->post('/dictionnaires/nouveauMot/process', function (Request $req, Response
     return $cont->processCreateMot();
 })->setName('new_mot_process');
 
-/**
-$app->post('/dictionnaires/access/{idM}/majAppartenanceMots/process', function (Request $req, Response $resp, $args) {
-    $cont = new ControleurDicoContient($req, $resp, $args);
-    return $cont->processUpdate($args["idM"]);
-})->setName('update_dico_contient');
-**/
+$app->post("/dictionnaire/acces/{idD}/{idM}/editPic/", function (Request $req, Response $resp, $args) {
+    $cont = new ControleurMot($req, $resp, $args);
+    return $cont->updatePic($args["idD"], $args["idM"]);
+})->setName('update_pic');
 
 $app->get('/about', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurHome();
@@ -208,6 +207,14 @@ $app->post("/changeDicoMot", function () {
     else
     echo "ERREUR";
 });
+
+$app->post("/udpateWord", function () {
+    if (isset($_POST['word'], $_POST['idM'])){
+        Mot::updateMot($_POST['word'], $_POST['idM']);
+    }
+});
+
+
 
 
 

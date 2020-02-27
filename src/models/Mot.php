@@ -33,7 +33,7 @@ class Mot extends Model
     }
 
     //TODO checker les paramètres nécessaires
-    public static function createNew(String $texte, int $idAudio, String $img)
+    public static function createNew(String $texte, int $idAudio)
     {
         $new = new Mot();
         $new->texte = filter_var($texte, FILTER_SANITIZE_STRING);
@@ -60,5 +60,34 @@ class Mot extends Model
     public static function supprimer(int $idM)
     {
         Mot::where("idM", "=", "$idM")->delete();
+    }
+
+    public static function updateMot(String $word, int $idM)
+    {
+        $mot = Mot::where("idM", "=", "$idM")->first();
+        $mot->texte = $word;
+        $mot->update();
+    }
+
+    public static function updatePic($idM)
+    {
+        $mot = Mot::where("idM", "=", "$idM")->first();
+        $old = $mot->image;
+        if (isset($_FILES['image']) AND $_FILES['image']['error'] == 0) {
+            $extension_upload = pathinfo($_FILES['image']['name'])['extension'];
+            $extensions_autorisees = array('jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'gif');
+            if (in_array($extension_upload, $extensions_autorisees)) {
+                $fileName = rand() . filter_var($_FILES['image']['name'], FILTER_SANITIZE_URL);
+                move_uploaded_file($_FILES['image']['tmp_name'], 'media/img/img/mot/' . $fileName);
+
+                $mot->image = $fileName;
+            } else {
+                echo "aie";
+                return 1;
+            }
+        }
+        $mot->update();
+        if (!is_null($old))
+            unlink("media/img/img/mot" . $old);
     }
 }
