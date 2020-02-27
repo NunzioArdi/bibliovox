@@ -2,7 +2,6 @@ var PATH = "/s3a_s20_bernard_claude_conte_sallerin_allard";
 
 if (document.getElementById("searchButtn") !== null)
     document.getElementById("searchButtn").onclick = function () {
-        console.log(PATH);
         var words = document.getElementById("searchBar").value;
         makeRequest(PATH + '/searchAudio', "data=" + encodeURIComponent(words), printResultSearchAudio);
     }
@@ -30,7 +29,6 @@ function printResultSearchAudio(e) {
     let txt;
     if (this.readyState === XMLHttpRequest.DONE) {
         if (this.status === 200) {
-            console.log(this.response);
             let resp = this.response.split('-');
             let board = document.querySelector("#results");
             while (board.firstChild) {

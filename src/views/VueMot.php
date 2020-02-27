@@ -352,7 +352,7 @@ FORM;
                            
                         </div>
                     <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
-                    <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
+                    <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js" ></script>
 
                     
             </div>
