@@ -68,6 +68,8 @@ class VueMot extends Vue
 
         $_POST['idM'] = $idM;
         $this->content .= <<<CARD
+<input id="idM" value="$idM" hidden>
+
 <div class="card-deck">
 
 <div class="card border-primary mb-3" style="min-width: 18rem;">
@@ -79,6 +81,7 @@ class VueMot extends Vue
 
 
 <!-- Select Multiple -->
+
 <div class="form-group">
   <div class="col-md-auto">
     <select id="selectedDico" name="dico" class="form-control" multiple="multiple">
@@ -139,7 +142,7 @@ END;
 <div class="form-group">
   <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
-    <button id="singlebutton" name="singlebutton" class="btn btn-success">Valider</button>
+    <button id="buttnChangeWord" name="singlebutton" class="btn btn-success">Valider</button>
   </div>
 </div>
 

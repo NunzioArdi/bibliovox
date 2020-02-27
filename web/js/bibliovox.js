@@ -4,23 +4,33 @@ if (document.getElementById("searchButtn") !== null)
     document.getElementById("searchButtn").onclick = function () {
     console.log(PATH);
     var words = document.getElementById("searchBar").value;
-    makeRequest(PATH + '/searchAudio', "data=" + encodeURIComponent(words), printResultSearchAudio)
+    makeRequest(PATH + '/searchAudio', "data=" + encodeURIComponent(words), printResultSearchAudio);
 }
 
 if (document.getElementById("dicoButtn") !== null)
 document.getElementById("dicoButtn").onclick = function () {
     var dico = getSelectionsListe("selectedDico");
-
-    console.log(dico);
-    makeRequest(PATH + '/changeDicoMot', "data=" + encodeURIComponent(dico) + "&idM=7", nothing)
+    var idM = document.getElementById("idM").value;
+    makeRequest(PATH + '/changeDicoMot', "data=" + encodeURIComponent(dico) + "&idM=" + idM, nothing);
 }
 
 function printResultSearchAudio(e) {
-    console.log(this.response);
+    if (this.readyState === XMLHttpRequest.DONE) {
+        if (this.status === 200) {
+            console.log(this.response);
+        } else {
+            alert('Il y a eu un problème avec la requête.');
+        }
+    }
 }
 
 function nothing(e) {
-    console.log(this.response);
+    if (this.readyState === XMLHttpRequest.DONE) {
+        if (this.status === 200) {
+        } else {
+            alert('Il y a eu un problème avec la requête.');
+        }
+    }
 }
 
 function makeRequest(url, data, then) {
