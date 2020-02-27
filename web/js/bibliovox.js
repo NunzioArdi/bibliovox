@@ -27,14 +27,32 @@ if (document.getElementById("reload") !== null)
     }
 
 function printResultSearchAudio(e) {
+    let txt;
     if (this.readyState === XMLHttpRequest.DONE) {
         if (this.status === 200) {
             console.log(this.response);
+            let resp = this.response.split('-');
+            let board = document.querySelector("#results");
+            while (board.firstChild) {
+                board.removeChild(board.firstChild);
+            }
+
+            if (resp[0] !== "") {
+                for (let i = 0; i < resp.length-1; i++) {
+                    txt = "<audio controls src = '" + PATH + "/" + resp[i] + "'>Erreur</audio><br>";
+                    $('#results').append(txt);
+                }
+            } else {
+                board.append("Auncun Résultat");
+            }
+
+
         } else {
             alert('Il y a eu un problème avec la requête.');
         }
     }
 }
+
 
 function nothing(e) {
     if (this.readyState === XMLHttpRequest.DONE) {

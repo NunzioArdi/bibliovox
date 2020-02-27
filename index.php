@@ -180,44 +180,42 @@ $app->post("/searchAudio", function () {
         $wods = explode(' ', $_POST['data']);
         $ids[] = null;
         foreach ($wods as $word) {
-            foreach (Utilisateur::getID($word) as $id){
-                if (! is_null($id))
-                array_push($ids, $id);
+            foreach (Utilisateur::getID($word) as $id) {
+                if (!is_null($id))
+                    array_push($ids, $id);
             }
         }
 
         $chemins[] = null;
         foreach ($ids as $row) {
             if (!is_null($row)) {
-                foreach (Audio::getAudio($row) as $chem){
-                    array_push($chemins, $chem);
+                foreach (Audio::getAudio($row) as $chem) {
+                    array_push($chemins, $chem['chemin']);
                 }
             }
         }
-            echo json_encode($chemins);
+        $chemins = array_unique($chemins);
+        foreach ($chemins as $row) {
+            if (isset($row))
+                echo $row . "-";
+        }
     }
 });
 
 $app->post("/changeDicoMot", function () {
-    if (isset($_POST['data'])){
+    if (isset($_POST['data'])) {
         $ids = explode(' ', $_POST['data']);
         $cont = new ControleurDicoContient();
         $cont->processUpdate(intval($_POST['idM']), $ids);
-    }
-    else
-    echo "ERREUR";
+    } else
+        echo "ERREUR";
 });
 
 $app->post("/udpateWord", function () {
-    if (isset($_POST['word'], $_POST['idM'])){
+    if (isset($_POST['word'], $_POST['idM'])) {
         Mot::updateMot($_POST['word'], $_POST['idM']);
     }
 });
-
-
-
-
-
 
 
 $app->run();

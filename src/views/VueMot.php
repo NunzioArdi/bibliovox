@@ -194,7 +194,6 @@ CARD;
 CARD;
 
 
-
         // Bouton de suppression :
         $path = $GLOBALS["router"]->urlFor("delete_mot") . "?idM=" . $idM;
         $this->content .= <<<CARD
@@ -348,6 +347,11 @@ FORM;
                             <a href="#" id="searchButtn" class="btn btn-primary">Lancer la recherche</a>
                           </div>
                         </div>
+                        
+                        <div id="results">
+                           
+                        </div>
+                    <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
                     <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
 
                     
