@@ -219,10 +219,9 @@ CARD;
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="mot">Mot</label>  
+  <label class="col-md-4 control-label" for="mot">Nom du mot</label>  
   <div class="col-md-5">
   <input id="mot" name="mot" type="text" placeholder="Mot" class="form-control input-md" required="">
-  <span class="help-block">Mot à ajouter au dictionnaire</span>  
   </div>
 </div>
 
