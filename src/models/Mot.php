@@ -61,4 +61,9 @@ class Mot extends Model
     {
         Mot::where("idM", "=", "$idM")->delete();
     }
+
+    public function audios()
+    {
+        return $this->belongsToMany("\bibliovox\models\Audio", "audioMot", "idAudio", "idM")->get();
+    }
 }
