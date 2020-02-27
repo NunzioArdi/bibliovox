@@ -4,7 +4,6 @@
 namespace bibliovox\views;
 
 
-use bibliovox\models\Audio;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 
@@ -32,25 +31,24 @@ class VueMot extends Vue
 
         $this->title = $texte;
 
-
         $this->content .= "<div class = \"mot\">";
         $this->content .= "<h1>$texte</h1>";
         if ($mot->image != null)
             $this->content .= "<img src=\" " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "\"  alt=\"img\">";
 
-        //TODO Gérer les plusieurs audio possibles
+        $audios = $mot->audios();
+        foreach ($audios as $audio) {
+            $date = explode('-', $audio->dateCreation);
+            $this->content .= "<div class=\"date\">Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
 
-        $chemin = Audio::getAudioById($mot->idAudio);
-        if (! is_null($chemin)) {
             $this->content .= "<audio controls>";
-            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/" . $chemin . "\" type=\"audio/mp3\">";
+            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/" . $audio->chemin . "\" type=\"audio/mp3\">";
             $this->content .= "</audio></div>";
         }
 
-
-            $this->content .= "<h2>Enregistre toi !</h2>";
-            //TODO
-            //Appel à l'enregistreur
+        $this->content .= "<h2>Enregistre toi !</h2>";
+        //TODO
+        //Appel à l'enregistreur
 
 
         //TODO controler qu'il s'agit d'un prof/admin

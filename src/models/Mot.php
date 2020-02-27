@@ -64,6 +64,6 @@ class Mot extends Model
 
     public function audios()
     {
-        return $this->belongsToMany("\bibliovox\models\Audio", "audioMot", "idAudio", "idM")->get();
+        return $this->belongsToMany("\bibliovox\models\Audio", "audioMot", "idM", "idAudio")->get();
     }
 }
