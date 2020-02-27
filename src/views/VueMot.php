@@ -365,7 +365,6 @@ FORM;
                     <li>Sélectionner un fichier audio déjà existant en cherchant son créateur</li>
                     <li>Importer un fichier audio au format mp3</li>
                 </ul>
-                <p>Attention, si vous importez un fichier audio, seul celui-ci sera pris en compte.</p>
             </div>
         </div>
         
