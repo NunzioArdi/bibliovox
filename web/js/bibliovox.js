@@ -1,4 +1,4 @@
-var PATH = "/s3a_s20_bernard_claude_conte_sallerin_allard";
+var PATH = document.getElementById("path").value;
 
 if (document.getElementById("searchButtn") !== null)
     document.getElementById("searchButtn").onclick = function () {

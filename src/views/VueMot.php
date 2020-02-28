@@ -207,7 +207,7 @@ CARD;
 </div>
 
      </div>   
-
+<input id="path" value="{$GLOBALS["PATH"]}" hidden>
 <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
   
             </div>
@@ -352,7 +352,7 @@ FORM;
                         </div>
                         
                         <div id="results"></div>
-                        
+                    <input id="path" value="{$GLOBALS["PATH"]}" hidden>
                     <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
                     <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js" ></script>
 
