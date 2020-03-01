@@ -33,7 +33,7 @@ class Mot extends Model
     }
 
     //TODO checker les paramètres nécessaires
-    public static function createNew(String $texte, int $idAudio)
+    public static function createNew(String $texte)
     {
         $new = new Mot();
         $new->texte = filter_var($texte, FILTER_SANITIZE_STRING);
@@ -50,8 +50,6 @@ class Mot extends Model
             }
 
         } else $new->image = '';
-
-        $new->idAudio = $idAudio;
         $new->save();
 
         return $new;
@@ -82,12 +80,16 @@ class Mot extends Model
 
                 $mot->image = $fileName;
             } else {
-                echo "aie";
                 return 1;
             }
         }
         $mot->update();
         if (!is_null($old))
             unlink("media/img/img/mot" . $old);
+    }
+
+    public function audios()
+    {
+        return $this->belongsToMany("\bibliovox\models\Audio", "audioMot", "idM", "idAudio")->get();
     }
 }

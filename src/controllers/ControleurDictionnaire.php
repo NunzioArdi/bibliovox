@@ -89,6 +89,19 @@ class ControleurDictionnaire extends Controleur
             return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces", ["idD" => $res->idD]));
     }
 
+    public function delete($idD)
+    {
+        DicoContient::deleteBiIdD($idD);
+        Dictionnaire::deleteDico($idD);
+        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaires"));
+    }
+
+    public function updateImage($idD)
+    {
+        echo "Chargement en cours...";
+        Dictionnaire::updatePic($idD);
+        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces", ["idD" => $idD]));
+    }
 
 
 }

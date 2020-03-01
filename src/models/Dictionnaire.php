@@ -44,4 +44,35 @@ class Dictionnaire extends Model
         return $newDico;
     }
 
+    public static function updateName(String $dicoName, int $idD)
+    {
+        $dico = Dictionnaire::where("idD", "=", "$idD")->first();
+        $dico->nomD = $dicoName;
+
+        $dico->update();
+    }
+
+    public static function deleteDico($idD)
+    {
+        Dictionnaire::where("idD", "=", "$idD")->delete();
+    }
+
+    public static function updatePic($idD) {
+        $dico = Dictionnaire::where("idD", "=", "$idD")->first();
+
+        if (isset($_FILES['image']) AND $_FILES['image']['error'] == 0) {
+            $extension_upload = pathinfo($_FILES['image']['name'])['extension'];
+            $extensions_autorisees = array('jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'gif');
+            if (in_array($extension_upload, $extensions_autorisees)) {
+                $fileName = rand() . filter_var($_FILES['image']['name'], FILTER_SANITIZE_URL);
+                move_uploaded_file($_FILES['image']['tmp_name'], 'media/img/img/dico/' . $fileName);
+
+                $dico->imageD = $fileName;
+            } else {
+            }
+        }
+
+        $dico->update();
+    }
+
 }

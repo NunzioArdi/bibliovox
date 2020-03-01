@@ -1,8 +1,7 @@
-var PATH = "/s3a_s20_bernard_claude_conte_sallerin_allard";
+var PATH = document.getElementById("path").value;
 
 if (document.getElementById("searchButtn") !== null)
     document.getElementById("searchButtn").onclick = function () {
-        console.log(PATH);
         var words = document.getElementById("searchBar").value;
         makeRequest(PATH + '/searchAudio', "data=" + encodeURIComponent(words), printResultSearchAudio);
     }
@@ -21,20 +20,47 @@ if (document.getElementById("buttnChangeWord") !== null)
         makeRequest(PATH + '/udpateWord', "word=" + word + "&idM=" + idM, nothing);
     }
 
-if (document.getElementById("reload") !== null)
-    document.getElementById("reload").onclick = function () {
-
+if (document.getElementById("bttnName") !== null)
+    document.getElementById("bttnName").onclick = function () {
+    let newName = document.getElementById("dicoName").value;
+    let idD = document.getElementById("idD").value;
+    makeRequest(PATH + "/updateDicoName", "dicoName=" + newName + "&idD=" + idD, nothing);
     }
 
 function printResultSearchAudio(e) {
+    let txt;
     if (this.readyState === XMLHttpRequest.DONE) {
         if (this.status === 200) {
-            console.log(this.response);
+            let resp = this.response.split('-');
+            let board = document.querySelector("#results");
+            while (board.firstChild) {
+                board.removeChild(board.firstChild);
+            }
+
+            if (resp[0] !== "") {
+
+                txt = "<input type='text' name='cbnumber' hidden value='" + resp.length + "'>";
+
+                txt += "<p>Sélectionnez les audio que vous souhaitez associer au mot.</p>"
+
+                for (let i = 0; i < resp.length-1; i++) {
+                    txt += "<div>\n" +
+                        "  <input type='checkbox' name='" + i + "' id='checkox' value='" + resp[i] + "'>" +
+                        "  <label for='" + resp[i] + "'><audio controls src = '" + PATH + "/" + resp[i] + "'>Erreur</audio></label>" +
+                        "</div><br>";
+                }
+                $('#results').append(txt);
+            } else {
+                board.append("Auncun Résultat");
+            }
+
+
         } else {
             alert('Il y a eu un problème avec la requête.');
         }
     }
 }
+
 
 function nothing(e) {
     if (this.readyState === XMLHttpRequest.DONE) {

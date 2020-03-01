@@ -66,12 +66,6 @@ abstract class Vue
     <title>$this->title</title>
     <link rel="stylesheet" href="{$GLOBALS["PATH"]}/web/css/bootstrap.css">
     <link rel="icon" href="{$GLOBALS["PATH"]}/media/img/icn/logo.png">
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
-    <script src="{$GLOBALS["PATH"]}/web/js/bootstrap.js"></script>
-
-
-
 </head>
 <body>
     <nav>
@@ -80,6 +74,9 @@ abstract class Vue
         </ul>
     </nav>
 $this->content
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
+    <script src="{$GLOBALS["PATH"]}/web/js/bootstrap.js"></script>
 </body>
 </html>
 HTML;

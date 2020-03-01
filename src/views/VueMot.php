@@ -4,7 +4,7 @@
 namespace bibliovox\views;
 
 
-use bibliovox\models\Audio;
+use bibliovox\controllers\ControleurAudio;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 
@@ -38,19 +38,17 @@ class VueMot extends Vue
         if ($mot->image != null)
             $this->content .= "<img src=\" " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "\"  alt=\"img\">";
 
-        //TODO Gérer les plusieurs audio possibles
+        $audios = $mot->audios();
+        foreach ($audios as $audio) {
+            $date = explode('-', $audio->dateCreation);
+            $this->content .= "<div class=\"date\">Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
 
-        $chemin = Audio::getAudioById($mot->idAudio);
-        if (!is_null($chemin)) {
             $this->content .= "<audio controls>";
-            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/" . $chemin . "\" type=\"audio/mp3\">";
+            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/" . $audio->chemin . "\" type=\"audio/mp3\">";
             $this->content .= "</audio></div>";
         }
 
-
-        $this->content .= "<h2>Enregistre toi !</h2>";
-        //TODO
-        //Appel à l'enregistreur
+        $this->content .= ControleurAudio::record();
 
 
         //TODO controler qu'il s'agit d'un prof/admin
@@ -68,20 +66,16 @@ class VueMot extends Vue
 
         $_POST['idM'] = $idM;
         $this->content .= <<<CARD
-
-<div class="card text-center">
-  <div class="card-header">
+<div class="card">
+  <div class="card-header text-center">
     <b>Outils d'édition</b>
   </div>
-  <div class="card-body">
+  <div class="card-body text-center">
     <p class="card-text">Certainnes modifications n'apparaiteront qu'une fois la page rechargée.</p>
     <p class="card-text"> Pensez à actualiser la page une fois vos modifications effectuées.</p>
     <input class="btn btn-block btn-success" type="button" value = "Rafraîchir" onclick="history.go(0)" />
   </div>
   <div class="card-footer text-muted">
-
-
-
 <input id="idM" value="$idM" hidden>
 
 <div class="card-deck">
@@ -95,7 +89,6 @@ class VueMot extends Vue
 
 
 <!-- Select Multiple -->
-
 <div class="form-group">
   <div class="col-md-auto">
     <select id="selectedDico" name="dico" class="form-control" multiple="multiple">
@@ -144,20 +137,19 @@ END;
 <fieldset>
 
 
-  <p class="text-body">Indiquez la nouvelle orthographe du mot.</p>
-
 <!-- Text input-->
 <div class="form-group">
   <div class="col-md-auto">
-  <input id="newWord" name="newWord" type="text" placeholder="correction" value="$mot" class="form-control input-md" onkeypress="refuserToucheEntree(event);">
+  <input id="newWord" name="newWord" type="text" placeholder="correction" value="$mot" class="form-control input-md" onkeypress="refuserToucheEntree(event);">    
   </div>
 </div>
 
 <!-- Button -->
 <div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
   <div class="col-md-4">
-    <a id="buttnChangeWord" href="#" class="btn btn-success">Valider</a>
-  </div>
+        <a id="buttnChangeWord" href="#" class="btn btn-success">Valider</a>
+    </div>
 </div>
 
 </fieldset>
@@ -214,15 +206,18 @@ CARD;
 </div>
 
      </div>   
-
+<input id="path" value="{$GLOBALS["PATH"]}" hidden>
 <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
   
-      </div>
+            </div>
 </div>    
 CARD;
 
 
     }
+
+
+
 
     private function creMot()
     {
@@ -237,9 +232,10 @@ CARD;
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="mot">Nom du mot</label>  
+  <label class="col-md-4 control-label" for="mot">Mot</label>  
   <div class="col-md-5">
   <input id="mot" name="mot" type="text" placeholder="Mot" class="form-control input-md" required="">
+  <span class="help-block">Mot à ajouter au dictionnaire</span>  
   </div>
 </div>
 
@@ -340,7 +336,7 @@ FORM;
                         <!-- Text input-->
                         <div class="form-group">
                           <div class="col-md-6">
-                          <input id="searchBar"  type="text" placeholder="Recherche" class="form-control input-md">
+                          <input id="searchBar"  type="text" placeholder="Recherche" class="form-control input-md" onkeypress="refuserToucheEntree(event);">
                           <span class="help-block">Cherchez par nom, prénom, courriel ou identifiant.</span>  
                           </div>
                         </div>
@@ -353,7 +349,11 @@ FORM;
                             <a href="#" id="searchButtn" class="btn btn-primary">Lancer la recherche</a>
                           </div>
                         </div>
-                    <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
+                        
+                        <div id="results"></div>
+                    <input id="path" value="{$GLOBALS["PATH"]}" hidden>
+                    <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
+                    <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js" ></script>
 
                     
             </div>
@@ -364,7 +364,6 @@ FORM;
                     <li>Sélectionner un fichier audio déjà existant en cherchant son créateur</li>
                     <li>Importer un fichier audio au format mp3</li>
                 </ul>
-                <p>Attention, si vous importez un fichier audio, seul celui-ci sera pris en compte.</p>
             </div>
         </div>
         

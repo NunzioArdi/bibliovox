@@ -27,4 +27,25 @@ class ControleurAudio extends Controleur
             return -1;
         return $ret->idAudio;
     }
+
+
+    //On pourra éventuellement passer des paramètres pour l'enregistrement si nécessaire
+    public static function record() : String
+    {
+        $res = <<<REC
+<div class="card text-white bg-info mb-3" style="min-width: 18rem;">
+  <div class="card-header">Enregistre toi !</div>
+  <div class="card-body">
+    <p>Enregistre toi en utilisant le bouton "enregistrement".</p>
+    <p class="text-center">
+        <a href="#" class="btn btn-success" id="bRecord">Enregistrement</a>
+        <a href="#" class="btn btn-light" id="bPause">Stop</a>
+        <a href="#" class="btn btn-warning" id="bUpload">Envoyer</a>
+    </p>
+  </div>
+</div>
+REC;
+        return $res;
+
+    }
 }
