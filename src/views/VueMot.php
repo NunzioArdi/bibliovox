@@ -67,11 +67,11 @@ class VueMot extends Vue
 
         $_POST['idM'] = $idM;
         $this->content .= <<<CARD
-<div class="card text-center">
-  <div class="card-header">
+<div class="card">
+  <div class="card-header text-center">
     <b>Outils d'édition</b>
   </div>
-  <div class="card-body">
+  <div class="card-body text-center">
     <p class="card-text">Certainnes modifications n'apparaiteront qu'une fois la page rechargée.</p>
     <p class="card-text"> Pensez à actualiser la page une fois vos modifications effectuées.</p>
     <input class="btn btn-block btn-success" type="button" value = "Rafraîchir" onclick="history.go(0)" />
