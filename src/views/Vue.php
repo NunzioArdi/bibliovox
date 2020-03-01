@@ -35,7 +35,7 @@ abstract class Vue
         $this->res = $res;
 
         $this->nav = [
-            "logo" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('home') . "\"><img class =\"icn\" src=\"" . $GLOBALS["PATH"] . "/media/img/icn/logo.png\" alt=\"Logo\"></a></li>",
+            "logo" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('home') . "\"><img  class =\"logo\" src=\"" . $GLOBALS["PATH"] . "/media/img/icn/logo.png\" alt=\"Logo\"></a></li>",
             "Accueil" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('home') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/home.png\" alt=\"Accueil\">Accueil</a></li>",
             "dictionnaires" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('dictionnaires') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/dico.png\" alt=\"Dictionnaires\">Dictionnaires</a></li>",
             "recueils" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('recueils') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/recueil.png\" alt=\"Recueils\">Recueils</a></li>",
