@@ -10330,14 +10330,40 @@ nav li .icn {
   color: #020647;
 }
 
+.icn {
+  margin-right: 1em;
+}
+
+.logo{
+  width: 90px;
+  margin-right: -20px;
+}
+
 .dico {
   display: block;
 }
-
+ 
 .dico h2 {
   display: inline-block;
 }
 
 .dico img {
-  width: 10%;
+  width: 8%;
+  margin: 1em 0 1em 15px;
+}
+
+.text{
+  text-align: center;
+}
+
+#dicoText{
+  margin-top : 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+#dicoButton{
+  display: block;
+  margin : 15px auto 0 auto;
+  width: 126px;
 }

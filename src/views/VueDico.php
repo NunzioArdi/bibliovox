@@ -58,7 +58,7 @@ class VueDico extends Vue
         }
 
         $this->content .= "    <div class=\"createNew\">
-            <a href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\">Nouveau Dico</a>
+            <a id='dicoButton' href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\">Nouveau Dico</a>
             </div>";
     }
 
@@ -79,8 +79,8 @@ class VueDico extends Vue
             <textarea name='description' placeholder='Description' lang='fr' required></textarea><br>
             <label>Illustration du dictionnaire (facultatif)</label> <br>
             <input type='file' name='image' accept="image/*"> <br> <br>
-            <input class="bouton" type="submit" value="Valider">
-            <input class='bouton' type="reset" value="Annuler">
+            <input class="btn btn-primary" type="submit" value="Valider" >
+            <input class="btn btn-primary" type="reset" value="Annuler">
             </form>
 FORM;
     }
@@ -89,13 +89,13 @@ FORM;
     {
         $this->title = "Tous les mots";
 
-        $this->content .= "<h1>Tous les mots par ordre alphabétique</h1>";
+        $this->content .= "<h1 id='dicoText'>Tous les mots par ordre alphabétique</h1>";
 
         //On veut l'image?
         //echo "<img src='".PATH."/media/img/img/dico/alpha.png'>";
 
         foreach ($this->res as $m) {
-            $this->content .= "<h2><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => 0, "idM" => $m->idM]) . "'>$m->texte</a></h2>\n";
+            $this->content .= "<h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => 0, "idM" => $m->idM]) . "'>$m->texte</a></h2>\n";
         }
         $this->content.= "<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => 0]) . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\"></span> Nouveau mot</a>";
 
@@ -104,12 +104,12 @@ FORM;
     private function theme()
     {
         $this->title = $this->res[1];
-        $this->content .= "<h1>$this->title</h1>";
+        $this->content .= "<h1 id='dicoText'>$this->title</h1>";
 
         foreach ($this->res[2] as $m) {
-            $this->content .= "<h2><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2>\n";
+            $this->content .= "<h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2>\n";
         }
-        $this->content.= "<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => $this->res[0]]) . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\"></span> Nouveau mot</a>";
+        $this->content.= "<a id='dicoButton' type='submit' href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => $this->res[0]]) . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\"></span> Nouveau mot</a>";
 
     }
 
