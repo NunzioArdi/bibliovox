@@ -20,9 +20,11 @@ if (document.getElementById("buttnChangeWord") !== null)
         makeRequest(PATH + '/udpateWord', "word=" + word + "&idM=" + idM, nothing);
     }
 
-if (document.getElementById("reload") !== null)
-    document.getElementById("reload").onclick = function () {
-
+if (document.getElementById("bttnName") !== null)
+    document.getElementById("bttnName").onclick = function () {
+    let newName = document.getElementById("dicoName").value;
+    let idD = document.getElementById("idD").value;
+    makeRequest(PATH + "/updateDicoName", "dicoName=" + newName + "&idD=" + idD, nothing);
     }
 
 function printResultSearchAudio(e) {

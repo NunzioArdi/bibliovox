@@ -8,6 +8,7 @@ use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\controllers\ControleurHome;
 use bibliovox\models\Audio;
+use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\models\Utilisateur;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -85,6 +86,12 @@ $app->get('/dictionnaire/acces/{idD}/nouveauMot', function (Request $req, Respon
     $cont = new ControleurMot();
     $cont->createMot($args['idD']);
 })->setName('new_mot');
+//Supprimer le dictionnaire
+$app->get('/dictionnaire/access/{idD}/delete', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurDictionnaire($req, $resp, $args);
+    $cont->delete($args['idD']);
+})->setName('delete_dico');
+
 
 
 //Recueil
@@ -136,6 +143,10 @@ $app->post('/dictionnaire/create/process', function (Request $req, Response $res
     $cont = new ControleurDictionnaire($req, $resp);
     return $cont->processCreate();
 })->setName('new_dictionnaire_process');
+$app->post('/dictionnaires/access/{idD}/processImage',function (Request $req, Response $resp, $args){
+    $cont = new ControleurDictionnaire($req, $resp, $args);
+    return $cont->updateImage($args['idD']);
+})->setName('update_dico_image');
 
 
 $app->post('/production/create/process', function (Request $req, Response $resp, $args) {
@@ -214,6 +225,12 @@ $app->post("/changeDicoMot", function () {
 $app->post("/udpateWord", function () {
     if (isset($_POST['word'], $_POST['idM'])) {
         Mot::updateMot($_POST['word'], $_POST['idM']);
+    }
+});
+
+$app->post("/updateDicoName", function () {
+    if (isset($_POST['dicoName'], $_POST['idD'])){
+        Dictionnaire::updateName($_POST['dicoName'], $_POST['idD']);
     }
 });
 

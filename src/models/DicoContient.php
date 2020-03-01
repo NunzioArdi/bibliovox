@@ -49,4 +49,9 @@ class DicoContient extends Model
         DicoContient::where("idM", "=", "$idM")->delete();
 
     }
+
+    public static function deleteBiIdD($idD)
+    {
+        DicoContient::where("idD", "=", "$idD")->delete();
+    }
 }
