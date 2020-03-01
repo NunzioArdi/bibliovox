@@ -4,6 +4,7 @@
 namespace bibliovox\views;
 
 
+use bibliovox\controllers\ControleurAudio;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
 
@@ -47,9 +48,7 @@ class VueMot extends Vue
             $this->content .= "</audio></div>";
         }
 
-        $this->content .= "<h2>Enregistre toi !</h2>";
-        //TODO
-        //Appel à l'enregistreur
+        $this->content .= ControleurAudio::record();
 
 
         //TODO controler qu'il s'agit d'un prof/admin

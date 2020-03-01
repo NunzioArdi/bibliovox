@@ -58,7 +58,7 @@ class VueDico extends Vue
         }
 
         $this->content .= "    <div class=\"createNew\">
-            <a href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\">Nouveau Dico</a>
+            <a href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon \"> + Nouveau Dictionnaire</a>
             </div>";
     }
 
