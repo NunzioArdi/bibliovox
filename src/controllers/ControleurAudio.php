@@ -44,6 +44,9 @@ class ControleurAudio extends Controleur
     </p>
   </div>
 </div>
+
+<script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
+<script src="{$GLOBALS["PATH"]}/web/js/recAudio.js" ></script>
 REC;
         return $res;
 

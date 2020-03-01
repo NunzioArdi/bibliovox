@@ -17,6 +17,7 @@ let blob = null;
 
 bRecord.on("click", () => {
 
+    bRecord.toggleClass("btn-danger");
     //Demande de l'autorisation de l'utilisation du micro
     let promise = navigator.mediaDevices.getUserMedia({audio: true}).then(record).catch(gestionErreurUserMedia);
 
