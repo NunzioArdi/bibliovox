@@ -16,11 +16,8 @@ let context = null;
 let blob = null;
 
 bRecord.on("click", () => {
-
-    bRecord.toggleClass("btn-danger");
-    //Demande de l'autorisation de l'utilisation du micro
-    let promise = navigator.mediaDevices.getUserMedia({audio: true}).then(record).catch(gestionErreurUserMedia);
-
+    if (!recording)
+        navigator.mediaDevices.getUserMedia({audio: true}).then(record).catch(gestionErreurUserMedia);
 });
 
 bPause.on("click", pause);
@@ -36,6 +33,7 @@ function gestionErreurUserMedia(erreur) {
 
 function record(stream) {
 
+    bRecord.addClass("btn-danger");
     context = new AudioContext();
     mediaStream = context.createMediaStreamSource(stream);
 
@@ -56,57 +54,60 @@ function record(stream) {
 }
 
 function pause() {
+    if (recording) {
+        bRecord.removeClass("btn-danger");
+        // stop recording
+        recorder.disconnect(context.destination);
+        mediaStream.disconnect(recorder);
 
-    // stop recording
-    recorder.disconnect(context.destination);
-    mediaStream.disconnect(recorder);
+        recording = false;
 
-    recording = false;
+        // we flat the left and right channels down
+        // Float32Array[] => Float32Array
+        let leftBuffer = flattenArray(leftchannel, recordingLength);
+        let rightBuffer = flattenArray(rightchannel, recordingLength);
+        // we interleave both channels together
+        // [left[0],right[0],left[1],right[1],...]
+        let interleaved = interleave(leftBuffer, rightBuffer);
 
-    // we flat the left and right channels down
-    // Float32Array[] => Float32Array
-    let leftBuffer = flattenArray(leftchannel, recordingLength);
-    let rightBuffer = flattenArray(rightchannel, recordingLength);
-    // we interleave both channels together
-    // [left[0],right[0],left[1],right[1],...]
-    let interleaved = interleave(leftBuffer, rightBuffer);
+        // we create our wav file
+        let buffer = new ArrayBuffer(44 + interleaved.length * 2);
+        let view = new DataView(buffer);
 
-    // we create our wav file
-    let buffer = new ArrayBuffer(44 + interleaved.length * 2);
-    let view = new DataView(buffer);
+        // RIFF chunk descriptor
+        writeUTFBytes(view, 0, 'RIFF');
+        view.setUint32(4, 44 + interleaved.length * 2, true);
+        writeUTFBytes(view, 8, 'WAVE');
+        // FMT sub-chunk
+        writeUTFBytes(view, 12, 'fmt ');
+        view.setUint32(16, 16, true); // chunkSize
+        view.setUint16(20, 1, true); // wFormatTag
+        view.setUint16(22, 2, true); // wChannels: stereo (2 channels)
+        view.setUint32(24, sampleRate, true); // dwSamplesPerSec
+        view.setUint32(28, sampleRate * 4, true); // dwAvgBytesPerSec
+        view.setUint16(32, 4, true); // wBlockAlign
+        view.setUint16(34, 16, true); // wBitsPerSample
+        // data sub-chunk
+        writeUTFBytes(view, 36, 'data');
+        view.setUint32(40, interleaved.length * 2, true);
 
-    // RIFF chunk descriptor
-    writeUTFBytes(view, 0, 'RIFF');
-    view.setUint32(4, 44 + interleaved.length * 2, true);
-    writeUTFBytes(view, 8, 'WAVE');
-    // FMT sub-chunk
-    writeUTFBytes(view, 12, 'fmt ');
-    view.setUint32(16, 16, true); // chunkSize
-    view.setUint16(20, 1, true); // wFormatTag
-    view.setUint16(22, 2, true); // wChannels: stereo (2 channels)
-    view.setUint32(24, sampleRate, true); // dwSamplesPerSec
-    view.setUint32(28, sampleRate * 4, true); // dwAvgBytesPerSec
-    view.setUint16(32, 4, true); // wBlockAlign
-    view.setUint16(34, 16, true); // wBitsPerSample
-    // data sub-chunk
-    writeUTFBytes(view, 36, 'data');
-    view.setUint32(40, interleaved.length * 2, true);
+        // write the PCM samples
+        let index = 44;
+        let volume = 1;
+        for (let i = 0; i < interleaved.length; i++) {
+            view.setInt16(index, interleaved[i] * (0x7FFF * volume), true);
+            index += 2;
+        }
 
-    // write the PCM samples
-    let index = 44;
-    let volume = 1;
-    for (let i = 0; i < interleaved.length; i++) {
-        view.setInt16(index, interleaved[i] * (0x7FFF * volume), true);
-        index += 2;
+        // our final blob
+        blob = new Blob([view], {type: 'audio/wav'});
     }
-
-    // our final blob
-    blob = new Blob([view], {type: 'audio/wav'});
 }
 
 function play() {
     if (recording)
         pause();
+
     if (blob != null) {
         let url = window.URL.createObjectURL(blob);
         let audio = new Audio(url);
@@ -115,6 +116,9 @@ function play() {
 }
 
 function reset() {
+    if (recording)
+        pause();
+
     leftchannel = [];
     rightchannel = [];
     recorder = null;
