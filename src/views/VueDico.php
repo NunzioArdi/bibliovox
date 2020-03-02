@@ -92,26 +92,52 @@ FORM;
 
         $this->content .= "<h1 id='dicoText'>Tous les mots par ordre alphabétique</h1>";
 
-        //On veut l'image?
-        //echo "<img src='".PATH."/media/img/img/dico/alpha.png'>";
+
+        $none = true;
 
         foreach ($this->res as $m) {
+            $none = false;
             $this->content .= "<h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => 0, "idM" => $m->idM]) . "'>$m->texte</a></h2>\n";
         }
-        $this->content .= "<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => 0]) . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\"></span> Nouveau mot</a>";
+        if ($none)
+            $this->content .= "<p>Aucun mot dans Bibli O'vox.</p>";
+
+        //TODO test si admin
+        if (true) {
+            $this->content .= "<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => 0]) . "\" class=\"btn btn-block btn-success\">+ Créer un mot</a>";
+        }
 
     }
 
     private function theme()
     {
         $this->title = $this->res[1];
-        $this->content .= "<h1 id='dicoText'>$this->title</h1>";
+        $img = $GLOBALS["PATH"]."/media/img/img/dico/" . $this->res[3];
+        $titre = "<h1 id='dicoText'>$this->title</h1>";
 
+        $this->content .= <<<MOTS
+<div class="card text-center" style="min-width: 18rem;">
+  <img class="card-img-top" src="$img" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">$titre</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+
+
+MOTS;
+
+
+
+        $none = true;
         foreach ($this->res[2] as $m) {
-            $this->content .= "<h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2>\n";
+            $none = false;
+            $this->content .= "<li class='list-group-item'><h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2></li>\n";
         }
-        $this->content.= "<a id='themeButton' type='submit' href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => $this->res[0]]) . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon glyphicon-plus\"></span> Nouveau mot</a>";
 
+        if ($none)
+            $this->content .= "<li class='list-group-item'><p class='btn btn-danger'>Aucun mot dans ce dictionnaire.</p></li>";
+
+        $this->content .= "</ul></div>";
         //TODO Test si admin
         if (true) {
             $this->outilsAdmin();

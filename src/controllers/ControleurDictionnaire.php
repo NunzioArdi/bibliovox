@@ -59,7 +59,7 @@ class ControleurDictionnaire extends Controleur
         $dico = Dictionnaire::getId($idDico);
 
         if ($dico != null) {
-            $rep = [$dico->idD, $dico->nomD, [] ];
+            $rep = [$dico->idD, $dico->nomD, [] , $dico->imageD];
             $mots = DicoContient::motContenuDico($idDico);
             foreach ($mots as $m) {
                 array_push($rep[2], json_decode($mot = Mot::getById($m->idM)));
