@@ -33,20 +33,31 @@ class VueMot extends Vue
         $this->title = $texte;
 
 
-        $this->content .= "<div class = \"mot\">";
+        $this->content .= "<div class = 'mot'>";
         $this->content .= "<h1>$texte</h1>";
         if ($mot->image != null)
             $this->content .= "<img src=\" " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "\"  alt=\"img\">";
 
         $audios = $mot->audios();
+
+        //Permet de savoir si on a affiché un mot
+        $none = true;
+
         foreach ($audios as $audio) {
+            $none = false;
             $date = explode('-', $audio->dateCreation);
-            $this->content .= "<div class=\"date\">Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
+            $an = $date[0];
+            $mois = $date[1];
+            $jour =explode(" ", $date[2])[0];
+            $this->content .= "<div class='date'>Créé le: $jour / $mois /$an</div>";
 
             $this->content .= "<audio controls>";
             $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/" . $audio->chemin . "\" type=\"audio/mp3\">";
             $this->content .= "</audio></div>";
         }
+
+        if ($none)
+            $this->content .= "<p>Aucun enregistrement pour le moment.</p><p>Crée le premier enregistrement maintenant !</p>";
 
         $this->content .= ControleurAudio::record();
 
