@@ -51,7 +51,7 @@ function printResultSearchAudio(e) {
                 }
                 $('#results').append(txt);
             } else {
-                board.append("Auncun Résultat");
+                board.append("Aucun résultat.Vérifiez l'orthographe.");
             }
 
 
