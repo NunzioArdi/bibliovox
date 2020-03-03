@@ -42,11 +42,11 @@ CREATE TABLE IF NOT EXISTS `audio` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `audiomot`
+-- Structure de la table `audioMot`
 --
 
-DROP TABLE IF EXISTS `audiomot`;
-CREATE TABLE IF NOT EXISTS `audiomot` (
+DROP TABLE IF EXISTS `audioMot`;
+CREATE TABLE IF NOT EXISTS `audioMot` (
   `idAudio` int(11) NOT NULL COMMENT 'ID de l''audio',
   `idM` int(11) NOT NULL COMMENT 'ID du mot',
   PRIMARY KEY (`idAudio`,`idM`),
@@ -56,11 +56,11 @@ CREATE TABLE IF NOT EXISTS `audiomot` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `audiorec`
+-- Structure de la table `audioRec`
 --
 
-DROP TABLE IF EXISTS `audiorec`;
-CREATE TABLE IF NOT EXISTS `audiorec` (
+DROP TABLE IF EXISTS `audioRec`;
+CREATE TABLE IF NOT EXISTS `audioRec` (
   `idR` int(10) UNSIGNED NOT NULL COMMENT 'ID du Recueil',
   `idU` int(10) UNSIGNED NOT NULL COMMENT 'ID de l''utilisateur',
   `idAudio` int(11) NOT NULL COMMENT 'ID de l''audio',
@@ -89,11 +89,11 @@ CREATE TABLE IF NOT EXISTS `classe` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `dicocontient`
+-- Structure de la table `dicoContient`
 --
 
-DROP TABLE IF EXISTS `dicocontient`;
-CREATE TABLE IF NOT EXISTS `dicocontient` (
+DROP TABLE IF EXISTS `dicoContient`;
+CREATE TABLE IF NOT EXISTS `dicoContient` (
   `idD` int(10) UNSIGNED NOT NULL COMMENT 'ID du dictionnaire',
   `idM` int(10) UNSIGNED NOT NULL COMMENT 'ID du mot',
   PRIMARY KEY (`idD`,`idM`),
@@ -128,19 +128,6 @@ CREATE TABLE IF NOT EXISTS `eleve` (
   `idU` int(11) NOT NULL COMMENT 'ID de l''utilisateur',
   PRIMARY KEY (`idC`,`idU`),
   KEY `idC` (`idC`,`idU`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `grade`
---
-
-DROP TABLE IF EXISTS `grade`;
-CREATE TABLE IF NOT EXISTS `grade` (
-  `idG` int(1) UNSIGNED NOT NULL COMMENT 'ID du grade',
-  `type` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`idG`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -222,16 +209,29 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   KEY `idG` (`idG`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `grade`
+--
+
+DROP TABLE IF EXISTS `grade`;
+CREATE TABLE IF NOT EXISTS `grade` (
+  `idG` int(1) UNSIGNED NOT NULL COMMENT 'ID du grade',
+  `type` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`idG`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `audiorec`
+-- Contraintes pour la table `audioRec`
 --
-ALTER TABLE `audiorec`
-  ADD CONSTRAINT `audiorec_ibfk_1` FOREIGN KEY (`idR`) REFERENCES `recueil` (`idR`),
-  ADD CONSTRAINT `audiorec_ibfk_2` FOREIGN KEY (`idU`) REFERENCES `utilisateur` (`idU`);
+ALTER TABLE `audioRec`
+  ADD CONSTRAINT `audioRec_ibfk_1` FOREIGN KEY (`idR`) REFERENCES `recueil` (`idR`),
+  ADD CONSTRAINT `audioRec_ibfk_2` FOREIGN KEY (`idU`) REFERENCES `utilisateur` (`idU`);
 
 --
 -- Contraintes pour la table `classe`
@@ -240,11 +240,11 @@ ALTER TABLE `classe`
   ADD CONSTRAINT `classe_ibfk_1` FOREIGN KEY (`idUEnseignant`) REFERENCES `utilisateur` (`idU`);
 
 --
--- Contraintes pour la table `dicocontient`
+-- Contraintes pour la table `dicoContient`
 --
-ALTER TABLE `dicocontient`
-  ADD CONSTRAINT `dicocontient_ibfk_1` FOREIGN KEY (`idD`) REFERENCES `dictionnaire` (`idD`),
-  ADD CONSTRAINT `dicocontient_ibfk_2` FOREIGN KEY (`idM`) REFERENCES `mot` (`idM`);
+ALTER TABLE `dicoContient`
+  ADD CONSTRAINT `dicoContient_ibfk_1` FOREIGN KEY (`idD`) REFERENCES `dictionnaire` (`idD`),
+  ADD CONSTRAINT `dicoContient_ibfk_2` FOREIGN KEY (`idM`) REFERENCES `mot` (`idM`);
 
 --
 -- Contraintes pour la table `tuteur`
