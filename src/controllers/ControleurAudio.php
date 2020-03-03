@@ -30,7 +30,7 @@ class ControleurAudio extends Controleur
 
 
     //On pourra éventuellement passer des paramètres pour l'enregistrement si nécessaire
-    public static function record() : String
+    public static function record(): String
     {
         $res = <<<REC
 <div class="card text-white bg-info mb-3" style="min-width: 18rem;">
@@ -38,15 +38,19 @@ class ControleurAudio extends Controleur
   <div class="card-body">
     <p>Enregistre toi en utilisant le bouton "enregistrement".</p>
     <p class="text-center">
-        <a href="#" class="btn btn-success" id="bRecord">Enregistrement</a>
-        <a href="#" class="btn btn-light" id="bPause">Stop</a>
-        <a href="#" class="btn btn-warning" id="bUpload">Envoyer</a>
+        <button  class="btn btn-success" id="bRecord">Enregistrement</button>
+        <button  class="btn btn-light" id="bPause">Stop</button>
+        <button  class="btn btn-light" id="bPlay">Écouter</button>
+        <button  class="btn btn-warning" id="bUpload" disabled>Envoyer</button>
+        <button  class="btn btn-danger" id="bReset" title="Efface le début de l'enregistrement">Recommencer</button>
+
     </p>
   </div>
 </div>
 
 <script src="{$GLOBALS["PATH"]}/web/js/jquery-1.10.2.js"></script>
 <script src="{$GLOBALS["PATH"]}/web/js/recAudio.js" ></script>
+
 REC;
         return $res;
 
