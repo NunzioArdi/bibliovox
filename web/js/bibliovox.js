@@ -31,7 +31,7 @@ function printResultSearchAudio(e) {
     let txt;
     if (this.readyState === XMLHttpRequest.DONE) {
         if (this.status === 200) {
-            let resp = this.response.split('-');
+            let resp = this.response.split(' ');
             let board = document.querySelector("#results");
             while (board.firstChild) {
                 board.removeChild(board.firstChild);

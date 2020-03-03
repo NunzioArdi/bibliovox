@@ -208,7 +208,7 @@ $app->post("/searchAudio", function () {
         $chemins = array_unique($chemins);
         foreach ($chemins as $row) {
             if (isset($row))
-                echo $row . "-";
+                echo $row . " ";
         }
     }
 });
