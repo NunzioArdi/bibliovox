@@ -12,6 +12,8 @@ use PDOException;
  * Modèle MVC de Recueil
  * @method static orderBy(string $nomColone, string $mode)
  * @method static where(string $nomColone, string $comparateur, string $valeur)
+ * @property string nomR le nom du recueil
+ * @property string descriptionR la description du receuil
  */
 class Recueil extends Model
 {

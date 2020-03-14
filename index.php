@@ -1,5 +1,6 @@
 <?php
 
+use bibliovox\controllers\ControleurAdmin;
 use bibliovox\controllers\ControleurCompte;
 use bibliovox\controllers\ControleurDicoContient;
 use bibliovox\controllers\ControleurDictionnaire;
@@ -51,6 +52,12 @@ $app->get('/compte', function () {
     $cont = new ControleurCompte();
     $cont->compte();
 })->setName('compte');
+
+//TODO
+$app->get('/admin', function () {
+    $cont = new ControleurAdmin();
+    $cont->interface();
+})->setName('admin');
 
 
 //Dictionnaires
@@ -129,6 +136,17 @@ $app->get('/production[/[{id}]]', function (Request $req, Response $resp, $args 
     }
 })->setName('productions');
 
+$app->get('/about', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurHome();
+    $cont->about();
+})->setName('about');
+
+// Suppression d'un mot
+$app->get("/deleteMot", function (Request $req, Response $resp, $args) {
+    $idM = $_REQUEST['idM'];
+    $cont = new ControleurMot($req, $resp, $args);
+    return $cont->deleteMot($idM);
+})->setName("delete_mot");
 
 /********************************
  *             POST              *
@@ -170,18 +188,10 @@ $app->post("/dictionnaire/acces/{idD}/{idM}/editPic/", function (Request $req, R
     return $cont->updatePic($args["idD"], $args["idM"]);
 })->setName('update_pic');
 
-$app->get('/about', function (Request $req, Response $resp, $args = []) {
-    $cont = new ControleurHome();
-    $cont->about();
-})->setName('about');
-
-// Suppression d'un mot
-$app->get("/deleteMot", function (Request $req, Response $resp, $args) {
-    $idM = $_REQUEST['idM'];
-    $cont = new ControleurMot($req, $resp, $args);
-    return $cont->deleteMot($idM);
-})->setName("delete_mot");
-
+$app->post("/admin/pannel/createUser", function (Request $req, Response $resp, $args) {
+    $cont = new ControleurAdmin($req, $resp, $args);
+    return $cont->processCreateUser();
+})->setName('createUser');
 
 /********************************
  *      MÉTHODES POUR AJAX      *

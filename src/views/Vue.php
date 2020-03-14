@@ -41,6 +41,7 @@ abstract class Vue
             "recueils" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('recueils') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/recueil.png\" alt=\"Recueils\">Recueils</a></li>",
             "productions" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('productions') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/production.png\" alt=\"Productions\">Productions</a></li>",
             "compte" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('compte') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/compte.png\" alt=\"Compte\">Compte</a></li>",
+            "admin" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('admin') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/compte.png\" alt=\"Compte\">Admin</a></li>",
 
         ];
     }

@@ -201,7 +201,6 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `nom` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Nom',
   `prenom` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Prenom',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Mot de passe salé',
-  `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Sel du mot de passe',
   `mail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Adresse mail',
   `idG` int(10) UNSIGNED NOT NULL COMMENT 'ID du grade associé',
   `avatar` varchar(255) DEFAULT NULL COMMENT 'Nom du fichier image',

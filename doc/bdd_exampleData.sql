@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO `grade` (`idG`, `type`) VALUES
+(0, 'Admin'),
 (1, 'Eleve'),
 (2, 'Enseignant'),
 (3, 'Parent');
@@ -35,10 +36,10 @@ INSERT INTO `grade` (`idG`, `type`) VALUES
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`idU`, `nom`, `prenom`, `password`, `salt`, `mail`, `idG`, `avatar`) VALUES
-(1, 'Loubart', 'Titouan', '637b7b0cc03d8b5b988407fd924fd264', '86309', 'Loubart.Titouan@example.com', 1, NULL),
-(2, 'Gérald', 'Bertrand', '637b7b0cc03d8b5b988407fd924fd264', '86309', 'gerald.bertrand@example.com', 2, NULL),
-(3, 'Loubart', 'Véronique', '637b7b0cc03d8b5b988407fd924fd264', '86309', NULL, 3, NULL);
+INSERT INTO `utilisateur` (`idU`, `nom`, `prenom`, `password`, `mail`, `idG`, `avatar`) VALUES
+(1, 'Loubart', 'Titouan', '637b7b0cc03d8b5b988407fd924fd264', 'Loubart.Titouan@example.com', 1, NULL),
+(2, 'Gérald', 'Bertrand', '637b7b0cc03d8b5b988407fd924fd264', 'gerald.bertrand@example.com', 2, NULL),
+(3, 'Loubart', 'Véronique', '637b7b0cc03d8b5b988407fd924fd264', NULL, 3, NULL);
 
 --
 -- Déchargement des données de la table `audio`
