@@ -2,7 +2,7 @@
 
 **Bibli O’vox** est un projet d'aide au enfant dans l'apprentisage de la langue parlé.
 
-**Bibli O’vox** a été imaginé par Christophe Buck, Sophie Deleys et Marie Lequèvre dans le cadre d’un master dans le domaine des sciences de l’éducation. Notre production s’appuiera sur les propositions résultant de ce travail.
+**Bibli O’vox** a été imaginé par Christophe Buczkowski, Sophie Deleys et Marie Lequèvre dans le cadre d’un master dans le domaine des sciences de l’éducation. Notre production s’appuiera sur les propositions résultant de ce travail.
 
 **Bibli O’vox** est un outil qui a pour but de favoriser le développement du langage oral dans un cadre scolaire.
 
