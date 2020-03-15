@@ -3,9 +3,6 @@
 
 namespace bibliovox\views;
 
-
-use bibliovox\views\Vue;
-
 class VueAdmin extends Vue
 {
 

@@ -48,6 +48,7 @@ abstract class Vue
 
     /**
      * Sélectionne la vue à afficher. Dois appeler la fonction afficher à la fin.
+     * @deprecated fonction à supprimer, plus génant qu'autre chose
      * @param string $view le nom de la vue
      * @return void
      */

@@ -61,8 +61,9 @@ class Utilisateur extends Model
         $newUtilisateur->nom = $firstname;
         $newUtilisateur->prenom = $lastname;
         $newUtilisateur->password = $pwdhash;
-        $newUtilisateur->mail= $mail;
+        $newUtilisateur->mail = isset($mail) ? null : $mail;
         $newUtilisateur->idG = $grade;
+        //TODO photo de profil
 
         try {
             $res = $newUtilisateur->save();
@@ -75,4 +76,24 @@ class Utilisateur extends Model
         return $newUtilisateur;
     }
 
+    /**
+     * Vérifie les identifiants de connection
+     * @param $firstname
+     * @param $lastname
+     * @param $password
+     * @return bool|array idU et grade si identifiant correct, sinon false
+     */
+    static function login($firstname, $lastname, $password)
+    {
+        $tmp = Utilisateur::where('nom', 'like', $firstname)->where('prenom', 'like', $lastname)->get();
+
+        //si 2 personnes on le même nom et prénom mais 2 mot de pass /=/ ok
+        //si 2 personnes on le même nom et prénom ET même mot de pass, ça pose problème
+        foreach ($tmp as $r) {
+            if (!is_null($r))
+                if (password_verify($password, $r->password))
+                    return [$r->idU, $r->grade];
+        }
+        return false;
+    }
 }
