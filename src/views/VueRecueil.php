@@ -4,6 +4,9 @@
 namespace bibliovox\views;
 
 
+use bibliovox\controllers\ControleurAudio;
+use bibliovox\controllers\ControleurAudioRecueil;
+
 class VueRecueil extends Vue
 {
     public function views(string $view)
@@ -31,15 +34,40 @@ class VueRecueil extends Vue
         $this->title = $rec->nomR;
 
         $date = explode('-', $rec->dateR);
+        $an = $date[0];
+        $mois = $date[1];
+        $jour = explode(" ", $date[2])[0];
 
         $this->content .= "<h1>Recueil: <i>$rec->nomR</i></h1>";
-        $this->content .= "<div class='date'>Créé le: " . $date['2'] . "/" . $date['1'] . "/" . $date['0'] . "</div>";
+        $this->content .= "<div class='date'>Créé le: $jour / $mois / $an </div>";
         $this->content .= "<textarea readonly class='cite'>$rec->descriptionR</textarea>";
 
+        $this->content .= ControleurAudio::record();
 
-        //TODO
-        //Ajouter une recherche suivant l'utilisateru connecté
-        //ControleurAudioRecueil::renderAudio($rec->idR, $idU);
+
+        //TODO Ajouter l'id de l'utilisateur connecté
+        $aPerso = ControleurAudioRecueil::audioPerso($rec->idR, 1);
+        $aPartage = ControleurAudioRecueil::audioPartage($rec->idR);
+
+        $this->content .= <<<AUDIOS
+<div class='card border-info mb-3 '>
+  <div class='card-header'>Enregistrements</div>
+  <div class='card-body text-info'>
+<div class="card-deck">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Tes enregistrements</h5>
+      $aPerso
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Exemples</h5>
+      $aPartage
+    </div>
+  </div>
+</div>
+AUDIOS;
     }
 
     /**
