@@ -81,7 +81,7 @@ class Utilisateur extends Model
      * @param $firstname
      * @param $lastname
      * @param $password
-     * @return array idU et grade si identifiant correct, sinon [0]
+     * @return array idU et grade si identifiant correct, sinon [-1]
      * @todo je sais c'est pas obti
      */
     static function login($firstname, $lastname, $password)
@@ -95,6 +95,6 @@ class Utilisateur extends Model
                 if (password_verify($password, $r->password))
                     return [$r->idU, $r->grade];
         }
-        return [0];
+        return [-1];
     }
 }

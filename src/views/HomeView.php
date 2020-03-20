@@ -4,6 +4,8 @@
 namespace bibliovox\views;
 
 
+use bibliovox\controllers\ControleurCompte;
+
 class HomeView extends Vue
 {
 
@@ -57,6 +59,7 @@ HTML;
     {
         $this->title = "À propos";
 
+        $ControleurCompte = ControleurCompte::getIdUser();
         $this->content .= <<<END
         <div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href='https://www.flaticon.com/authors/ddara' title='dDara'>dDara</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
@@ -67,7 +70,7 @@ HTML;
         <div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
-
+        $ControleurCompte;
 END;
 
     }
