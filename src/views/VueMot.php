@@ -52,13 +52,12 @@ class VueMot extends Vue
 
 
         foreach ($audios as $audio) {
-            $none = false;
             $date = explode('-', $audio->dateCreation);
             $an = $date[0];
             $mois = $date[1];
             $jour = explode(" ", $date[2])[0];
 
-            $temp = "<p class='date'>Créé le: $jour / $mois /$an</p>";
+            $temp = "<p class='date'>Créé le: $jour / $mois / $an</p>";
             $temp .= "<audio controls>";
             $temp .= "<source src=' " . $GLOBALS["PATH"] . "/" . $audio->chemin . "' type='audio/mp3'>";
             $temp .= "</audio>";
