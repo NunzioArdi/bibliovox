@@ -55,4 +55,9 @@ REC;
         return $res;
 
     }
+
+    public static function getPathById($idAudio)
+    {
+        return Audio::where("idAudio", "=", "$idAudio")->first();
+    }
 }
