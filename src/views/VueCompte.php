@@ -30,8 +30,10 @@ class VueCompte extends Vue
     public function connection()
     {
         $this->title = 'connection';
+        $path =$GLOBALS["PATH"];
+
         $this->content .= <<<END
-<form method="POST" action="/account/login">
+<form method="POST" action="$path/account/login">
 
 <!-- File Button --> 
 <div class="form-group">
