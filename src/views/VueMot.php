@@ -5,8 +5,10 @@ namespace bibliovox\views;
 
 
 use bibliovox\controllers\ControleurAudio;
+use bibliovox\controllers\ControleurUtilisateur;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
+use bibliovox\models\Utilisateur;
 
 class VueMot extends Vue
 {
@@ -36,28 +38,72 @@ class VueMot extends Vue
         $this->content .= "<div class = 'mot'>";
         $this->content .= "<h1>$texte</h1>";
         if ($mot->image != null)
-            $this->content .= "<img src=\" " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "\"  alt=\"img\">";
+            $this->content .= "<img src=' " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "'  alt='img'>";
 
         $audios = $mot->audios();
 
-        //Permet de savoir si on a affiché un mot
-        $none = true;
+        //Représentent les chaines à afficher pour chaque audio
+        $printAudioPerso = "";
+        $printAudioEx = "";
+
+        $this->content .= "<div class='card border-info mb-3 '>
+  <div class='card-header'>Enregistrements</div>
+  <div class='card-body text-info'>";
+
 
         foreach ($audios as $audio) {
             $none = false;
             $date = explode('-', $audio->dateCreation);
             $an = $date[0];
             $mois = $date[1];
-            $jour =explode(" ", $date[2])[0];
-            $this->content .= "<div class='date'>Créé le: $jour / $mois /$an</div>";
+            $jour = explode(" ", $date[2])[0];
 
-            $this->content .= "<audio controls>";
-            $this->content .= "<source src=\" " . $GLOBALS["PATH"] . "/" . $audio->chemin . "\" type=\"audio/mp3\">";
-            $this->content .= "</audio></div>";
+            $temp = "<p class='date'>Créé le: $jour / $mois /$an</p>";
+            $temp .= "<audio controls>";
+            $temp .= "<source src=' " . $GLOBALS["PATH"] . "/" . $audio->chemin . "' type='audio/mp3'>";
+            $temp .= "</audio>";
+
+            //TODO comparer avec l'id de lutilisateur connecté
+            if ($audio->idU == 1)
+                $printAudioPerso .= $temp;
+            else {
+                $printAudioEx .= "<p>Exemple de <b>" . ControleurUtilisateur::getNameById($audio->idU) . "</b></p>";
+                $printAudioEx .= $temp;
+            }
+
         }
 
-        if ($none)
+        if ($printAudioEx == "" && $printAudioPerso == "")
             $this->content .= "<p>Aucun enregistrement pour le moment.</p><p>Crée le premier enregistrement maintenant !</p>";
+        else {
+            if ($printAudioPerso == "")
+                $printAudioPerso = "<p>Tu n'as pas encore d'enregistrement.</p><p>Enregistre-toi tout de suite !</p>";
+            if ($printAudioEx == "")
+                $printAudioEx = "<p>Aucun exemple pour l'instant</p><p>Tu peux demander à ta maitresse ou à ton maitre de te choisir comme exemple !</p>";
+        }
+
+        $groupe = $GLOBALS['PATH'] . "/media/img/icn/groupe.png";
+        $eleve = $GLOBALS['PATH'] . "/media/img/icn/eleve.png";
+        $this->content .= <<<AUDIOS
+<div class="card-deck">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Tes enregistrements</h5>
+      $printAudioPerso
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Exemples</h5>
+      $printAudioEx
+    </div>
+  </div>
+</div>
+AUDIOS;
+
+
+
+        $this->content .= "  </div></div>";
 
         $this->content .= ControleurAudio::record();
 
@@ -116,9 +162,9 @@ CARD;
                 }
             }
             if ($bool)
-                $this->content .= "<option value=\"" . $r->idD . "\"selected>" . $r->nomD . "</option>";
+                $this->content .= "<option value='" . $r->idD . "'selected>" . $r->nomD . "</option>";
             else
-                $this->content .= "<option value=\"" . $r->idD . "\">" . $r->nomD . "</option>";
+                $this->content .= "<option value='" . $r->idD . "'>" . $r->nomD . "</option>";
         }
         $this->content .= <<<END
 </select>
@@ -228,8 +274,6 @@ CARD;
     }
 
 
-
-
     private function creMot()
     {
         $this->title = "Nouveau mot";
@@ -258,9 +302,9 @@ CARD;
 FORM;
         foreach ($this->res['dico'] as $d) {
             if ($this->res['idD'] == $d->idD) {
-                $this->content .= "<option value=\"" . $d->idD . "\"selected>" . $d->nomD . "</option>";
+                $this->content .= "<option value='" . $d->idD . "'selected>" . $d->nomD . "</option>";
             } else
-                $this->content .= "<option value=\"" . $d->idD . "\">" . $d->nomD . "</option>";
+                $this->content .= "<option value='" . $d->idD . "'>" . $d->nomD . "</option>";
         }
         $this->content .= <<<FORM
     </select>
