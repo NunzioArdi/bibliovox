@@ -27,29 +27,32 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO `grade` (`idG`, `type`) VALUES
-(0, 'Admin'),
-(1, 'Eleve'),
-(2, 'Enseignant'),
-(3, 'Parent');
+                                        (0, 'Admin'),
+                                        (1, 'Eleve'),
+                                        (2, 'Enseignant'),
+                                        (3, 'Parent');
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`idU`, `nom`, `prenom`, `password`, `mail`, `idG`, `avatar`) VALUES
-(1, 'Loubart', 'Titouan', '637b7b0cc03d8b5b988407fd924fd264', 'Loubart.Titouan@example.com', 1, NULL),
-(2, 'Gérald', 'Bertrand', '637b7b0cc03d8b5b988407fd924fd264', 'gerald.bertrand@example.com', 2, NULL),
-(3, 'Loubart', 'Véronique', '637b7b0cc03d8b5b988407fd924fd264', NULL, 3, NULL);
+INSERT INTO `utilisateur` (`idU`, `nom`, `prenom`, `password`, `mail`, `idG`, `avatar`)
+VALUES (0, 'admin', 'admin', '$2y$10$uYgt4zFriQWdbOe9QrP80egt9t36OQQPKxpVmfsWUmg//jYcjdPfK', NULL, 0, NULL),
+       (1, 'Loubart', 'Titouan', '$2y$10$cER/VfZO7.Trt1l3hcoufekMKrWup5tvk.QyNVTEGs5v0g.DS2Abe',
+        'Loubart.Titouan@example.com', 1, NULL),
+       (2, 'Gérald', 'Bertrand', '$2y$10$RqCuQORrQDl.nYXHjRJOD.8YF1T.wgV05T1zrLq7aG1IqufKMTgRS',
+        'gerald.bertrand@example.com', 2, NULL),
+       (3, 'Loubart', 'Véronique', '$2y$10$82eT8IrvylQySZ2bYbtd4eRvSbZ6FTXVCDHATctL7z4U3wRiK/Kta', NULL, 3, NULL);
 
 --
 -- Déchargement des données de la table `audio`
 --
 
-INSERT INTO `audio` (`idAudio`, `idU`, `dateCreation`, `chemin`, `commentaire`) VALUES
-(1, 0, '2020-02-26 14:18:36', 'media/aud/arbre.mp3', NULL),
-(2, 0, '2020-02-26 14:20:36', 'media/aud/bus.mp3', NULL),
-(3, 0, '2020-02-26 14:20:36', 'media/aud/chateau.mp3', NULL),
-(4, 0, '2020-02-26 14:20:36', 'media/aud/chevalier.mp3', NULL),
+INSERT INTO `audio` (`idAudio`, `idU`, `dateCreation`, `chemin`, `commentaire`)
+VALUES (1, 0, '2020-02-26 14:18:36', 'media/aud/arbre.mp3', NULL),
+       (2, 0, '2020-02-26 14:20:36', 'media/aud/bus.mp3', NULL),
+       (3, 0, '2020-02-26 14:20:36', 'media/aud/chateau.mp3', NULL),
+       (4, 0, '2020-02-26 14:20:36', 'media/aud/chevalier.mp3', NULL),
 (5, 0, '2020-02-26 14:20:36', 'media/aud/demain.mp3', NULL),
 (6, 0, '2020-02-26 14:20:36', 'media/aud/maison.mp3', NULL),
 (7, 1, '2020-02-26 14:20:36', 'media/aud/rec-1-lucas.mp3', NULL),
