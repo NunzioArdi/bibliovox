@@ -21,10 +21,12 @@ abstract class Controleur
         $this->req = $req;
         $this->resp = $resp;
         $this->args = $args;
-        if (!$this->isConnected()) {
-            $this->connection();
+        if ($GLOBALS["CONNPROCESS"] == 0) {
+            if (!$this->isConnected()) {
+                $this->connection();
+                exit();
+            }
         }
-        exit();
     }
 
     protected static function isConnected()
@@ -39,6 +41,9 @@ abstract class Controleur
         return false;
     }
 
+    /**
+     * Affiche la page de connection
+     */
     protected function connection()
     {
         $vue = new VueCompte();

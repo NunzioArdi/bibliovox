@@ -23,6 +23,9 @@ class ControleurCompte extends Controleur
             $_SESSION['nom'] = $_POST['firstname'];
             $_SESSION['prenom'] = $_POST['lastname'];
             $_SESSION['grade'] = $res[1];
+            $GLOBALS["CONNPROCESS"] = 0;
         }
+        return $this->resp->withRedirect($this->req->getHeader('Referer')[0]);
+        //TODO page d'erreur, actuellement si marche pas renvoie sur la page demandé
     }
 }

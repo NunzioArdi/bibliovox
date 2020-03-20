@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 use bibliovox\controllers\ControleurAdmin;
 use bibliovox\controllers\ControleurCompte;
 use bibliovox\controllers\ControleurDicoContient;
@@ -25,6 +26,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 //define('PATH', parse_ini_file('src/conf/conf_path.ini')['path']);
 global $PATH;
 $PATH = parse_ini_file('src/conf/conf_path.ini')['path'];
+
+/**
+ * indique si un processus de connection est en cours.
+ * @global integer $GLOBALS ["CONNPROCESS"]
+ * @name $CONNPROCESS
+ */
+global $CONNPROCESS;
+$CONNPROCESS = 0;
 
 //Eloquent
 $db = new DB();
@@ -211,6 +220,7 @@ $app->post("/admin/pannel/createUser", function (Request $req, Response $resp, $
 
 //Utilisateur
 $app->post('/account/login', function (Request $req, Response $resp, $args) {
+    $GLOBALS["CONNPROCESS"] = 1;
     $cont = new ControleurCompte($req, $resp, $args);
     return $cont->processLogin();
 })->setName('connection');
