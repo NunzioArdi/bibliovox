@@ -1,5 +1,8 @@
 <?php
+session_start();
 
+
+use bibliovox\controllers\ControleurAdmin;
 use bibliovox\controllers\ControleurCompte;
 use bibliovox\controllers\ControleurDicoContient;
 use bibliovox\controllers\ControleurDictionnaire;
@@ -19,26 +22,39 @@ use Slim\Http\Response;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+//Path
 //define('PATH', parse_ini_file('src/conf/conf_path.ini')['path']);
 global $PATH;
 $PATH = parse_ini_file('src/conf/conf_path.ini')['path'];
-$db = new DB();
 
+/**
+ * indique si un processus de connection est en cours.
+ * @global integer $GLOBALS ["CONNPROCESS"]
+ * @name $CONNPROCESS
+ */
+global $CONNPROCESS;
+$CONNPROCESS = 0;
+
+//Eloquent
+$db = new DB();
 $db->addConnection(parse_ini_file('src/conf/conf.ini'));
 $db->setAsGlobal();
 $db->bootEloquent();
 
+//Slim
 $configuration = [
     'settings' => [
         'displayErrorDetails' => true,
     ],
 ];
-
-$c = new Container($configuration);
-$app = new Slim($c);
+$app = new Slim(new Container($configuration));
 global $router;
 $router = $app->getContainer()->get('router');
 
+
+/*********************************
+ *              GET              *
+ *********************************/
 
 //Accueil
 $app->get('/', function () {
@@ -47,10 +63,18 @@ $app->get('/', function () {
 })->setName('home');
 
 
+//Compte
 $app->get('/compte', function () {
     $cont = new ControleurCompte();
     $cont->compte();
 })->setName('compte');
+
+
+//Admin
+$app->get('/admin', function () {
+    $cont = new ControleurAdmin();
+    $cont->interface();
+})->setName('admin');
 
 
 //Dictionnaires
@@ -86,12 +110,19 @@ $app->get('/dictionnaire/acces/{idD}/nouveauMot', function (Request $req, Respon
     $cont = new ControleurMot();
     $cont->createMot($args['idD']);
 })->setName('new_mot');
+
+// Suppression d'un mot
+$app->get("/deleteMot", function (Request $req, Response $resp, $args) {
+    $idM = $_REQUEST['idM'];
+    $cont = new ControleurMot($req, $resp, $args);
+    return $cont->deleteMot($idM);
+})->setName("delete_mot");
+
 //Supprimer le dictionnaire
 $app->get('/dictionnaire/access/{idD}/delete', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurDictionnaire($req, $resp, $args);
     $cont->delete($args['idD']);
 })->setName('delete_dico');
-
 
 
 //Recueil
@@ -129,36 +160,33 @@ $app->get('/production[/[{id}]]', function (Request $req, Response $resp, $args 
     }
 })->setName('productions');
 
+$app->get('/about', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurHome();
+    $cont->about();
+})->setName('about');
 
-/********************************
+
+/*********************************
  *             POST              *
  *********************************/
 
+//Recueil
 $app->post('/recueil/create/process', function (Request $req, Response $resp) {
     $cont = new ControleurRecueil($req, $resp);
     return $cont->processCreate();
 })->setName('new_recueil_process');
 
+
+//Dictionnaire
 $app->post('/dictionnaire/create/process', function (Request $req, Response $resp) {
     $cont = new ControleurDictionnaire($req, $resp);
     return $cont->processCreate();
 })->setName('new_dictionnaire_process');
-$app->post('/dictionnaires/access/{idD}/processImage',function (Request $req, Response $resp, $args){
+
+$app->post('/dictionnaires/access/{idD}/processImage', function (Request $req, Response $resp, $args) {
     $cont = new ControleurDictionnaire($req, $resp, $args);
     return $cont->updateImage($args['idD']);
 })->setName('update_dico_image');
-
-
-$app->post('/production/create/process', function (Request $req, Response $resp, $args) {
-    $cont = new ControleurProduction($req, $resp, $args);
-    return $cont->processCreateProduction();
-})->setName('new_production_process');
-
-
-$app->post('/production/{idP}/edit/process', function (Request $req, Response $resp, $args) {
-    $cont = new ControleurProduction($req, $resp, $args);
-    return $cont->processEditProduction($args['idP']);
-})->setName('edit_production_process');
 
 $app->post('/dictionnaires/nouveauMot/process', function (Request $req, Response $resp, $args) {
     $cont = new ControleurMot($req, $resp, $args);
@@ -170,18 +198,32 @@ $app->post("/dictionnaire/acces/{idD}/{idM}/editPic/", function (Request $req, R
     return $cont->updatePic($args["idD"], $args["idM"]);
 })->setName('update_pic');
 
-$app->get('/about', function (Request $req, Response $resp, $args = []) {
-    $cont = new ControleurHome();
-    $cont->about();
-})->setName('about');
 
-// Suppression d'un mot
-$app->get("/deleteMot", function (Request $req, Response $resp, $args) {
-    $idM = $_REQUEST['idM'];
-    $cont = new ControleurMot($req, $resp, $args);
-    return $cont->deleteMot($idM);
-})->setName("delete_mot");
+//Production
+$app->post('/production/create/process', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurProduction($req, $resp, $args);
+    return $cont->processCreateProduction();
+})->setName('new_production_process');
 
+$app->post('/production/{idP}/edit/process', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurProduction($req, $resp, $args);
+    return $cont->processEditProduction($args['idP']);
+})->setName('edit_production_process');
+
+
+//Admin
+$app->post("/admin/pannel/createUser", function (Request $req, Response $resp, $args) {
+    $cont = new ControleurAdmin($req, $resp, $args);
+    return $cont->processCreateUser();
+})->setName('createUser');
+
+
+//Utilisateur
+$app->post('/account/login', function (Request $req, Response $resp, $args) {
+    $GLOBALS["CONNPROCESS"] = 1;
+    $cont = new ControleurCompte($req, $resp, $args);
+    return $cont->processLogin();
+})->setName('connection');
 
 /********************************
  *      MÉTHODES POUR AJAX      *
@@ -229,13 +271,14 @@ $app->post("/udpateWord", function () {
 });
 
 $app->post("/updateDicoName", function () {
-    if (isset($_POST['dicoName'], $_POST['idD'])){
+    if (isset($_POST['dicoName'], $_POST['idD'])) {
         Dictionnaire::updateName($_POST['dicoName'], $_POST['idD']);
     }
 });
 
 
-$app->run();
-
-//echo "</body>";
-//echo "</html>";
+try {
+    $app->run();
+} catch (\Throwable $e) {
+    echo "Erreur de lancement du site";
+}

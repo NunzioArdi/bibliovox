@@ -1,9 +1,9 @@
 <?php
 
+
 namespace bibliovox\views;
 
-
-class VueCompte extends Vue
+class VueAdmin extends Vue
 {
 
     /**
@@ -11,9 +11,9 @@ class VueCompte extends Vue
      */
     public function views(string $view)
     {
-        switch ($view) {
-            case 'compte':
-                $this->compte();
+        switch ($view){
+            case 'createUser':
+                $this->creerCompte();
                 break;
             default:
                 break;
@@ -21,17 +21,10 @@ class VueCompte extends Vue
         $this->afficher();
     }
 
-    private function compte()
+    private function creerCompte()
     {
-        $this->title = 'Compte';
-        $this->content .= "account";
-    }
-
-    public function connection()
-    {
-        $this->title = 'connection';
-        $this->content .= <<<END
-<form method="POST" action="/account/login">
+$this->content.=<<<END
+<form method="POST" action="/admin/pannel/createUser">
 
 <!-- File Button --> 
 <div class="form-group">
@@ -42,6 +35,10 @@ class VueCompte extends Vue
     <input name="lastname" type="text"><br>
     <label>Password</label>
     <input name="password" type="text"><br>
+    <label>Grade</label>
+    <input name="grade" type="text" value="1"><br>
+    <label>Email</label>
+    <input name="email" type="text">
   </div>
 </div>
 
@@ -57,6 +54,5 @@ class VueCompte extends Vue
 END;
 
 
-        $this->afficher();
     }
 }
