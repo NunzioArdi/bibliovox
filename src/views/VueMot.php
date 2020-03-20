@@ -78,7 +78,7 @@ class VueMot extends Vue
             if ($printAudioPerso == "")
                 $printAudioPerso = "<p>Tu n'as pas encore d'enregistrement.</p><p>Enregistre-toi tout de suite !</p>";
             if ($printAudioEx == "")
-                $printAudioEx = "<p>Aucun exemple pour l'instant</p><p>Tu peux demander à ta maitresse ou à ton maitre de te choisir comme exemple !</p>";
+                $printAudioEx = "<p>Aucun exemple pour l'instant.</p><p>Tu peux demander à ta maitresse ou à ton maitre de te choisir comme exemple !</p>";
         }
 
         $groupe = $GLOBALS['PATH'] . "/media/img/icn/groupe.png";
