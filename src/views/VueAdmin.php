@@ -6,12 +6,21 @@ namespace bibliovox\views;
 class VueAdmin extends Vue
 {
 
+    public function __construct($res = null)
+    {
+        parent::__construct($res);
+
+        $this->nav += [
+            "admin" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('admin') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/compte.png\" alt=\"Compte\">Admin</a></li>",
+        ];
+    }
+
     /**
      * @inheritDoc
      */
     public function views(string $view)
     {
-        switch ($view){
+        switch ($view) {
             case 'createUser':
                 $this->creerCompte();
                 break;

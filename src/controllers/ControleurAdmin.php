@@ -6,17 +6,25 @@ namespace bibliovox\controllers;
 
 use bibliovox\models\Utilisateur;
 use bibliovox\views\VueAdmin;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class ControleurAdmin extends Controleur
 {
 
     public function interface()
     {
-        $vue = new VueAdmin();
-        $vue->views('createUser');
+        if (ControleurCompte::isAdmin()) {
+            $vue = new VueAdmin();
+            $vue->views('createUser');
+        } else {
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("home"));
+        }
+        return null;
     }
 
-    public function processCreateUser(){
+    public function processCreateUser()
+    {
         $pwdEncode = password_hash($_POST['password'], PASSWORD_BCRYPT);
         //PHP Deprecated:  password_hash(): Use of the 'salt' option to password_hash is deprecated in /srv/http/bibli/src/controllers/ControleurAdmin.php on line 34
         // c'est pour ça que je ne met pas de sel, il est généré aléatoirement
@@ -31,4 +39,5 @@ class ControleurAdmin extends Controleur
         return $this->resp->withRedirect($GLOBALS["router"]->urlFor("admin"));
 
     }
+
 }

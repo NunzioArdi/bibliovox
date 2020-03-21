@@ -71,9 +71,9 @@ $app->get('/compte', function () {
 
 
 //Admin
-$app->get('/admin', function () {
-    $cont = new ControleurAdmin();
-    $cont->interface();
+$app->get('/admin', function (Request $req, Response $resp) {
+    $cont = new ControleurAdmin($req, $resp);
+    return $cont->interface();
 })->setName('admin');
 
 

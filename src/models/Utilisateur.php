@@ -93,7 +93,7 @@ class Utilisateur extends Model
         foreach ($tmp as $r) {
             if (!is_null($r))
                 if (password_verify($password, $r->password))
-                    return [$r->idU, $r->grade];
+                    return [$r->idU, $r->idG];
         }
         return [-1];
     }
