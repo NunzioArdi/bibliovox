@@ -3,6 +3,7 @@
 
 namespace bibliovox\views;
 
+use bibliovox\controllers\ControleurCompte;
 use Exception;
 use Throwable;
 
@@ -42,20 +43,29 @@ class VueProduction extends Vue
      */
     private function all()
     {
-        $this->title = 'Productions personnel';
-        $this->content .= '<h1>Retrouve ici tes productions !</h1>';
+        if (ControleurCompte::isEleve()) {
+            $this->title = 'Productions';
+            $this->content .= '<h1>Retrouves ici toutes tes productions !</h1>';
 
-        if ($this->res[0] != null) {
-            foreach ($this->res[0] as $r) {
-                $this->content .= "<a href =\"" . $GLOBALS["router"]->urlFor('productions') . "$r->idP\"><h2>$r->nomP</h2></a>";
+            if ($this->res[0] != null) {
+                foreach ($this->res[0] as $r) {
+                    $this->content .= "<a href =\"" . $GLOBALS["router"]->urlFor('productions') . "$r->idP\"><h2>$r->nomP</h2></a>";
+                }
+            } else {
+                $this->content .= '<p>Aucune production</p>';
             }
-        } else {
-            $this->content .= '<p>Aucune production</p>';
+
+            $id = ControleurCompte::getIdUser();
+            //    L'idU est temporairement passé dans le GET
+            $this->content .= "<div class='createNew'>
+            <a class='boutton' href=\"" . $GLOBALS["router"]->urlFor("new_production") . "?idU=$id\">Ajout</a>";
         }
 
-        //    L'idU est temporairement passé dans le GET
-        $this->content .= "<div class='createNew'>
-            <a class='boutton' href=\"" . $GLOBALS["router"]->urlFor("new_production") . "?idU={$this->res[1]}\">Ajout</a>";
+        if (ControleurCompte::isTeatch()) {
+            $this->content .= '<h1>Retrouvez ici toutes les productions de vos élèves</h1>';
+
+        }
+
 
     }
 

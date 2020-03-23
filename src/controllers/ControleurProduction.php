@@ -22,10 +22,10 @@ class ControleurProduction extends Controleur
     public function allProduction()
     {
         /* idU utilisé en attente de la fonction des comptes */
-        $idU = 1;
 
-        $prods = Production::allCheck($idU);
-        $vue = new VueProduction([$prods, $idU]);
+
+        $prods = Production::allCheck(ControleurCompte::getIdUser());
+        $vue = new VueProduction([$prods, ControleurCompte::getIdUser()]);
         $vue->views('all');
     }
 
