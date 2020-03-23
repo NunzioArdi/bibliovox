@@ -66,3 +66,4 @@ composer.phar
 .scala_dependencies
 .worksheet
 *.ini
+/media/aud/
