@@ -146,12 +146,17 @@ $app->get('/production/create', function (Request $req, Response $resp, $args = 
     $cont->createProduction();
 })->setName('new_production');
 
+$app->get('/production/delete', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurProduction($req, $resp);
+    return $cont->delete();
+})->setName('delete_production');
+
 $app->get('/production/{idP}/edit[/]', function (Request $req, Response $resp, $args) {
     $cont = new ControleurProduction();
     $cont->editProduction($args['idP']);
 })->setName('edit_production');
 
-$app->get('/production[/[{id}]]', function (Request $req, Response $resp, $args = []) {
+$app->get('/production', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurProduction();
     if (isset($args["id"]) && is_numeric($args["id"])) {
         $cont->production($args["id"]);

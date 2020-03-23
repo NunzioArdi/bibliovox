@@ -22,14 +22,20 @@ class Production extends Model
         return Production::where("idP", "=", "$idP")->first();
     }
 
+    static function getAll() {
+        return Production::orderBy("dateP", "DESC")->get();
+    }
+
     public static function allCheck(int $idU)
     {
         $res = [];
-        foreach (Production::all() as $prod) {
+        foreach (Production::orderBy("dateP", "DESC")->get() as $prod) {
             $audio = $prod->audio();
-            if ($audio != null && $audio->idU == $idU)
-                $res[] = $prod;
+            if ($audio != null && $audio->idU == $idU) {
+                array_push($res, $prod);
+            }
         }
+
         return $res;
     }
 
@@ -83,6 +89,15 @@ class Production extends Model
             return $prod;
         }
         return 2;
+    }
+
+    public static function remove($idP)
+    {
+        $prod = Production::where("idP", "=", "$idP")->first();
+        $audio = Audio::where("idAudio", "=", $prod->idAudio)->first();
+        unlink($GLOBALS['PATH'] . "/" . $audio->chemin);
+        $audio->forceDelete();
+        $prod->forceDelete();
     }
 
     public function audio()

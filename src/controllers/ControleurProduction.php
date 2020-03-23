@@ -37,7 +37,7 @@ class ControleurProduction extends Controleur
     public function production(int $idP)
     {
         /* idU utilisé en attente de la fonction des comptes */
-        $idU = 1;
+        $idU = ControleurCompte::getIdUser();
 
         if (Production::exist($idP)) {
             $prod = Production::getById($idP);
@@ -57,7 +57,7 @@ class ControleurProduction extends Controleur
     public function editProduction(int $idP)
     {
         /* idU utilisé en attente de la fonction des comptes */
-        $idU = 1;
+        $idU = ControleurCompte::getIdUser();
 
         if (Production::exist($idP)) {
             $url = $GLOBALS["router"]->urlFor("edit_production_process", ['idP' => $idP]) . "?idU=$idU";
@@ -73,7 +73,7 @@ class ControleurProduction extends Controleur
     public function createProduction()
     {
         /* idU utilisé en attente de la fonction des comptes */
-        $idU = 1;
+        $idU = ControleurCompte::getIdUser();
 
         $vue = new VueProduction($idU);
         $vue->views('create');
@@ -86,7 +86,7 @@ class ControleurProduction extends Controleur
     public function processEditProduction($idP): Response
     {
         /* idU utilisé en attente de la fonction des comptes */
-        $idU = 1;
+        $idU = ControleurCompte::getIdUser();
 
         $res = Production::updateProd($idP, $_POST['nom'], $idU, $_POST['comm']);
 
@@ -102,7 +102,7 @@ class ControleurProduction extends Controleur
     public function processCreateProduction()
     {
         /* idU utilisé en attente de la fonction des comptes */
-        $idU = 1;
+        $idU = ControleurCompte::getIdUser();
 
         $idAudio = ControleurAudio::createAudio($idU);
 
@@ -113,8 +113,16 @@ class ControleurProduction extends Controleur
             $err->views('prodProcess');
             return $this->resp->withStatus(500);
         } else
-            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("productions") . "$res->idP");
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("productions"));
 
+    }
+
+    public function delete()
+    {
+        if (isset($_GET['idP']))
+            Production::remove($_GET['idP']);
+
+        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("productions"));
     }
 
 }

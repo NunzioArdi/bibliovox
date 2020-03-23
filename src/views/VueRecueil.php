@@ -53,17 +53,19 @@ class VueRecueil extends Vue
 <div class='card border-info mb-3 '>
   <div class='card-header'>Enregistrements</div>
   <div class='card-body text-info'>
-<div class="card-deck">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Tes enregistrements</h5>
-      $aPerso
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Exemples</h5>
-      $aPartage
+    <div class="card-deck">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Tes enregistrements</h5>
+          $aPerso
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Exemples</h5>
+          $aPartage
+        </div>
+      </div>
     </div>
   </div>
 </div>
