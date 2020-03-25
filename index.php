@@ -140,10 +140,15 @@ $app->get('/recueil/create/', function () {
     $cont->creerRecueil();
 })->setName('new_recueil');
 
-$app->get('/recueil/delete/', function (Request $req, Response $resp, $args = []) {
+$app->get('/recueil/delete/record', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurAudioRecueil($req, $resp);
+    return $cont->delete(true);
+})->setName('deleteRecordRec');
+
+$app->get('/recueil/delete/all', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurRecueil($req, $resp);
     return $cont->delete();
-})->setName('deleteRec');
+})->setName('delete_recueil');
 
 
 //Production

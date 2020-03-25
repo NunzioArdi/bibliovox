@@ -64,7 +64,7 @@ class ControleurAudioRecueil extends Controleur
         return $ret;
     }
 
-    public function delete()
+    public function delete(bool $redirect)
     {
         if (isset($_GET['idAudio'])){
             $idAudio = $_GET['idAudio'];
@@ -74,11 +74,13 @@ class ControleurAudioRecueil extends Controleur
             $rec->forceDelete();
         }
 
-        $rec = "";
-        if (isset($_GET['idR']))
-            $rec = $_GET['idR'];
+        if ($redirect) {
+            $rec = "";
+            if (isset($_GET['idR']))
+                $rec = $_GET['idR'];
 
             return $this->resp->withRedirect($GLOBALS["router"]->urlFor("recueils") . $rec);
+        }
     }
 
 }

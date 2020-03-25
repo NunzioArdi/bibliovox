@@ -3,6 +3,7 @@
 namespace bibliovox\controllers;
 
 use bibliovox\models\Audio;
+use bibliovox\models\AudioRecueil;
 use bibliovox\models\Recueil;
 use bibliovox\views\VueErreur;
 use bibliovox\views\VueRecueil;
@@ -70,6 +71,23 @@ class ControleurRecueil extends Controleur
             return $this->resp->withStatus(500);
         }
 
+    }
+
+    public function delete()
+    {
+        if (isset($_GET['idR'])){
+            $idR = $_GET['idR'];
+            $audRec = AudioRecueil::where("idR", "=", "$idR")->get();
+            foreach ($audRec as $item) {
+                $_GET['idAudio'] = $item->idAudio;
+                $cont = new ControleurAudioRecueil();
+                $cont->delete(false);
+            }
+
+            $rec = Recueil::where("idR", "=", "$idR")->first();
+            $rec->forceDelete();
+        }
+        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("recueils"));
     }
 
 

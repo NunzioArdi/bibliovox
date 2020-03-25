@@ -120,7 +120,7 @@ FORM;
     {
         //Récuperation de tous les audios associés au recueil
         $auds = ControleurAudioRecueil::allAudioRec($rec->idR);
-        $pathDelete = $GLOBALS["router"]->urlFor("deleteRec") . "?idR=" . $rec->idR;
+        $pathDelete = $GLOBALS["router"]->urlFor("deleteRecordRec") . "?idR=" . $rec->idR;
 
         //Variable affichant les audios des élèves par ordre d'ajout
         $histo = "";
@@ -202,6 +202,12 @@ AUD;
       </div>
 AUDIOS;
 
+        //Préparation de l'affichage de l'éditeur
+
+        $titre = $rec->nomR;
+        $contenu = $rec->descriptionR;
+        $deleteRec = $GLOBALS["router"]->urlFor("delete_recueil") . "?idR=$rec->idR";
+
         $this->content .= <<<NAV
 <h2>Retrouvez ici toutes les enregistrements de vos élèves</h2>
 
@@ -261,10 +267,43 @@ AUDIOS;
   </div>
 </div>
 
-<div class="tab-pane fade" id="pills-edition" role="tabpanel" aria-labelledby="pills-edition-tab">En cours...</div>
+<div class="tab-pane fade" id="pills-edition" role="tabpanel" aria-labelledby="pills-edition-tab">
+
+    <form class="form-horizontal">
+<fieldset>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="titre">Titre</label>  
+  <div class="col-md-4">
+  <input id="titre" name="titre" type="text" placeholder="titre" class="form-control input-md" required value="$titre">
+    
+  </div>
 </div>
 
-    
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="contenu">Contenu</label>
+  <div>                     
+    <textarea class="cite" id="contenu" name="contenu" required>$contenu</textarea>
+  </div>
+</div>
+
+<div class="form-group">
+    <div id="er" class="btn btn-success">Enregistrer</div>
+    <a id="editRec" href="$deleteRec" class="btn btn-danger">Supprimer le recueil</a>
+</div>
+
+</fieldset>
+</form>
+
+</div>
+
+
+</div>
+
+
 NAV;
     }
 
