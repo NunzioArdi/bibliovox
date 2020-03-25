@@ -48,5 +48,11 @@ class Audio extends Model
         return Audio::where("chemin", "=", "$path")->first()->idAudio;
     }
 
+    public static function deleteById (int $id) {
+        $aud = Audio::where("idAudio", "=", "$id")->first();
+        unlink($GLOBALS["PATH"] . "/" . $aud->chemin);
+        $aud->forceDelete();
+    }
+
 
 }

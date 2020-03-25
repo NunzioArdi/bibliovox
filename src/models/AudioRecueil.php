@@ -5,6 +5,7 @@ namespace bibliovox\models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @method static orderBy(string $nomColone, string $mode)
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class AudioRecueil extends Model
 {
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'idAudio';
     protected $table = 'audioRec';
 
     static function getByBoth (int $idR, int $idU) {

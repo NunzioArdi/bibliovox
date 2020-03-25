@@ -56,8 +56,12 @@ REC;
 
     }
 
+
+    //Le nom de cette fonction est trompeur attention
     public static function getPathById($idAudio)
     {
         return Audio::where("idAudio", "=", "$idAudio")->first();
     }
+
+
 }

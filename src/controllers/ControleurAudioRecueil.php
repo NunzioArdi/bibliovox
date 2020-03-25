@@ -6,10 +6,15 @@ namespace bibliovox\controllers;
 
 
 
+use bibliovox\models\Audio;
 use bibliovox\models\AudioRecueil;
 
-class ControleurAudioRecueil
+class ControleurAudioRecueil extends Controleur
 {
+
+    static function allAudioRec (int $idR) {
+        return AudioRecueil::where("idR", "=", "$idR")->get();
+    }
 
     static function audioPerso (int $idR, int $idU) : string {
         $ret = "";
@@ -57,6 +62,23 @@ class ControleurAudioRecueil
             $ret = "<p>Aucun exemple pour l'instant.</p><p>Tu peux demander à ta maitresse ou à ton maitre de te choisir comme exemple !</p>";
 
         return $ret;
+    }
+
+    public function delete()
+    {
+        if (isset($_GET['idAudio'])){
+            $idAudio = $_GET['idAudio'];
+            Audio::deleteById($idAudio);
+            $rec = AudioRecueil::where("idAudio", "=", "$idAudio")->first();
+            echo $rec->idAudio;
+            $rec->forceDelete();
+        }
+
+        $rec = "";
+        if (isset($_GET['idR']))
+            $rec = $_GET['idR'];
+
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("recueils") . $rec);
     }
 
 }

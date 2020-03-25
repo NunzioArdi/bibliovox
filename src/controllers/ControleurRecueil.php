@@ -2,6 +2,7 @@
 
 namespace bibliovox\controllers;
 
+use bibliovox\models\Audio;
 use bibliovox\models\Recueil;
 use bibliovox\views\VueErreur;
 use bibliovox\views\VueRecueil;
@@ -70,4 +71,6 @@ class ControleurRecueil extends Controleur
         }
 
     }
+
+
 }

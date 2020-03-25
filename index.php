@@ -3,6 +3,7 @@ session_start();
 
 
 use bibliovox\controllers\ControleurAdmin;
+use bibliovox\controllers\ControleurAudioRecueil;
 use bibliovox\controllers\ControleurCompte;
 use bibliovox\controllers\ControleurDicoContient;
 use bibliovox\controllers\ControleurDictionnaire;
@@ -138,6 +139,11 @@ $app->get('/recueil/create/', function () {
     $cont = new ControleurRecueil();
     $cont->creerRecueil();
 })->setName('new_recueil');
+
+$app->get('/recueil/delete/', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurAudioRecueil($req, $resp);
+    return $cont->delete();
+})->setName('deleteRec');
 
 
 //Production

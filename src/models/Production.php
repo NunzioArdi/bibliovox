@@ -94,9 +94,7 @@ class Production extends Model
     public static function remove($idP)
     {
         $prod = Production::where("idP", "=", "$idP")->first();
-        $audio = Audio::where("idAudio", "=", $prod->idAudio)->first();
-        unlink($GLOBALS['PATH'] . "/" . $audio->chemin);
-        $audio->forceDelete();
+        Audio::deleteById($prod->idAudio);
         $prod->forceDelete();
     }
 
