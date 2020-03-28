@@ -25,7 +25,8 @@ class VueMot extends Vue
             $this->content("<img src=' " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "'  alt='img'>");
 
         $audioMot = ControleurAudioMot::allAudioMot($mot->idM);
-        $audios = $mot->audios();
+        $audios = $mot->audios(ControleurCompte::getIdUser());
+        //$audios = ControleurAudioMot::
 
         //Représentent les chaines à afficher pour chaque audio
         $printAudioPerso = "";
