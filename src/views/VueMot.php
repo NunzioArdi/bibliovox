@@ -20,11 +20,11 @@ class VueMot extends Vue
         $mot = $this->res;
         $texte = ucfirst($mot->texte);
 
-
         $this->title($texte)->content("<div class = 'mot'>\n  <h1>$texte</h1>");
         if ($mot->image != null)
             $this->content("<img src=' " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "'  alt='img'>");
 
+        $audioMot = ControleurAudioMot::allAudioMot($mot->idM);
         $audios = $mot->audios();
 
         //Représentent les chaines à afficher pour chaque audio
@@ -42,23 +42,16 @@ class VueMot extends Vue
             $temp .= "<source src=' " . $GLOBALS["PATH"] . "/" . $audio->chemin . "' type='audio/mp3'>";
             $temp .= "</audio>";
 
-            if ($audio->idU == ControleurCompte::getIdUser())
                 $printAudioPerso .= $temp;
-            else {
-                $printAudioEx .= "<p>Exemple de <b>" . ControleurUtilisateur::getNameById($audio->idU) . "</b></p>";
-                $printAudioEx .= $temp;
-            }
-
         }
 
-        if ($printAudioEx == "" && $printAudioPerso == "")
-            $this->content("<p>Aucun enregistrement pour le moment.</p><p>Crée le premier enregistrement maintenant !</p>");
-        else {
-            if ($printAudioPerso == "")
-                $printAudioPerso = "<p>Tu n'as pas encore d'enregistrement.</p><p>Enregistre-toi tout de suite !</p>";
-            if ($printAudioEx == "")
-                $printAudioEx = "<p>Aucun exemple pour l'instant.</p><p>Tu peux demander à ta maitresse ou à ton maitre de te choisir comme exemple !</p>";
-        }
+        $printAudioEx = ControleurAudioMot::allSharedPrinter($mot->idM);
+
+        if ($printAudioPerso == "")
+            $printAudioPerso = "<p>Tu n'as pas encore d'enregistrement.</p><p>Enregistre-toi tout de suite !</p>";
+        if ($printAudioEx == "")
+            $printAudioEx = "<p>Aucun exemple pour l'instant.</p><p>Tu peux demander à ta maitresse ou à ton maitre de te choisir comme exemple !</p>";
+
 
         if (ControleurCompte::isTeatch()) {
 
@@ -284,11 +277,11 @@ CARD;
                 }
             }
             if ($bool)
-                $ret .="<option value='" . $r->idD . "'selected>" . $r->nomD . "</option>";
+                $ret .= "<option value='" . $r->idD . "'selected>" . $r->nomD . "</option>";
             else
-                $ret .="<option value='" . $r->idD . "'>" . $r->nomD . "</option>";
+                $ret .= "<option value='" . $r->idD . "'>" . $r->nomD . "</option>";
         }
-        $ret .=<<<END
+        $ret .= <<<END
 </select>
   </div>
 </div>
@@ -308,7 +301,7 @@ CARD;
 END;
 
         // Modifier mot :
-        $ret .=<<<CARD
+        $ret .= <<<CARD
 <div class="card border-success mb-3" style="min-width: 18rem;">
   <div class="card-header">Corriger l'orthographe</div>
   <div class="card-body text-success">
@@ -341,7 +334,7 @@ CARD;
 
         // Modifier ou Ajouter une Image
         $path = $GLOBALS["router"]->urlFor("update_pic", ["idD" => -1, "idM" => $idM]);
-        $ret .=<<<CARD
+        $ret .= <<<CARD
 <div class="card-deck">
 
 <div class="card border-warning mb-3" style="min-width: 18rem;">
@@ -392,7 +385,7 @@ CARD;
 </div>    
 CARD;
 
-return $ret;
+        return $ret;
     }
 
 
