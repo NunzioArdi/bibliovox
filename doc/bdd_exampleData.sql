@@ -37,12 +37,14 @@ INSERT INTO `grade` (`idG`, `type`) VALUES
 --
 
 INSERT INTO `utilisateur` (`idU`, `nom`, `prenom`, `password`, `mail`, `idG`, `avatar`)
-VALUES (0, 'admin', 'admin', '$2y$10$uYgt4zFriQWdbOe9QrP80egt9t36OQQPKxpVmfsWUmg//jYcjdPfK', NULL, 0, NULL),
+VALUES (0, 'admin', 'admin', '$2y$10$uYgt4zFriQWdbOe9QrP80egt9t36OQQPKxpVmfsWUmg//jYcjdPfK', 'admin@bibli.com', 0, NULL),
        (1, 'Loubart', 'Titouan', '$2y$10$cER/VfZO7.Trt1l3hcoufekMKrWup5tvk.QyNVTEGs5v0g.DS2Abe',
-        'Loubart.Titouan@example.com', 1, NULL),
+        'loubart.titouan@bibli.com', 1, NULL),
        (2, 'Gérald', 'Bertrand', '$2y$10$RqCuQORrQDl.nYXHjRJOD.8YF1T.wgV05T1zrLq7aG1IqufKMTgRS',
-        'gerald.bertrand@example.com', 2, NULL),
-       (3, 'Loubart', 'Véronique', '$2y$10$82eT8IrvylQySZ2bYbtd4eRvSbZ6FTXVCDHATctL7z4U3wRiK/Kta', NULL, 3, NULL);
+        'gerald.bertrand@bibli.com', 2, NULL),
+       (3, 'Loubart', 'Véronique', '$2y$10$82eT8IrvylQySZ2bYbtd4eRvSbZ6FTXVCDHATctL7z4U3wRiK/Kta', 'loubard.veronique@bibli.com', 3, NULL),
+       (4, 'Bernard', 'Legrand', '$2y$10$qmA4.Pb903/Daj7RhHqy0OvhJaUGZGrhNTRC/gWM9EnukFtZpk5IC', 'bernard.legrand@bibli.com', 1, NULL),
+       (5, 'Élève3_1', 'Élève3_2', '$2y$10$bEof5K7F/7Esx.L9UtLOKe16CxBWnWm0oV0M/0xVdaq8hq.c1Dl/.', 'eleve31.eleve32@bibli.com', 1, NULL);
 
 --
 -- Déchargement des données de la table `audio`
@@ -137,6 +139,15 @@ INSERT INTO `production` (`idP`, `idAudio`, `nomP`, `dateP`) VALUES
 
 INSERT INTO `tuteur` (`idUEnfant`, `idUTuteur`) VALUES
 (1, 3);
+
+--
+-- Déchargement des données de la table `eleve`
+--
+
+INSERT INTO `eleve` (`idC`, `idU`) VALUES
+(1,	1),
+(1,	4);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
