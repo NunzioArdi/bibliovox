@@ -16,7 +16,7 @@ class ControleurAdmin extends Controleur
     {
         if (ControleurCompte::isAdmin()) {
             $vue = new VueAdmin();
-            $vue->views('createUser');
+            $vue->creerCompte();
         } else {
             return $this->resp->withRedirect($GLOBALS["router"]->urlFor("home"));
         }

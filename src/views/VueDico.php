@@ -7,41 +7,17 @@ namespace bibliovox\views;
 class VueDico extends Vue
 {
 
-    /**
-     * @inheritDoc
-     */
-    public function views(string $view)
-    {
-        switch ($view) {
-            case "all":
-                $this->allDico();
-                break;
-            case "createDico":
-                $this->creDico();
-                break;
-            case "alphabet":
-                $this->affAlph();
-                break;
-            case "theme":
-                $this->theme();
-                break;
 
-            default:
-                break;
-        }
-        $this->afficher();
-    }
-
-    private function allDico()
+    public function allDico()
     {
         $this->title = "Dictionnaires";
 
-        $this->content .= "    <div class=\"dico\">
+        $this->content("    <div class=\"dico\">
             <a href=\"" . $GLOBALS["router"]->pathFor('dictionnaire_acces', $data = ['idD' => 0]) . "\">
             <img src=\"" . $GLOBALS["PATH"] . "/media/img/img/dico/alpha.png\" alt=\"alphabet\">
             <h2>Dictionnaire alphabétique</h2>
             </a>
-            </div>\n";
+            </div>\n");
 
         foreach ($this->res as $d) {
             $image = "/media/img/img/dico/";
@@ -49,30 +25,30 @@ class VueDico extends Vue
                 $image .= $d->imageD;
             else
                 $image .= "dico.png";
-            $this->content .= "    <div class=\"dico\">
+            $this->content("    <div class=\"dico\">
                 <a href=\"" . $GLOBALS["router"]->urlFor('dictionnaire_acces', $data = ['idD' => $d->idD]) . "\">
                 <img src=\"" . $GLOBALS["PATH"] . "$image\">
                 <h2>$d->nomD</h2>
                 </a>
-                </div>\n";
+                </div>\n");
         }
 
-        $this->content .= "    <div class=\"createNew\">
+        $this->content("    <div class=\"createNew\">
             <a id='dicoButton' href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon \"> + Nouveau Dictionnaire</a>
 
-            </div>";
+            </div>")->afficher();
     }
 
     /**
      * Vue de création d'un dictionnaire
      */
-    private function creDico()
+    public function creDico()
     {
         $this->title = "Nouveau dictionnaire";
-
-        $this->content .= "<h1>Créer un nouveau dictionnaire</h1>";
         $path = $GLOBALS["router"]->urlFor("new_dictionnaire_process");
-        $this->content .= <<<FORM
+
+        $this->content("<h1>Créer un nouveau dictionnaire</h1>")
+            ->content(<<<FORM
             <form id='new_dictionnaire' method='post' action='$path' enctype="multipart/form-data">
             <label>Nom du dictionnaire</label> <br>
             <input type='text' name='nom' placeholder='Nom' required> <br>
@@ -83,39 +59,40 @@ class VueDico extends Vue
             <input class="btn btn-primary" type="submit" value="Valider" >
             <input class="btn btn-primary" type="reset" value="Annuler">
             </form>
-FORM;
+FORM
+            )->afficher();
     }
 
-    private function affAlph()
+    public function affAlph()
     {
         $this->title = "Tous les mots";
 
-        $this->content .= "<h1 id='dicoText'>Tous les mots par ordre alphabétique</h1>";
+        $this->content("<h1 id='dicoText'>Tous les mots par ordre alphabétique</h1>");
 
 
         $none = true;
 
         foreach ($this->res as $m) {
             $none = false;
-            $this->content .= "<h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => 0, "idM" => $m->idM]) . "'>$m->texte</a></h2>\n";
+            $this->content("<h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor("mot", ["idD" => 0, "idM" => $m->idM]) . "'>$m->texte</a></h2>\n");
         }
         if ($none)
-            $this->content .= "<p>Aucun mot dans Bibli O'vox.</p>";
+            $this->content("<p>Aucun mot dans Bibli O'vox.</p>");
 
         //TODO test si admin
         if (true) {
-            $this->content .= "<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => 0]) . "\" class=\"btn btn-block btn-success\">+ Créer un mot</a>";
+            $this->content("<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => 0]) . "\" class=\"btn btn-block btn-success\">+ Créer un mot</a>");
         }
-
+        $this->afficher();
     }
 
-    private function theme()
+    public function theme()
     {
         $this->title = $this->res[1];
-        $img = $GLOBALS["PATH"]."/media/img/img/dico/" . $this->res[3];
+        $img = $GLOBALS["PATH"] . "/media/img/img/dico/" . $this->res[3];
         $titre = "<h1 id='dicoText'>$this->title</h1>";
 
-        $this->content .= <<<MOTS
+        $this->content(<<<MOTS
 <div class="card text-center" style="min-width: 18rem;">
   <img class="card-img-top" src="$img" alt="Card image cap">
   <div class="card-body">
@@ -123,25 +100,24 @@ FORM;
   </div>
   <ul class="list-group list-group-flush">
 
-
-MOTS;
-
-
+MOTS
+        );
 
         $none = true;
         foreach ($this->res[2] as $m) {
             $none = false;
-            $this->content .= "<li class='list-group-item'><h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2></li>\n";
+            $this->content("<li class='list-group-item'><h2 id='dicoText'><a href='" . $GLOBALS["router"]->urlFor('mot', ['idD' => $this->res[0], 'idM' => $m->idM]) . "'>$m->texte</a></h2></li>\n");
         }
 
         if ($none)
-            $this->content .= "<li class='list-group-item'><p class='btn btn-danger'>Aucun mot dans ce dictionnaire.</p></li>";
+            $this->content("<li class='list-group-item'><p class='btn btn-danger'>Aucun mot dans ce dictionnaire.</p></li>");
 
-        $this->content .= "</ul></div>";
+        $this->content("</ul></div>");
         //TODO Test si admin
         if (true) {
             $this->outilsAdmin();
         }
+        $this->afficher();
 
     }
 
@@ -152,7 +128,7 @@ MOTS;
         $image = $GLOBALS["router"]->pathFor("update_dico_image", $data = ['idD' => $this->res[0]]);
         $dicoName = $this->res[1];
         $idD = $this->res[0];
-        $this->content .= <<<CONT
+        $this->content(<<<CONT
 <div class="card">
   <div class="card-header text-center">
     <b>Outils d'édition</b>
@@ -257,7 +233,8 @@ MOTS;
 
 <input id="path" value="{$GLOBALS["PATH"]}" hidden>
 <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
-CONT;
+CONT
+        );
 
     }
 

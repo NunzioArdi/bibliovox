@@ -46,14 +46,6 @@ abstract class Vue
     }
 
     /**
-     * Sélectionne la vue à afficher. Dois appeler la fonction afficher à la fin.
-     * @deprecated fonction à supprimer, plus génant qu'autre chose
-     * @param string $view le nom de la vue
-     * @return void
-     */
-    public abstract function views(string $view);
-
-    /**
      * Affiche le contenue de la page
      * @return void
      */
@@ -94,5 +86,17 @@ HTML;
             $res .= $value . "\n            ";
         }
         return $res;
+    }
+
+    protected function content($str)
+    {
+        $this->content .= $str;
+        return $this;
+    }
+
+    protected function title($str)
+    {
+        $this->title = $str;
+        return $this;
     }
 }

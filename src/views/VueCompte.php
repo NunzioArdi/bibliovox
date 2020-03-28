@@ -6,33 +6,29 @@ namespace bibliovox\views;
 class VueCompte extends Vue
 {
 
-    /**
-     * @inheritDoc
-     */
-    public function views(string $view)
-    {
-        switch ($view) {
-            case 'compte':
-                $this->compte();
-                break;
-            default:
-                break;
-        }
-        $this->afficher();
-    }
-
-    private function compte()
+    public function compte()
     {
         $this->title = 'Compte';
         $this->content .= "account";
     }
 
+
+    /*  public function connection(){
+          $this->content(<<<END
+  Je suis
+  20 SAUSSICE
+  END
+  )->content("test2");
+          $this->afficher();
+      }*/
+
+
     public function connection()
     {
         $this->title = 'connection';
-        $path =$GLOBALS["PATH"];
+        $path = $GLOBALS["PATH"];
 
-        $this->content .= <<<END
+        $this->content(<<<END
 <form method="POST" action="$path/account/login">
 
 <!-- File Button --> 
@@ -56,9 +52,7 @@ class VueCompte extends Vue
 </div>
 
 </form>
-END;
-
-
-        $this->afficher();
+END
+        )->afficher();
     }
 }

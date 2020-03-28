@@ -15,24 +15,10 @@ class VueAdmin extends Vue
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function views(string $view)
-    {
-        switch ($view) {
-            case 'createUser':
-                $this->creerCompte();
-                break;
-            default:
-                break;
-        }
-        $this->afficher();
-    }
 
-    private function creerCompte()
+    public function creerCompte()
     {
-$this->content.=<<<END
+        $this->content(<<<END
 <form method="POST" action="/admin/pannel/createUser">
 
 <!-- File Button --> 
@@ -60,8 +46,7 @@ $this->content.=<<<END
 </div>
 
 </form>
-END;
-
-
+END
+        )->afficher();
     }
 }

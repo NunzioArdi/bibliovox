@@ -11,29 +11,12 @@ use bibliovox\controllers\ControleurUtilisateur;
 
 class VueRecueil extends Vue
 {
-    public function views(string $view)
-    {
-        switch ($view) {
-            case 'recueil':
-                $this->recueil();
-                break;
-            case 'allrecueil':
-                $this->allRecueil();
-                break;
-            case 'creer':
-                $this->create();
-                break;
-            default:
-                break;
-        }
-        $this->afficher();
-    }
 
-    private function recueil()
+    public function recueil()
     {
         $rec = $this->res;
-        $this->title = $rec->nomR;
-        $this->content .= "<h1>Recueil: <i>$rec->nomR</i></h1>";
+        $this->title($rec->nomR)
+            ->content("<h1>Recueil: <i>$rec->nomR</i></h1>");
         if (ControleurCompte::isTeatch())
             $this->recTeatch($rec);
         else {
@@ -44,17 +27,16 @@ class VueRecueil extends Vue
             $jour = explode(" ", $date[2])[0];
 
 
-            $this->content .= "<div class='date'>Créé le: $jour / $mois / $an </div>";
-            $this->content .= "<textarea readonly class='cite'>$rec->descriptionR</textarea>";
-
-            $this->content .= ControleurAudio::record();
+            $this->content("<div class='date'>Créé le: $jour / $mois / $an </div>")
+                ->content("<textarea readonly class='cite'>$rec->descriptionR</textarea>")
+                ->content(ControleurAudio::record());
 
 
             //TODO Ajouter l'id de l'utilisateur connecté
             $aPerso = ControleurAudioRecueil::audioPerso($rec->idR, ControleurCompte::getIdUser());
             $aPartage = ControleurAudioRecueil::audioPartage($rec->idR);
 
-            $this->content .= <<<AUDIOS
+            $this->content(<<<AUDIOS
 <div class='card border-info mb-3 '>
   <div class='card-header'>Enregistrements</div>
   <div class='card-body text-info'>
@@ -74,37 +56,38 @@ class VueRecueil extends Vue
     </div>
   </div>
 </div>
-AUDIOS;
+AUDIOS
+            );
         }
+        $this->afficher();
     }
 
     /**
      * Affiche tout les recueil
      */
-    private function allRecueil()
+    public function allRecueil()
     {
-        $this->title = "Recueils";
-
-        $this->content = "<h1>Tous les recueils</h1>";
+        $this->title("Recueils")
+            ->content("<h1>Tous les recueils</h1>");
         if ($this->res != null)
             foreach ($this->res as $r) {
-                $this->content .= "<a href =\"" . $GLOBALS["router"]->urlFor('recueils') . "$r->idR\"><h2>$r->nomR</h2></a>";
+                $this->content("<a href =\"" . $GLOBALS["router"]->urlFor('recueils') . "$r->idR\"><h2>$r->nomR</h2></a>");
             }
         if (ControleurCompte::isTeatch()) {
             $path = $GLOBALS["router"]->urlFor("new_recueil");
-            $this->content .= "<a href='$path' class='btn btn-block btn-success'>+ Créer un recueil</a>";
+            $this->content("<a href='$path' class='btn btn-block btn-success'>+ Créer un recueil</a>");
 
         }
+        $this->afficher();
     }
 
-    private function create()
+    public function create()
     {
-        $this->title = "Nouveau recueil";
-
-        $this->content .= "<h1>Créer un nouveau recueil</h1>";
         $path = $GLOBALS["router"]->urlFor("new_recueil_process");
 
-        $this->content .= <<<FORM
+        $this->title("Nouveau recueil")
+            ->content("<h1>Créer un nouveau recueil</h1>")
+            ->content(<<<FORM
 <form id='new_recueil' method='post' action='$path' enctype="multipart/form-data">
 <label>Nom du recueil</label>
 <input type='text' name='nom' placeholder='Nom' required>
@@ -113,7 +96,8 @@ AUDIOS;
 <input class='bouton' type="reset" value="Annuler">
 <input class="bouton" type="submit" value="Valider">
 </form>
-FORM;
+FORM
+            )->afficher();
     }
 
     private function recTeatch($rec)
@@ -146,7 +130,7 @@ FORM;
             else
                 $unshared = "checked='checked'";
 
-            echo $aud->partage;
+            //echo $aud->partage;
 
             // Affichage des audio des élèves en fonction de la date
             $histo .= <<<AUD
@@ -208,7 +192,7 @@ AUDIOS;
         $contenu = $rec->descriptionR;
         $deleteRec = $GLOBALS["router"]->urlFor("delete_recueil") . "?idR=$rec->idR";
 
-        $this->content .= <<<NAV
+        $this->content(<<<NAV
 <h2>Retrouvez ici toutes les enregistrements de vos élèves</h2>
 
 <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
@@ -304,7 +288,8 @@ AUDIOS;
 </div>
 
 
-NAV;
+NAV
+        );
     }
 
 }

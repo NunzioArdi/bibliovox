@@ -26,7 +26,7 @@ class ControleurProduction extends Controleur
 
         $prods = Production::allCheck(ControleurCompte::getIdUser());
         $vue = new VueProduction([$prods, ControleurCompte::getIdUser()]);
-        $vue->views('all');
+        $vue->all();
     }
 
     /**
@@ -42,7 +42,7 @@ class ControleurProduction extends Controleur
         if (Production::exist($idP)) {
             $prod = Production::getById($idP);
             $vue = new VueProduction($prod);
-            $vue->views('prod');
+            $vue->prod();
         } else {
             $err = new VueErreur();
             $err->views('idProd');
@@ -63,7 +63,7 @@ class ControleurProduction extends Controleur
             $url = $GLOBALS["router"]->urlFor("edit_production_process", ['idP' => $idP]) . "?idU=$idU";
             $prod = Production::getById($idP);
             $vue = new VueProduction([$prod, $url]);
-            $vue->views('editProd');
+            $vue->editProd();
         } else {
             $err = new VueErreur();
             $err->views('idProd');
@@ -76,7 +76,7 @@ class ControleurProduction extends Controleur
         $idU = ControleurCompte::getIdUser();
 
         $vue = new VueProduction($idU);
-        $vue->views('create');
+        $vue->create();
     }
 
     /**

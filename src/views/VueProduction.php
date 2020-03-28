@@ -18,42 +18,20 @@ use Throwable;
 class VueProduction extends Vue
 {
 
-    /**
-     * @inheritDoc
-     */
-    public function views(string $view)
-    {
-        switch ($view) {
-            case 'all':
-                $this->all();
-                break;
-            case 'prod':
-                $this->prod();
-                break;
-            case 'editProd':
-                $this->editProd();
-                break;
-            case 'create':
-                $this->create();
-                break;
-            default:
-                break;
-        }
-        $this->afficher();
-    }
 
     /**
-     * Affiche toutes les production d'un utilisateur
+     * Affiche toutes les productions d'un utilisateur
      */
-    private function all()
+    public function all()
     {
-        $this->title = 'Productions';
         $path = $GLOBALS["router"]->urlFor("new_production");
+
+        $this->title('Productions');
         $histo = $this->printHisto(ControleurCompte::isTeatch());
         if (ControleurCompte::isTeatch()) {
             $perso = $this->printHisto(false);
 
-            $this->content .= <<<NAV
+            $this->content(<<<NAV
 <h1>Retrouvez ici toutes les productions de vos élèves</h1>
 <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
   <li class="nav-item">
@@ -97,12 +75,13 @@ class VueProduction extends Vue
 </div>
 </div>
 </div>
-NAV;
+NAV
+            );
 
 
         } else {
 
-            $this->content .= <<<AUDS
+            $this->content(<<<AUDS
 <h1>Retrouves ici toutes tes productions !</h1>
 <div class="card-columns">
   <div class="card text-white bg-success mb-3" style="min-width: 20rem;">
@@ -116,15 +95,17 @@ NAV;
   $histo
 </div>
 
-AUDS;
+AUDS
+            );
 
         }
+        $this->afficher();
     }
 
-    private function prod()
+    public function prod()
     {
         $prod = $this->res;
-        $this->title = $prod->nomP;
+        $this->title($prod->nomP);
         $audios = $prod->audio();
 
         $this->content .= "<h1>Production: <i>$prod->nomP</i></h1>";
@@ -149,7 +130,7 @@ AUDS;
             }
         }
 
-        $this->content .= <<<AUDS
+        $this->content(<<<AUDS
 <div class='card border-info mb-3 '>
   <div class='card-header'>Enregistrements</div>
   <div class='card-body text-info'>
@@ -169,50 +150,52 @@ AUDS;
     </div>
   </div>
 </div>
-AUDS;
+AUDS
+        );
 
 
         //L'idU est stocké en get temporairement (jusqu'à la gestion du compte)
-        $this->content .= "<a class=\"boutton\" href=\" " . $GLOBALS["router"]->urlFor("edit_production", $data = ['idP' => $prod->idP]) . " \">Editer</a>";
+        $this->content("<a class=\"boutton\" href=\" " . $GLOBALS["router"]->urlFor("edit_production", $data = ['idP' => $prod->idP]) . " \">Editer</a>")
+            ->afficher();
     }
 
-    private function editProd()
+    public function editProd()
     {
         $prod = $this->res[0];
         $url = $this->res[1];
-        $this->title = "Édition";
+        $this->title("Édition");
 
-        $this->content .= <<<END
+        $this->content(<<<END
     <form id="edit_production" method="post" action="$url" enctype="multipart/form-data">
         <label>Titre de la production</label>
         <input type="text" name="nom" placeholder="Titre" value="$prod->nomP">
         <label>Audio</label>
         <input type="file" name="audio" accept="audio/*">
         <label>Commentaire</label>
-END;
+END
+        );
         if ($prod->commentaire != null)
-            $this->content .= "<textArea name='comm'>$prod->commentaire</textArea>";
-        else
-            $this->content .= <<<END
+            $this->content("<textArea name='comm'>$prod->commentaire</textArea>")->afficher();
+        else {
+            $this->content(<<<END
 <textArea name='comm'></textArea>
 <br>
         <input class='bouton' type="reset" value="Annuler modifications">
         <input class="bouton" type="submit" value="Valider modifications">
     </form>
-END;
-
-
+END
+            )->afficher();
+        }
     }
 
-    private function create()
+    public function create()
     {
-        $this->title = 'Nouvelle production';
-        $this->content .= "<h1>Créer une nouvelle production</h1>";
-
         $id = ControleurCompte::getIdUser();
         $path = $GLOBALS["router"]->urlFor("new_production_process") . "?idU=$id";
 
-        $this->content .= <<<FORM
+        $this->title('Nouvelle production')
+            ->content("<h1>Créer une nouvelle production</h1>")
+            ->content(<<<FORM
 <form id='new_production' method='post' action='$path' enctype="multipart/form-data">
 <label>Titre de la production</label>
 <input type='text' name='nom' placeholder='Titre' required>
@@ -221,7 +204,8 @@ END;
 <input class='bouton' type="reset" value="Annuler">
 <input class="bouton" type="submit" value="Valider">
 </form>
-FORM;
+FORM
+            )->afficher();
     }
 
     private function printHisto(bool $all): string

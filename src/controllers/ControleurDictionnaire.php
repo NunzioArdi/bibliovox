@@ -24,7 +24,7 @@ class ControleurDictionnaire extends Controleur
     {
         $dico = Dictionnaire::all();
         $vue = new VueDico($dico);
-        $vue->views('all');
+        $vue->allDico();
     }
 
     /**
@@ -35,7 +35,7 @@ class ControleurDictionnaire extends Controleur
     public function createDico()
     {
         $vue = new VueDico();
-        $vue->views('createDico');
+        $vue->creDico();
     }
 
     /**
@@ -46,7 +46,7 @@ class ControleurDictionnaire extends Controleur
     {
         $mots = Mot::allAlpha();
         $vue = new VueDico($mots);
-        $vue->views('alphabet');
+        $vue->affAlph();
     }
 
     /**
@@ -65,7 +65,7 @@ class ControleurDictionnaire extends Controleur
                 array_push($rep[2], json_decode($mot = Mot::getById($m->idM)));
             }
             $vue = new VueDico($rep);
-            $vue->views("theme");
+            $vue->theme();
         } else {
             $err = new VueErreur();
             $err->views('getDico');

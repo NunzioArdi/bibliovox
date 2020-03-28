@@ -26,7 +26,7 @@ class ControleurMot extends Controleur
         $mot = Mot::getById($idM);
         if ($mot != null && (DicoContient::matchIDs($idM, $idD) || $idD == 0)) {
             $vue = new VueMot($mot);
-            $vue->views('motDico');
+            $vue->motDico();
         }
         else {
            $err = new VueErreur($idD);
@@ -37,8 +37,8 @@ class ControleurMot extends Controleur
     public function createMot($idD)
     {
         $dico = Dictionnaire::all();
-        $vue = new VueMot(["idD" => $idD,"dico" => $dico]);
-        $vue->views("createMot");
+        $vue = new VueMot(["idD" => $idD, "dico" => $dico]);
+        $vue->creeMot();
     }
 
     public function processCreateMot()

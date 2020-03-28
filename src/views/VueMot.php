@@ -13,32 +13,15 @@ use bibliovox\models\Utilisateur;
 class VueMot extends Vue
 {
 
-    public function views(string $view)
-    {
-        switch ($view) {
-            case "motDico":
-                $this->motDico();
-                break;
-            case "createMot" :
-                $this->creMot();
-            default:
-                break;
-        }
-        $this->afficher();
-    }
-
-    private function motDico()
+    public function motDico()
     {
         $mot = $this->res;
         $texte = ucfirst($mot->texte);
 
-        $this->title = $texte;
 
-
-        $this->content .= "<div class = 'mot'>";
-        $this->content .= "<h1>$texte</h1>";
+        $this->title($texte)->content("<div class = 'mot'>\n  <h1>$texte</h1>");
         if ($mot->image != null)
-            $this->content .= "<img src=' " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "'  alt='img'>";
+            $this->content("<img src=' " . $GLOBALS["PATH"] . "/media/img/img/mot/" . $mot->image . "'  alt='img'>");
 
         $audios = $mot->audios();
 
@@ -46,9 +29,9 @@ class VueMot extends Vue
         $printAudioPerso = "";
         $printAudioEx = "";
 
-        $this->content .= "<div class='card border-info mb-3 '>
+        $this->content("<div class='card border-info mb-3 '>
   <div class='card-header'>Enregistrements</div>
-  <div class='card-body text-info'>";
+  <div class='card-body text-info'>");
 
 
         foreach ($audios as $audio) {
@@ -73,7 +56,7 @@ class VueMot extends Vue
         }
 
         if ($printAudioEx == "" && $printAudioPerso == "")
-            $this->content .= "<p>Aucun enregistrement pour le moment.</p><p>Crée le premier enregistrement maintenant !</p>";
+            $this->content("<p>Aucun enregistrement pour le moment.</p><p>Crée le premier enregistrement maintenant !</p>");
         else {
             if ($printAudioPerso == "")
                 $printAudioPerso = "<p>Tu n'as pas encore d'enregistrement.</p><p>Enregistre-toi tout de suite !</p>";
@@ -83,7 +66,7 @@ class VueMot extends Vue
 
         $groupe = $GLOBALS['PATH'] . "/media/img/icn/groupe.png";
         $eleve = $GLOBALS['PATH'] . "/media/img/icn/eleve.png";
-        $this->content .= <<<AUDIOS
+        $this->content(<<<AUDIOS
 <div class="card-deck">
   <div class="card">
     <div class="card-body">
@@ -98,19 +81,16 @@ class VueMot extends Vue
     </div>
   </div>
 </div>
-AUDIOS;
-
-
-
-        $this->content .= "  </div></div>";
-
-        $this->content .= ControleurAudio::record();
+AUDIOS
+        )->content("  </div></div>")->content(ControleurAudio::record());
 
 
         //TODO controler qu'il s'agit d'un prof/admin
         if (true) {
             $this->editDicosMot($mot->idM);
         }
+
+        $this->afficher();
     }
 
     private function editDicosMot(int $idM)
@@ -121,7 +101,7 @@ AUDIOS;
 
 
         $_POST['idM'] = $idM;
-        $this->content .= <<<CARD
+        $this->content(<<<CARD
 <div class="card">
   <div class="card-header text-center">
     <b>Outils d'édition</b>
@@ -151,7 +131,8 @@ AUDIOS;
         <option value="-1">Supprimer des dictionnaires</option>
 
 
-CARD;
+CARD
+        );
 
         foreach ($all as $r) {
             $bool = false;
@@ -161,11 +142,11 @@ CARD;
                 }
             }
             if ($bool)
-                $this->content .= "<option value='" . $r->idD . "'selected>" . $r->nomD . "</option>";
+                $this->content("<option value='" . $r->idD . "'selected>" . $r->nomD . "</option>");
             else
-                $this->content .= "<option value='" . $r->idD . "'>" . $r->nomD . "</option>";
+                $this->content("<option value='" . $r->idD . "'>" . $r->nomD . "</option>");
         }
-        $this->content .= <<<END
+        $this->content(<<<END
 </select>
   </div>
 </div>
@@ -182,10 +163,11 @@ CARD;
 </form>
 </div>
 </div>
-END;
+END
+        );
 
         // Modifier mot :
-        $this->content .= <<<CARD
+        $this->content(<<<CARD
 <div class="card border-success mb-3" style="min-width: 18rem;">
   <div class="card-header">Corriger l'orthographe</div>
   <div class="card-body text-success">
@@ -214,11 +196,12 @@ END;
 </div>
 
 </div>  
-CARD;
+CARD
+        );
 
         // Modifier ou Ajouter une Image
         $path = $GLOBALS["router"]->urlFor("update_pic", ["idD" => -1, "idM" => $idM]);
-        $this->content .= <<<CARD
+        $this->content(<<<CARD
 <div class="card-deck">
 
 <div class="card border-warning mb-3" style="min-width: 18rem;">
@@ -246,12 +229,13 @@ CARD;
 </form>
   </div>
 </div>
-CARD;
+CARD
+        );
 
 
         // Bouton de suppression :
         $path = $GLOBALS["router"]->urlFor("delete_mot") . "?idM=" . $idM;
-        $this->content .= <<<CARD
+        $this->content(<<<CARD
 <div class="card border-danger mb-3" style="min-width: 18rem;">
   <div class="card-header">Supprimer le mot</div>
   <div class="card-body text-danger">
@@ -267,17 +251,19 @@ CARD;
   
             </div>
 </div>    
-CARD;
+CARD
+        );
 
 
     }
 
 
-    private function creMot()
+    public function creeMot()
     {
-        $this->title = "Nouveau mot";
         $path = $GLOBALS["router"]->urlFor("new_mot_process");
-        $this->content .= <<<FORM
+
+        $this->title("Nouveau mot")
+            ->content(<<<FORM
 <form class="form-horizontal" method='post' action='$path' enctype="multipart/form-data">
 <fieldset>
 
@@ -298,14 +284,15 @@ CARD;
   <label class="col-md-4 control-label" for="dico">Dictionnaire(s)</label>
   <div class="col-md-5">
     <select id="dico" name="dico[]" class="form-control" multiple="multiple">
-FORM;
+FORM
+            );
         foreach ($this->res['dico'] as $d) {
             if ($this->res['idD'] == $d->idD) {
-                $this->content .= "<option value='" . $d->idD . "'selected>" . $d->nomD . "</option>";
+                $this->content("<option value='" . $d->idD . "'selected>" . $d->nomD . "</option>");
             } else
-                $this->content .= "<option value='" . $d->idD . "'>" . $d->nomD . "</option>";
+                $this->content("<option value='" . $d->idD . "'>" . $d->nomD . "</option>");
         }
-        $this->content .= <<<FORM
+        $this->content(<<<FORM
     </select>
   </div>
 </div>
@@ -435,7 +422,8 @@ FORM;
 </form>
 
 
-FORM;
+FORM
+        )->afficher();
 
     }
 }

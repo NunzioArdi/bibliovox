@@ -7,29 +7,11 @@ namespace bibliovox\views;
 class HomeView extends Vue
 {
 
-    /**
-     * @inheritDoc
-     */
-    public function views(string $view)
-    {
-        switch ($view) {
-            case 'index':
-                $this->index();
-                break;
-            case 'about':
-                $this->about();
-                break;
-            default:
-                break;
-        }
-        $this->afficher();
-    }
-
-    private function index()
+    public function index()
     {
         $this->title = "Accueil";
 
-        $this->content .= <<<HTML
+        $this->content(<<<HTML
             <p class="text">Bibli O’vox a été imaginé par <strong>Christophe Buczkowski</strong>, <strong>Sophie Deleys</strong> et <strong>Marie Lequèvre</strong> 
                 dans le cadre d’un master dans le domaine des sciences de l’éducation. Notre production s’appuiera sur les propositions résultant 
                 de ce travail. </p>
@@ -49,15 +31,15 @@ class HomeView extends Vue
                 durant la journée et qu’ils puissent eux aussi s’investir dans les devoirs de leur enfant. Cela renforcera
                 le lien entre l’école et le foyer en partageant ce qui a été étudié en classe.</p>
 
-HTML;
-
+HTML
+        )->afficher();
     }
 
-    private function about()
+    public function about()
     {
         $this->title = "À propos";
 
-        $this->content .= <<<END
+        $this->content(<<<END
         <div>Icons made by <a href='https://www.flaticon.com/authors/eucalyp' title='Eucalyp'>Eucalyp</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href='https://www.flaticon.com/authors/ddara' title='dDara'>dDara</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
@@ -68,7 +50,7 @@ HTML;
         <div>Icons made by <a href='https://www.flaticon.com/authors/freepik' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></div>
         <div>Icons made by <a href="https://www.flaticon.com/authors/flat-icons" title="Flat Icons">Flat Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
-END;
-
+END
+        )->afficher();
     }
 }

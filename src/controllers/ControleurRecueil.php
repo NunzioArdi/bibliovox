@@ -27,7 +27,7 @@ class ControleurRecueil extends Controleur
         if (Recueil::exist($id)) {
             $rec = Recueil::getById($id);
             $vue = new VueRecueil(json_decode($rec));
-            $vue->views('recueil');
+            $vue->recueil();
         } else {
             $err = new VueErreur();
             $err->views('idRecueil');
@@ -42,7 +42,7 @@ class ControleurRecueil extends Controleur
     {
         $rec = Recueil::all();
         $vue = new VueRecueil(json_decode($rec));
-        $vue->views('allrecueil');
+        $vue->allRecueil();
 
     }
 
@@ -52,8 +52,8 @@ class ControleurRecueil extends Controleur
      */
     public function creerRecueil()
     {
-        $vue =  new VueRecueil();
-        $vue->views('creer');
+        $vue = new VueRecueil();
+        $vue->create();
     }
 
     /**

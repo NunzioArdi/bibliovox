@@ -11,7 +11,7 @@ class ControleurCompte extends Controleur
     public function compte()
     {
         $vue = new VueCompte();
-        $vue->views('compte');
+        $vue->compte();
     }
 
     public function processLogin()
