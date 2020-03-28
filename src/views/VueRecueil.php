@@ -32,7 +32,6 @@ class VueRecueil extends Vue
                 ->content(ControleurAudio::record());
 
 
-            //TODO Ajouter l'id de l'utilisateur connecté
             $aPerso = ControleurAudioRecueil::audioPerso($rec->idR, ControleurCompte::getIdUser());
             $aPartage = ControleurAudioRecueil::audioPartage($rec->idR);
 

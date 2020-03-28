@@ -5,6 +5,8 @@ namespace bibliovox\views;
 
 
 use bibliovox\controllers\ControleurAudio;
+use bibliovox\controllers\ControleurAudioMot;
+use bibliovox\controllers\ControleurCompte;
 use bibliovox\controllers\ControleurUtilisateur;
 use bibliovox\models\DicoContient;
 use bibliovox\models\Dictionnaire;
@@ -29,11 +31,6 @@ class VueMot extends Vue
         $printAudioPerso = "";
         $printAudioEx = "";
 
-        $this->content("<div class='card border-info mb-3 '>
-  <div class='card-header'>Enregistrements</div>
-  <div class='card-body text-info'>");
-
-
         foreach ($audios as $audio) {
             $date = explode('-', $audio->dateCreation);
             $an = $date[0];
@@ -45,8 +42,7 @@ class VueMot extends Vue
             $temp .= "<source src=' " . $GLOBALS["PATH"] . "/" . $audio->chemin . "' type='audio/mp3'>";
             $temp .= "</audio>";
 
-            //TODO comparer avec l'id de lutilisateur connecté
-            if ($audio->idU == 1)
+            if ($audio->idU == ControleurCompte::getIdUser())
                 $printAudioPerso .= $temp;
             else {
                 $printAudioEx .= "<p>Exemple de <b>" . ControleurUtilisateur::getNameById($audio->idU) . "</b></p>";
@@ -64,9 +60,159 @@ class VueMot extends Vue
                 $printAudioEx = "<p>Aucun exemple pour l'instant.</p><p>Tu peux demander à ta maitresse ou à ton maitre de te choisir comme exemple !</p>";
         }
 
-        $groupe = $GLOBALS['PATH'] . "/media/img/icn/groupe.png";
-        $eleve = $GLOBALS['PATH'] . "/media/img/icn/eleve.png";
-        $this->content(<<<AUDIOS
+        if (ControleurCompte::isTeatch()) {
+
+            //Les inforamtions pour les enregistrements personnels et ceux partagé
+            //(voir onglet "vos enregistrements personnels" sont traités ci-dessus
+
+            //Préparation des enregistrements créés par les élèves : $histo
+            $auds = ControleurAudioMot::allAudioMot($mot->idM);
+            $histo = "";
+
+            //Récupération des informations pour chaque audio, puis mise en forme
+            foreach ($auds as $row) {
+                $idAudio = $row->idAudio;
+                $aud = ControleurAudio::getPathById($idAudio);
+                $nom = ControleurUtilisateur::getNameById($aud->idU);
+                $date = explode('-', $aud->dateCreation);
+                $an = $date[0];
+                $mois = $date[1];
+                $jour = explode(" ", $date[2])[0];
+
+                $crea = "<p class='date'>Créé le: $jour / $mois / $an</p>";
+                $chemin = $GLOBALS["PATH"] . "/" . $aud->chemin;
+                $pathDelete = $GLOBALS["router"]->urlFor("deleteRecMot") . "?idM=$mot->idM";
+                $comm = $aud->commentaire;
+                $shared = "";
+                $unshared = "";
+                if ($row->partage == 1)
+                    $shared = "checked='checked'";
+                else
+                    $unshared = "checked='checked'";
+
+                $histo .= <<<HISTO
+<div class="card border-info mb-3" style="min-width: 20rem;">
+  <div class="card-header">$nom</div>
+  <div class="card-body text-info">
+    <p><audio controls><source src="$chemin" type="audio/mp3"></audio controls></p>
+    <h5 class="card-title">Commentaire</h5>
+    <input id="comm-$idAudio" name="comm" type="text" value="$comm" class="form-control input-md">
+  
+    
+    <h5 class="card-title">Partager l'enregistrement</h5>
+    <div class="col-md-4"> 
+    <label class="radio-inline" for="radios-0">
+      <input type="radio" name="$idAudio" id="shared-$idAudio" value="1" $shared>
+      Oui
+    </label> 
+    <label class="radio-inline" for="radios-1">
+      <input type="radio" name="$idAudio" id="radios-1" value="0" $unshared>
+      Non
+    </label>
+  </div>
+  
+  <button id="saveMot" class='btn btn-block btn-success' value="$idAudio">Enregistrer</button>
+  <a href="$pathDelete&idAudio=$idAudio" class='btn btn-block btn-danger'>Supprimer l'enregistrement</a>
+  
+</div>
+
+
+
+  <div class="card-footer"> $crea</div>
+</div>
+HISTO;
+
+            }
+
+            //appel à la méthode s'occupant de l'édition
+            $edit = $this->editDicosMot($mot->idM);
+
+            $this->content(<<<TEACH
+<h2>Retrouvez ici toutes les enregistrements de vos élèves</h2>
+
+<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="pills-histo-tab" data-toggle="pill" href="#pills-histo" role="tab" aria-controls="pills-histo" aria-selected="true">Derniers enregistrements</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Enregistrements de vos élèves</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="pills-perso-tab" data-toggle="pill" href="#pills-perso" role="tab" aria-controls="pills-perso" aria-selected="false">Vos enregistrements personnels</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="pills-edition-tab" data-toggle="pill" href="#pills-edition" role="tab" aria-controls="pills-edition" aria-selected="false"><b>Édition du mot</b></a>
+  </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-histo" role="tabpanel" aria-labelledby="pills-histo-tab">
+  <div class="card-columns">
+    <div class="card text-white bg-info mb-3" style="min-width: 20rem;">
+      <div class="card-header">Information</div>
+      <div class="card-body">
+        <p class="card-text">Les enregistrements sont triés selon leur ordre d'ajout.</p>
+        <p class="card-text">Vous avez la possibilité d'ajouter des commentaires ou de supprimer les enregistrements.</p>
+        <p class="card-text">Vous pouvez également partager un enregistrement avec tous les élèves.</p>
+      </div>
+  </div>
+    $histo
+  </div>
+  </div>
+  
+  
+  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">En cours...</div>
+  
+  
+  <div class="tab-pane fade" id="pills-perso" role="tabpanel" aria-labelledby="pills-perso-tab">
+  <div class="card-deck">
+    <div class="card border-0">
+        <div class="card text-white bg-info" >
+          <div class="card-header">Information</div>
+          <div class="card-body">
+            <p class="card-text">La présentation des informations sur cette page ressemble à celle que visualisent vos élèves.</p>
+            <p class="card-text">Les exemples que vous visualisez sur cette page sont les mêmes pour tous les élèves.</p>
+          </div>
+        </div>
+        <br>
+      <div class="card text-white bg-success" >
+          <div class="card-header">Nouvel enregistrement</div>
+          <div class="card-body">
+            <p class="card-text">Ajoutez un nouvel enregistrement à ce mot !</p>
+            <a class="btn btn-light" href=" # ">Nouvel enregistrement</a>
+          </div>
+      </div>
+  </div>
+              <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Vos enregistrements</h5>
+          $printAudioPerso
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Exemples</h5>
+          $printAudioEx
+        </div>
+      </div>
+  </div>
+</div>
+
+<div class="tab-pane fade" id="pills-edition" role="tabpanel" aria-labelledby="pills-edition-tab">
+$edit
+</div>
+</div>
+</div>
+</div>
+TEACH
+            );
+        } else {
+
+            $groupe = $GLOBALS['PATH'] . "/media/img/icn/groupe.png";
+            $eleve = $GLOBALS['PATH'] . "/media/img/icn/eleve.png";
+            $this->content(<<<AUDIOS
+<div class='card border-info mb-3 '>
+  <div class='card-header'>Enregistrements</div>
+  <div class='card-body text-info'>
 <div class="card-deck">
   <div class="card">
     <div class="card-body">
@@ -82,26 +228,23 @@ class VueMot extends Vue
   </div>
 </div>
 AUDIOS
-        )->content("  </div></div>")->content(ControleurAudio::record());
+            )->content("  </div></div>")->content(ControleurAudio::record());
 
-
-        //TODO controler qu'il s'agit d'un prof/admin
-        if (true) {
-            $this->editDicosMot($mot->idM);
         }
-
         $this->afficher();
     }
 
     private function editDicosMot(int $idM)
     {
+
+
         $dico = DicoContient::allDicoMot($idM);
         $all = Dictionnaire::all();
         $mot = $this->res->texte;
 
 
         $_POST['idM'] = $idM;
-        $this->content(<<<CARD
+        $ret = <<<CARD
 <div class="card">
   <div class="card-header text-center">
     <b>Outils d'édition</b>
@@ -131,8 +274,7 @@ AUDIOS
         <option value="-1">Supprimer des dictionnaires</option>
 
 
-CARD
-        );
+CARD;
 
         foreach ($all as $r) {
             $bool = false;
@@ -142,11 +284,11 @@ CARD
                 }
             }
             if ($bool)
-                $this->content("<option value='" . $r->idD . "'selected>" . $r->nomD . "</option>");
+                $ret .="<option value='" . $r->idD . "'selected>" . $r->nomD . "</option>";
             else
-                $this->content("<option value='" . $r->idD . "'>" . $r->nomD . "</option>");
+                $ret .="<option value='" . $r->idD . "'>" . $r->nomD . "</option>";
         }
-        $this->content(<<<END
+        $ret .=<<<END
 </select>
   </div>
 </div>
@@ -163,11 +305,10 @@ CARD
 </form>
 </div>
 </div>
-END
-        );
+END;
 
         // Modifier mot :
-        $this->content(<<<CARD
+        $ret .=<<<CARD
 <div class="card border-success mb-3" style="min-width: 18rem;">
   <div class="card-header">Corriger l'orthographe</div>
   <div class="card-body text-success">
@@ -196,12 +337,11 @@ END
 </div>
 
 </div>  
-CARD
-        );
+CARD;
 
         // Modifier ou Ajouter une Image
         $path = $GLOBALS["router"]->urlFor("update_pic", ["idD" => -1, "idM" => $idM]);
-        $this->content(<<<CARD
+        $ret .=<<<CARD
 <div class="card-deck">
 
 <div class="card border-warning mb-3" style="min-width: 18rem;">
@@ -229,13 +369,12 @@ CARD
 </form>
   </div>
 </div>
-CARD
-        );
+CARD;
 
 
         // Bouton de suppression :
         $path = $GLOBALS["router"]->urlFor("delete_mot") . "?idM=" . $idM;
-        $this->content(<<<CARD
+        $ret .= <<<CARD
 <div class="card border-danger mb-3" style="min-width: 18rem;">
   <div class="card-header">Supprimer le mot</div>
   <div class="card-body text-danger">
@@ -251,10 +390,9 @@ CARD
   
             </div>
 </div>    
-CARD
-        );
+CARD;
 
-
+return $ret;
     }
 
 

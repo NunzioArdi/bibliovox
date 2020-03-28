@@ -9,6 +9,7 @@ class AudioMot extends Pivot
 {
     public $timestamps = false;
     protected $table = 'audioMot';
+    protected $primaryKey = 'idAudio';
 
     public static function createNew(int $idA, int $idM)
     {
@@ -17,6 +18,12 @@ class AudioMot extends Pivot
         $aud->idM = $idM;
 
         $aud->save();
+    }
+
+    public static function deleteByID($id)
+    {
+        $aud = AudioMot::where("idAudio", "=", "$id")->first();
+        $aud->forceDelete();
     }
 
 

@@ -3,6 +3,8 @@ session_start();
 
 
 use bibliovox\controllers\ControleurAdmin;
+use bibliovox\controllers\ControleurAudio;
+use bibliovox\controllers\ControleurAudioMot;
 use bibliovox\controllers\ControleurAudioRecueil;
 use bibliovox\controllers\ControleurCompte;
 use bibliovox\controllers\ControleurDicoContient;
@@ -124,6 +126,11 @@ $app->get('/dictionnaire/access/{idD}/delete', function (Request $req, Response 
     $cont = new ControleurDictionnaire($req, $resp, $args);
     $cont->delete($args['idD']);
 })->setName('delete_dico');
+//Supprimer l'enregistrement d'un mot
+$app->get('/dictionnaire/deleteRecordMot', function (Request $req, Response $resp, $args = []) {
+    $cont = new ControleurAudioMot($req, $resp, $args);
+    return $cont->delete();
+})->setName('deleteRecMot');
 
 
 //Recueil
