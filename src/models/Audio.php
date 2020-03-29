@@ -54,5 +54,12 @@ class Audio extends Model
         $aud->forceDelete();
     }
 
+    public static function updateComm(string $id, string $data)
+    {
+        $aud = Audio::where("idAudio", "=", "$id")->first();
+        $aud->commentaire = $data;
+        $aud->update();
+    }
+
 
 }

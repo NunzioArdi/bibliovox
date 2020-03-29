@@ -126,8 +126,9 @@ FORM
             $unshared = "";
             if ($aud->partage == 1)
                 $shared = "checked='checked'";
-            else
+            else {
                 $unshared = "checked='checked'";
+            }
 
             //echo $aud->partage;
 
@@ -286,6 +287,8 @@ AUDIOS;
 
 </div>
 
+<input id="path" value="{$GLOBALS["PATH"]}" hidden>
+<script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
 
 NAV
         );

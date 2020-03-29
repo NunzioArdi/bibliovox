@@ -14,6 +14,8 @@ use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
 use bibliovox\controllers\ControleurHome;
 use bibliovox\models\Audio;
+use bibliovox\models\AudioMot;
+use bibliovox\models\AudioRecueil;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\models\Utilisateur;
@@ -300,6 +302,20 @@ $app->post("/udpateWord", function () {
 $app->post("/updateDicoName", function () {
     if (isset($_POST['dicoName'], $_POST['idD'])) {
         Dictionnaire::updateName($_POST['dicoName'], $_POST['idD']);
+    }
+});
+
+$app->post('/upddateAudioRec', function () {
+    if (isset($_POST['data'], $_POST['shared'])) {
+        Audio::updateComm($_POST['id'], $_POST['data']);
+        AudioRecueil::updatePartage($_POST['id'], $_POST['shared']);
+    }
+});
+
+$app->post('/upddateAudioMot', function () {
+    if (isset($_POST['data'], $_POST['shared'], $_POST['id'])) {
+        Audio::updateComm($_POST['id'], $_POST['data']);
+        AudioMot::updatePartage($_POST['id'], $_POST['shared']);
     }
 });
 

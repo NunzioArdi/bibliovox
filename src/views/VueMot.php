@@ -80,9 +80,12 @@ class VueMot extends Vue
                 $shared = "";
                 $unshared = "";
                 if ($row->partage == 1)
-                    $shared = "checked='checked'";
-                else
+                    $shared = "value='1' checked='checked'";
+                else {
                     $unshared = "checked='checked'";
+                    $shared = "value='0'";
+                }
+
 
                 $histo .= <<<HISTO
 <div class="card border-info mb-3" style="min-width: 20rem;">
@@ -96,11 +99,11 @@ class VueMot extends Vue
     <h5 class="card-title">Partager l'enregistrement</h5>
     <div class="col-md-4"> 
     <label class="radio-inline" for="radios-0">
-      <input type="radio" name="$idAudio" id="shared-$idAudio" value="1" $shared>
+      <input type="radio" name="$idAudio" id="shared-$idAudio"  $shared>
       Oui
     </label> 
     <label class="radio-inline" for="radios-1">
-      <input type="radio" name="$idAudio" id="radios-1" value="0" $unshared>
+      <input type="radio" name="$idAudio" id="radios-1" $unshared>
       Non
     </label>
   </div>
@@ -197,6 +200,8 @@ $edit
 </div>
 </div>
 </div>
+
+
 TEACH
             );
         } else {

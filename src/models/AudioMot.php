@@ -29,5 +29,12 @@ class AudioMot extends Pivot
         $aud->forceDelete();
     }
 
+    public static function updatePartage($id, $shared)
+    {
+        $aud = AudioMot::where("idAudio", "=", "$id")->first();
+        $aud->partage = $shared;
+        $aud->update();
+    }
+
 
 }

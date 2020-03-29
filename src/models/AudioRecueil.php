@@ -15,9 +15,17 @@ class AudioRecueil extends Model
 {
     protected $primaryKey = 'idAudio';
     protected $table = 'audioRec';
+    public $timestamps = false;
 
     static function getByBoth (int $idR, int $idU) {
         return AudioRecueil::where("idR", "=", "$idR")->where("idU", "=", "$idU")->first();
+    }
+
+    public static function updatePartage(string $id, int $shared)
+    {
+        $aud = AudioRecueil::where("idAudio", "=", "$id")->first();
+        $aud->partage = $shared;
+        $aud->update();
     }
 
 }

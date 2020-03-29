@@ -27,6 +27,28 @@ if (document.getElementById("bttnName") !== null)
     makeRequest(PATH + "/updateDicoName", "dicoName=" + newName + "&idD=" + idD, nothing);
     }
 
+if (document.getElementById("saveRec") !== null)
+    document.getElementById("saveRec").onclick = function () {
+        let id = document.getElementById("saveRec").value;
+        var comm = document.getElementById("comm-" + id).value;
+        var shared = 0;
+        if (document.getElementById("shared-" + id).checked)
+            shared = 1;
+
+        makeRequest(PATH + '/upddateAudioRec', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+    }
+
+if (document.getElementById("saveMot") !== null)
+    document.getElementById("saveMot").onclick = function () {
+        let id = document.getElementById("saveMot").value;
+        var comm = document.getElementById("comm-" + id).value;
+        var shared = 0;
+        if (document.getElementById("shared-" + id).checked)
+            shared = 1;
+
+        makeRequest(PATH + '/upddateAudioMot', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+    }
+
 function printResultSearchAudio(e) {
     let txt;
     if (this.readyState === XMLHttpRequest.DONE) {
