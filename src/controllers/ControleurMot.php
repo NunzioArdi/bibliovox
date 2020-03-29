@@ -43,9 +43,25 @@ class ControleurMot extends Controleur
 
     public function processCreateMot()
     {
-        $res = ControleurAudio::createAudio(ControleurCompte::getIdUser(), '');
+
         $ret = Mot::createNew($_POST['mot']);
 
+        if (isset($_FILES['newAudio']) AND $_FILES['newAudio']['error'] == 0) {
+            $res = ControleurAudio::createAudio(ControleurCompte::getIdUser(), '');
+
+            AudioMot::createNew($res, $ret->idM, true);
+            if (is_int($ret)){
+                //TODO lancer erreur
+            } else {
+                if (isset($_POST['dico'])){
+                    foreach ($_POST['dico'] as $d) {
+                        DicoContient::create($d, $ret->idM);
+                    }
+                }else  {
+                    //TODO lancer erreur
+                }
+            }
+        }
 
         if (isset($_POST['cbnumber'])) {
             for ($i = 0; $i < intval($_POST['cbnumber']); $i++){
@@ -55,19 +71,6 @@ class ControleurMot extends Controleur
             }
         }
 
-
-        AudioMot::createNew($res, $ret->idM, false);
-        if (is_int($ret)){
-            //TODO lancer erreur
-        } else {
-            if (isset($_POST['dico'])){
-                foreach ($_POST['dico'] as $d) {
-                    DicoContient::create($d, $ret->idM);
-                }
-            }else  {
-                //TODO lancer erreur
-            }
-        }
         return $this->resp->withRedirect($GLOBALS["router"]->urlFor("mot", ["idD" => -1, "idM" => $ret->idM]));
 
     }
