@@ -108,7 +108,7 @@ class VueMot extends Vue
     </label>
   </div>
   
-  <button id="saveMot" class='btn btn-block btn-success' value="$idAudio">Enregistrer</button>
+  <button id="saveMot" class='saveMot btn btn-block btn-success' value="$idAudio">Enregistrer</button>
   <a href="$pathDelete&idAudio=$idAudio" class='btn btn-block btn-danger'>Supprimer l'enregistrement</a>
   
 </div>

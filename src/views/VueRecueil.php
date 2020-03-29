@@ -155,7 +155,7 @@ FORM
     </label>
   </div>
   
-  <button id="saveRec" class='btn btn-block btn-success' value="$idAudio">Enregistrer</button>
+  <button class='saveRec btn btn-block btn-success' value="$idAudio">Enregistrer</button>
   <a href="$pathDelete&idAudio=$idAudio" class='btn btn-block btn-danger'>Supprimer l'enregistrement</a>
   
 </div>

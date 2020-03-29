@@ -4,50 +4,72 @@ if (document.getElementById("searchButtn") !== null)
     document.getElementById("searchButtn").onclick = function () {
         var words = document.getElementById("searchBar").value;
         makeRequest(PATH + '/searchAudio', "data=" + encodeURIComponent(words), printResultSearchAudio);
-    }
+    };
 
 if (document.getElementById("dicoButtn") !== null)
     document.getElementById("dicoButtn").onclick = function () {
         var dico = getSelectionsListe("selectedDico");
         var idM = document.getElementById("idM").value;
         makeRequest(PATH + '/changeDicoMot', "data=" + encodeURIComponent(dico) + "&idM=" + idM, nothing);
-    }
+    };
 
 if (document.getElementById("buttnChangeWord") !== null)
     document.getElementById("buttnChangeWord").onclick = function () {
         var word = document.getElementById("newWord").value;
         var idM = document.getElementById("idM").value;
         makeRequest(PATH + '/udpateWord', "word=" + word + "&idM=" + idM, nothing);
-    }
+    };
 
 if (document.getElementById("bttnName") !== null)
     document.getElementById("bttnName").onclick = function () {
-    let newName = document.getElementById("dicoName").value;
-    let idD = document.getElementById("idD").value;
-    makeRequest(PATH + "/updateDicoName", "dicoName=" + newName + "&idD=" + idD, nothing);
+        let newName = document.getElementById("dicoName").value;
+        let idD = document.getElementById("idD").value;
+        makeRequest(PATH + "/updateDicoName", "dicoName=" + newName + "&idD=" + idD, nothing);
+    };
+
+if (document.getElementsByClassName("saveRec") !== null) {
+    let all = document.getElementsByClassName("saveRec");
+    for (let element of all) {
+        element.onclick = function () {
+            let id = this.value;
+            var comm = document.getElementById("comm-" + id).value;
+            var shared = 0;
+            if (document.getElementById("shared-" + id).checked)
+                shared = 1;
+
+            makeRequest(PATH + '/upddateAudioRec', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+        }
     }
+}
 
-if (document.getElementById("saveRec") !== null)
-    document.getElementById("saveRec").onclick = function () {
-        let id = document.getElementById("saveRec").value;
-        var comm = document.getElementById("comm-" + id).value;
-        var shared = 0;
-        if (document.getElementById("shared-" + id).checked)
-            shared = 1;
+if (document.getElementsByClassName("saveMot") !== null) {
+    let all = document.getElementsByClassName("saveMot");
+    for (let element of all) {
+        element.onclick = function () {
+            let id = this.value;
+            var comm = document.getElementById("comm-" + id).value;
+            var shared = 0;
+            if (document.getElementById("shared-" + id).checked)
+                shared = 1;
 
-        makeRequest(PATH + '/upddateAudioRec', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+            makeRequest(PATH + '/upddateAudioMot', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+        }
     }
+}
 
-if (document.getElementById("saveMot") !== null)
-    document.getElementById("saveMot").onclick = function () {
-        let id = document.getElementById("saveMot").value;
-        var comm = document.getElementById("comm-" + id).value;
-        var shared = 0;
-        if (document.getElementById("shared-" + id).checked)
-            shared = 1;
 
-        makeRequest(PATH + '/upddateAudioMot', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+if (document.getElementsByClassName("saveProd") !== null) {
+    let all = document.getElementsByClassName("saveProd");
+    for (let element of all) {
+        element.onclick = function () {
+            let id = this.value;
+            var comm = document.getElementById("comm-" + id).value;
+
+            makeRequest(PATH + '/upddateAudioProd', "data=" + encodeURIComponent(comm) + "&id=" + id, nothing);
+        }
     }
+}
+
 
 function printResultSearchAudio(e) {
     let txt;
@@ -65,7 +87,7 @@ function printResultSearchAudio(e) {
 
                 txt += "<p>Sélectionnez les audio que vous souhaitez associer au mot.</p>"
 
-                for (let i = 0; i < resp.length-1; i++) {
+                for (let i = 0; i < resp.length - 1; i++) {
                     txt += "<div>\n" +
                         "  <input type='checkbox' name='" + i + "' id='checkox' value='" + resp[i] + "'>" +
                         "  <label for='" + resp[i] + "'><audio controls src = '" + PATH + "/" + resp[i] + "'>Erreur</audio></label>" +

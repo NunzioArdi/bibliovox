@@ -75,6 +75,9 @@ class VueProduction extends Vue
 </div>
 </div>
 </div>
+
+<input id="path" value="{$GLOBALS["PATH"]}" hidden>
+<script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
 NAV
             );
 
@@ -221,10 +224,11 @@ FORM
             $delete = $path = $GLOBALS["router"]->urlFor("delete_production");
             foreach ($prod as $r) {
                 $nom = $r->nomP;
-                $audio = ControleurAudio::getPathById($r->idAudio);
+                $id = $r->idAudio;
+                $audio = ControleurAudio::getPathById($id);
 
                 if (ControleurCompte::isTeatch())
-                    $nom .= " de <b>" . ControleurUtilisateur::getNameById($audio->idU) ."</b>";
+                    $nom .= " de <b>" . ControleurUtilisateur::getNameById($audio->idU) . "</b>";
                 $chemin = $GLOBALS["PATH"] . "/" . $audio->chemin;
 
                 $date = explode('-', $audio->dateCreation);
@@ -234,19 +238,21 @@ FORM
                 $crea = "Créé le: $jour / $mois / $an";
 
                 $comm = $audio->commentaire;
-                if ($comm == "")
-                    $comm = "Aucun commentaire pour le moment.";
 
-                $edit = "";
-                if (ControleurCompte::isTeatch()) {
-                    $edit = "<div class='card'>
+                $printComm = "";
+                if (ControleurCompte::isTeatch() && $all) {
+                    $printComm = "<div class='card'>
   <div class='card-body'>
     <h5 class='card-title'>Édition</h5>
-    <input id='commentaire' name='commentaire' type='text' placeholder='Commentaire' class='form-control input-md'>
-    <a href='#' class='card-link'>Ajouter le commentaire</a>
-    <a href='$delete?idP=$r->idP' class='card-link text-danger'>Supprimer la production</a>
+    <p><input id='comm-$id' name='commentaire' type='text' placeholder='Commentaire' class='form-control input-md' value='$comm'></p>
+    <button id='saveProd' value='$id' class='saveProd btn btn-block btn-success'>Ajouter le commentaire</button>
+    <a href='$delete?idP=$r->idP' class='btn btn-block btn-danger'>Supprimer la production</a>
   </div>
 </div>";
+                } else {
+                    if ($comm == "")
+                        $comm = "Aucun commentaire pour le moment.";
+                    $printComm = "<h5 class='card-title'>Commentaire</h5> <p class='card-text'>$comm</p>";
                 }
 
                 $printAuds .= <<<AUDS
@@ -256,9 +262,7 @@ FORM
   <div class="card-body text-info">
     <h5 class="card-title">Ton enregistrement</h5>
     <p><audio controls><source src="$chemin" type="audio/mp3"></audio controls></p>
-    <h5 class="card-title">Commentaire</h5>
-    <p class="card-text">$comm</p>
-    $edit
+    $printComm
   </div>
   <div class="card-footer">$crea</div>
 </div>

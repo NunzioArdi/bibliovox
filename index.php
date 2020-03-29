@@ -319,6 +319,12 @@ $app->post('/upddateAudioMot', function () {
     }
 });
 
+$app->post('/upddateAudioProd', function () {
+    if (isset($_POST['data'], $_POST['id'])) {
+        Audio::updateComm($_POST['id'], $_POST['data']);
+    }
+});
+
 
 try {
     $app->run();
