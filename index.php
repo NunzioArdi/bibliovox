@@ -72,6 +72,10 @@ $app->get('/compte', function () {
     $cont->compte();
 })->setName('compte');
 
+$app->get('/account/disconnect', function (Request $req, Response $resp) {
+    $cont = new ControleurCompte($req, $resp);
+    return $cont->disconnect();
+})->setName('deconnection');
 
 //Admin
 $app->get('/admin', function (Request $req, Response $resp) {

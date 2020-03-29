@@ -47,6 +47,6 @@ abstract class Controleur
     protected function connection()
     {
         $vue = new VueCompte();
-        $vue->connection();
+        $vue->connection(1);
     }
 }

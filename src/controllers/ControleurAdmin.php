@@ -23,6 +23,9 @@ class ControleurAdmin extends Controleur
         return null;
     }
 
+    /**
+     * @todo la photo de profil
+     */
     public function processCreateUser()
     {
         $pwdEncode = password_hash($_POST['password'], PASSWORD_BCRYPT);
@@ -36,7 +39,7 @@ class ControleurAdmin extends Controleur
         }
 
 
-        return $this->resp->withRedirect($GLOBALS["router"]->urlFor("admin"));
+        //return $this->resp->withRedirect($GLOBALS["router"]->urlFor("admin"));
 
     }
 

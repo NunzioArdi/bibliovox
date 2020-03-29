@@ -54,20 +54,21 @@ class Utilisateur extends Model
      * @return Utilisateur
      * @throws Exception
      */
-    static function createUser(string $firstname, string $lastname, string $pwdhash, int $grade, string $mail = null, $pp = null){
+    static function createUser(string $firstname, string $lastname, string $pwdhash, int $grade, string $mail, $pp = null){
 
         $res = false;
         $newUtilisateur = new Utilisateur();
         $newUtilisateur->nom = $firstname;
         $newUtilisateur->prenom = $lastname;
         $newUtilisateur->password = $pwdhash;
-        $newUtilisateur->mail = isset($mail) ? null : $mail;
+        $newUtilisateur->mail = $mail;
         $newUtilisateur->idG = $grade;
         //TODO photo de profil
 
         try {
             $res = $newUtilisateur->save();
         } catch (\PDOException $e) {
+            echo $e;
         }
 
         if ($res == false) {
@@ -84,16 +85,15 @@ class Utilisateur extends Model
      * @return array idU et grade si identifiant correct, sinon [-1]
      * @todo je sais c'est pas obti
      */
-    static function login($firstname, $lastname, $password)
+    static function login($email, $password)
     {
-        $tmp = Utilisateur::where('nom', 'like', $firstname)->where('prenom', 'like', $lastname)->get();
+        $tmp = Utilisateur::where('mail', 'like', $email)->get();
 
-        //si 2 personnes on le même nom et prénom mais 2 mot de pass /=/ ok
-        //si 2 personnes on le même nom et prénom ET même mot de pass, ça pose problème
         foreach ($tmp as $r) {
-            if (!is_null($r))
+            if (!is_null($r)){
                 if (password_verify($password, $r->password))
                     return [$r->idU, $r->idG];
+            }
         }
         return [-1];
     }
