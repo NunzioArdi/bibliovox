@@ -1,26 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3308
--- Généré le :  jeu. 27 fév. 2020 à 17:33
--- Version du serveur :  8.0.18
--- Version de PHP :  7.3.12
+-- Hôte : localhost:8889
+-- Généré le :  sam. 28 mars 2020 à 18:04
+-- Version du serveur :  5.7.26
+-- Version de PHP :  7.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
--- Base de données :  `bibliovox`
+-- Base de données :  `BibliOvox`
 --
+CREATE DATABASE IF NOT EXISTS `BibliOvox` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `BibliOvox`;
 
 -- --------------------------------------------------------
 
@@ -29,14 +23,12 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `audio`;
-CREATE TABLE IF NOT EXISTS `audio` (
-  `idAudio` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID de l''audio',
+CREATE TABLE `audio` (
+  `idAudio` int(11) UNSIGNED NOT NULL COMMENT 'ID de l''audio',
   `idU` int(11) NOT NULL COMMENT 'ID de l''utilisateur propriétaire',
   `dateCreation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date de la création',
-  `chemin` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Chemin menant au fichier audio',
-  `commentaire` varchar(265) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Commentaire de l''audio',
-  PRIMARY KEY (`idAudio`),
-  KEY `idU` (`idU`)
+  `chemin` varchar(255) NOT NULL COMMENT 'Chemin menant au fichier audio',
+  `commentaire` varchar(265) DEFAULT NULL COMMENT 'Commentaire de l''audio'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -46,11 +38,10 @@ CREATE TABLE IF NOT EXISTS `audio` (
 --
 
 DROP TABLE IF EXISTS `audioMot`;
-CREATE TABLE IF NOT EXISTS `audioMot` (
+CREATE TABLE `audioMot` (
   `idAudio` int(11) NOT NULL COMMENT 'ID de l''audio',
   `idM` int(11) NOT NULL COMMENT 'ID du mot',
-  PRIMARY KEY (`idAudio`,`idM`),
-  KEY `idAudio` (`idAudio`,`idM`)
+  `partage` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -60,15 +51,11 @@ CREATE TABLE IF NOT EXISTS `audioMot` (
 --
 
 DROP TABLE IF EXISTS `audioRec`;
-CREATE TABLE IF NOT EXISTS `audioRec` (
+CREATE TABLE `audioRec` (
   `idR` int(10) UNSIGNED NOT NULL COMMENT 'ID du Recueil',
   `idU` int(10) UNSIGNED NOT NULL COMMENT 'ID de l''utilisateur',
   `idAudio` int(11) NOT NULL COMMENT 'ID de l''audio',
-  `partage` bit(1) NOT NULL DEFAULT b'0',
-  PRIMARY KEY (`idR`,`idU`,`idAudio`),
-  KEY `idU` (`idU`),
-  KEY `idAudio` (`idAudio`),
-  KEY `idR` (`idR`)
+  `partage` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -78,13 +65,11 @@ CREATE TABLE IF NOT EXISTS `audioRec` (
 --
 
 DROP TABLE IF EXISTS `classe`;
-CREATE TABLE IF NOT EXISTS `classe` (
-  `idC` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID de la classe',
-  `nom` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Nom de la classe',
+CREATE TABLE `classe` (
+  `idC` int(10) UNSIGNED NOT NULL COMMENT 'ID de la classe',
+  `nom` varchar(255) NOT NULL COMMENT 'Nom de la classe',
   `idUEnseignant` int(10) UNSIGNED NOT NULL COMMENT 'ID utilisateur de l''enseignant',
-  `annee` int(10) UNSIGNED NOT NULL COMMENT 'Année de la classe',
-  PRIMARY KEY (`idC`),
-  KEY `idUEnseignant` (`idUEnseignant`)
+  `annee` int(10) UNSIGNED NOT NULL COMMENT 'Année de la classe'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -94,12 +79,9 @@ CREATE TABLE IF NOT EXISTS `classe` (
 --
 
 DROP TABLE IF EXISTS `dicoContient`;
-CREATE TABLE IF NOT EXISTS `dicoContient` (
+CREATE TABLE `dicoContient` (
   `idD` int(10) UNSIGNED NOT NULL COMMENT 'ID du dictionnaire',
-  `idM` int(10) UNSIGNED NOT NULL COMMENT 'ID du mot',
-  PRIMARY KEY (`idD`,`idM`),
-  KEY `idM` (`idM`),
-  KEY `idD` (`idD`)
+  `idM` int(10) UNSIGNED NOT NULL COMMENT 'ID du mot'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -109,12 +91,11 @@ CREATE TABLE IF NOT EXISTS `dicoContient` (
 --
 
 DROP TABLE IF EXISTS `dictionnaire`;
-CREATE TABLE IF NOT EXISTS `dictionnaire` (
-  `idD` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID du dictionnaire',
-  `nomD` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Nom du dictionnaire',
-  `descriptionD` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'Description du dictionnaire',
-  `imageD` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Nom du fichier image',
-  PRIMARY KEY (`idD`)
+CREATE TABLE `dictionnaire` (
+  `idD` int(10) UNSIGNED NOT NULL COMMENT 'ID du dictionnaire',
+  `nomD` varchar(255) NOT NULL COMMENT 'Nom du dictionnaire',
+  `descriptionD` text COMMENT 'Description du dictionnaire',
+  `imageD` varchar(255) NOT NULL COMMENT 'Nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -124,11 +105,21 @@ CREATE TABLE IF NOT EXISTS `dictionnaire` (
 --
 
 DROP TABLE IF EXISTS `eleve`;
-CREATE TABLE IF NOT EXISTS `eleve` (
+CREATE TABLE `eleve` (
   `idC` int(11) NOT NULL COMMENT 'ID de la classe',
-  `idU` int(11) NOT NULL COMMENT 'ID de l''utilisateur',
-  PRIMARY KEY (`idC`,`idU`),
-  KEY `idC` (`idC`,`idU`)
+  `idU` int(11) NOT NULL COMMENT 'ID de l''utilisateur'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `grade`
+--
+
+DROP TABLE IF EXISTS `grade`;
+CREATE TABLE `grade` (
+  `idG` int(1) UNSIGNED NOT NULL COMMENT 'ID du grade',
+  `type` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -138,11 +129,10 @@ CREATE TABLE IF NOT EXISTS `eleve` (
 --
 
 DROP TABLE IF EXISTS `mot`;
-CREATE TABLE IF NOT EXISTS `mot` (
-  `idM` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID du mot',
-  `texte` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Mot en lettre',
-  `image` varchar(255) NOT NULL COMMENT 'Nom du fichier image',
-  PRIMARY KEY (`idM`)
+CREATE TABLE `mot` (
+  `idM` int(10) UNSIGNED NOT NULL COMMENT 'ID du mot',
+  `texte` varchar(255) NOT NULL COMMENT 'Mot en lettre',
+  `image` varchar(255) NOT NULL COMMENT 'Nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -152,13 +142,11 @@ CREATE TABLE IF NOT EXISTS `mot` (
 --
 
 DROP TABLE IF EXISTS `production`;
-CREATE TABLE IF NOT EXISTS `production` (
-  `idP` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID de la production',
+CREATE TABLE `production` (
+  `idP` int(11) NOT NULL COMMENT 'ID de la production',
   `idAudio` int(11) NOT NULL COMMENT 'ID de l''audio',
-  `nomP` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Nom de la production',
-  `dateP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date de création de la production',
-  PRIMARY KEY (`idP`,`idAudio`),
-  KEY `idAudio` (`idAudio`)
+  `nomP` varchar(255) NOT NULL COMMENT 'Nom de la production',
+  `dateP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date de création de la production'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -168,12 +156,11 @@ CREATE TABLE IF NOT EXISTS `production` (
 --
 
 DROP TABLE IF EXISTS `recueil`;
-CREATE TABLE IF NOT EXISTS `recueil` (
-  `idR` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID du Recueil',
-  `nomR` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Nom',
-  `descriptionR` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'Description',
-  `dateR` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date de création',
-  PRIMARY KEY (`idR`)
+CREATE TABLE `recueil` (
+  `idR` int(10) UNSIGNED NOT NULL COMMENT 'ID du Recueil',
+  `nomR` varchar(255) NOT NULL COMMENT 'Nom',
+  `descriptionR` text COMMENT 'Description',
+  `dateR` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date de création'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -183,11 +170,9 @@ CREATE TABLE IF NOT EXISTS `recueil` (
 --
 
 DROP TABLE IF EXISTS `tuteur`;
-CREATE TABLE IF NOT EXISTS `tuteur` (
+CREATE TABLE `tuteur` (
   `idUEnfant` int(10) UNSIGNED NOT NULL COMMENT 'ID de l''enfant',
-  `idUTuteur` int(10) UNSIGNED NOT NULL COMMENT 'ID du tuteur',
-  PRIMARY KEY (`idUEnfant`,`idUTuteur`),
-  KEY `idUTuteur` (`idUTuteur`,`idUEnfant`) USING BTREE
+  `idUTuteur` int(10) UNSIGNED NOT NULL COMMENT 'ID du tuteur'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -204,23 +189,148 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Mot de passe salé',
   `mail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Adresse mail',
   `idG` int(10) UNSIGNED NOT NULL COMMENT 'ID du grade associé',
-  `avatar` varchar(255) DEFAULT NULL COMMENT 'Nom du fichier image',
-  PRIMARY KEY (`idU`),
-  KEY `idG` (`idG`)
+  `avatar` varchar(255) DEFAULT NULL COMMENT 'Nom du fichier image'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
--- Structure de la table `grade`
+-- Index pour les tables déchargées
 --
 
-DROP TABLE IF EXISTS `grade`;
-CREATE TABLE IF NOT EXISTS `grade` (
-  `idG` int(1) UNSIGNED NOT NULL COMMENT 'ID du grade',
-  `type` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`idG`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Index pour la table `audio`
+--
+ALTER TABLE `audio`
+  ADD PRIMARY KEY (`idAudio`),
+  ADD KEY `idU` (`idU`);
+
+--
+-- Index pour la table `audioMot`
+--
+ALTER TABLE `audioMot`
+  ADD PRIMARY KEY (`idAudio`,`idM`),
+  ADD KEY `idAudio` (`idAudio`,`idM`);
+
+--
+-- Index pour la table `audioRec`
+--
+ALTER TABLE `audioRec`
+  ADD PRIMARY KEY (`idR`,`idU`,`idAudio`),
+  ADD KEY `idU` (`idU`),
+  ADD KEY `idAudio` (`idAudio`),
+  ADD KEY `idR` (`idR`);
+
+--
+-- Index pour la table `classe`
+--
+ALTER TABLE `classe`
+  ADD PRIMARY KEY (`idC`),
+  ADD KEY `idUEnseignant` (`idUEnseignant`);
+
+--
+-- Index pour la table `dicoContient`
+--
+ALTER TABLE `dicoContient`
+  ADD PRIMARY KEY (`idD`,`idM`),
+  ADD KEY `idM` (`idM`),
+  ADD KEY `idD` (`idD`);
+
+--
+-- Index pour la table `dictionnaire`
+--
+ALTER TABLE `dictionnaire`
+  ADD PRIMARY KEY (`idD`);
+
+--
+-- Index pour la table `eleve`
+--
+ALTER TABLE `eleve`
+  ADD PRIMARY KEY (`idC`,`idU`),
+  ADD KEY `idC` (`idC`,`idU`);
+
+--
+-- Index pour la table `grade`
+--
+ALTER TABLE `grade`
+  ADD PRIMARY KEY (`idG`);
+
+--
+-- Index pour la table `mot`
+--
+ALTER TABLE `mot`
+  ADD PRIMARY KEY (`idM`);
+
+--
+-- Index pour la table `production`
+--
+ALTER TABLE `production`
+  ADD PRIMARY KEY (`idP`,`idAudio`),
+  ADD KEY `idAudio` (`idAudio`);
+
+--
+-- Index pour la table `recueil`
+--
+ALTER TABLE `recueil`
+  ADD PRIMARY KEY (`idR`);
+
+--
+-- Index pour la table `tuteur`
+--
+ALTER TABLE `tuteur`
+  ADD PRIMARY KEY (`idUEnfant`,`idUTuteur`),
+  ADD KEY `idUTuteur` (`idUTuteur`,`idUEnfant`) USING BTREE;
+
+--
+-- Index pour la table `utilisateur`
+--
+ALTER TABLE `utilisateur`
+  ADD PRIMARY KEY (`idU`),
+  ADD KEY `idG` (`idG`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `audio`
+--
+ALTER TABLE `audio`
+  MODIFY `idAudio` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID de l''audio';
+
+--
+-- AUTO_INCREMENT pour la table `classe`
+--
+ALTER TABLE `classe`
+  MODIFY `idC` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID de la classe';
+
+--
+-- AUTO_INCREMENT pour la table `dictionnaire`
+--
+ALTER TABLE `dictionnaire`
+  MODIFY `idD` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID du dictionnaire';
+
+--
+-- AUTO_INCREMENT pour la table `mot`
+--
+ALTER TABLE `mot`
+  MODIFY `idM` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID du mot';
+
+--
+-- AUTO_INCREMENT pour la table `production`
+--
+ALTER TABLE `production`
+  MODIFY `idP` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID de la production';
+
+--
+-- AUTO_INCREMENT pour la table `recueil`
+--
+ALTER TABLE `recueil`
+  MODIFY `idR` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID du Recueil';
+
+--
+-- AUTO_INCREMENT pour la table `utilisateur`
+--
+ALTER TABLE `utilisateur`
+  MODIFY `idU` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID de l''utilisateur';
 
 --
 -- Contraintes pour les tables déchargées
@@ -258,8 +368,3 @@ ALTER TABLE `tuteur`
 --
 ALTER TABLE `utilisateur`
   ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idG`) REFERENCES `grade` (`idG`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -11,11 +11,14 @@ class AudioMot extends Pivot
     protected $table = 'audioMot';
     protected $primaryKey = 'idAudio';
 
-    public static function createNew(int $idA, int $idM)
+    public static function createNew(int $idA, int $idM, bool $partage)
     {
         $aud = new AudioMot();
         $aud->idAudio = $idA;
         $aud->idM = $idM;
+
+        if ($partage)
+            $aud->partage = 1;
 
         $aud->save();
     }

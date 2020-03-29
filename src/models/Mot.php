@@ -88,8 +88,8 @@ class Mot extends Model
             unlink("media/img/img/mot" . $old);
     }
 
-    public function audios()
+    public function audios(int $idU)
     {
-        return $this->belongsToMany("\bibliovox\models\Audio", "audioMot", "idM", "idAudio")->get();
+        return $this->belongsToMany("\bibliovox\models\Audio", "audioMot", "idM", "idAudio")->where('idU', "=", "$idU")->get();
     }
 }

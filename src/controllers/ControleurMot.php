@@ -43,20 +43,20 @@ class ControleurMot extends Controleur
 
     public function processCreateMot()
     {
-        $res = ControleurAudio::createAudio(1, '');
+        $res = ControleurAudio::createAudio(ControleurCompte::getIdUser(), '');
         $ret = Mot::createNew($_POST['mot']);
 
 
         if (isset($_POST['cbnumber'])) {
             for ($i = 0; $i < intval($_POST['cbnumber']); $i++){
                 if (isset($_POST[$i])){
-                    AudioMot::createNew(Audio::getIdByPath($_POST[$i]), $ret->idM);
+                    AudioMot::createNew(Audio::getIdByPath($_POST[$i]), $ret->idM, true);
                 }
             }
         }
 
 
-        AudioMot::createNew($res, $ret->idM);
+        AudioMot::createNew($res, $ret->idM, false);
         if (is_int($ret)){
             //TODO lancer erreur
         } else {
