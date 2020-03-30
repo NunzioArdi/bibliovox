@@ -59,7 +59,6 @@ function pause() {
         // stop recording
         recorder.disconnect(context.destination);
         mediaStream.disconnect(recorder);
-
         recording = false;
 
         // we flat the left and right channels down
@@ -101,6 +100,7 @@ function pause() {
 
         // our final blob
         blob = new Blob([view], {type: 'audio/wav'});
+        updateButtonUpload();
     }
 }
 
@@ -110,7 +110,9 @@ function play() {
 
     if (blob != null) {
         let url = window.URL.createObjectURL(blob);
+        console.log(url);
         let audio = new Audio(url);
+        console.log(audio);
         audio.play();
     }
 }
@@ -126,6 +128,41 @@ function reset() {
     mediaStream = null;
     context = null;
     blob = null;
+}
+
+function updateButtonUpload() {
+    bUpload.click(function () {
+
+        let data = new FormData();
+        data.append('newAudio', blob);
+
+        let path = new URL(window.location.href).pathname.split("/");
+
+        let categorie = path[1];
+
+        switch (categorie) {
+            case "dictionnaire":
+                data.append("id", path[4]);
+                break;
+            case "recueil":
+                data.append("id", path[2]);
+                break;
+        }
+
+        $.ajax({
+            url: `/${categorie}/upload`,
+            type: "POST",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function () {
+                window.location.reload();
+            },
+            error: function () {
+
+            }
+        })
+    })
 }
 
 function flattenArray(channelBuffer, recordingLength) {

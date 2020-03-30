@@ -9,10 +9,10 @@ use bibliovox\controllers\ControleurAudioRecueil;
 use bibliovox\controllers\ControleurCompte;
 use bibliovox\controllers\ControleurDicoContient;
 use bibliovox\controllers\ControleurDictionnaire;
+use bibliovox\controllers\ControleurHome;
 use bibliovox\controllers\ControleurMot;
 use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurRecueil;
-use bibliovox\controllers\ControleurHome;
 use bibliovox\models\Audio;
 use bibliovox\models\AudioMot;
 use bibliovox\models\AudioRecueil;
@@ -325,9 +325,19 @@ $app->post('/upddateAudioProd', function () {
     }
 });
 
+$app->post('/dictionnaire/upload', function () {
+    AudioMot::createNew(ControleurAudio::createAudio(ControleurCompte::getIdUser()), $_POST["id"], false);
+});
+
+$app->post('/recueil/upload', function () {
+    $idU = ControleurCompte::getIdUser();
+
+    AudioRecueil::createNew(ControleurAudio::createAudio($idU), $_POST["id"], $idU, false);
+});
+
 
 try {
     $app->run();
-} catch (\Throwable $e) {
+} catch (Throwable $e) {
     echo "Erreur de lancement du site";
 }
