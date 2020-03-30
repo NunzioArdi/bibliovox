@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static orderBy(string $nomColone, string $mode)
- * @method static where(string $nomColone, string $comparateur, string $valeur)
+ * @method static where(string $nomColone, string $comparateur, mixed $valeur)
  */
 class Mot extends Model
 {
