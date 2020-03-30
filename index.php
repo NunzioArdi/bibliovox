@@ -336,7 +336,11 @@ $app->post('/recueil/upload', function () {
 });
 
 $app->post('/createProdEleve', function () {
-    if (isset($_POST['nomProd'], $_POST['courriel'], $_POST['mdp'], $_POST['stayConnected']) AND $_POST['nomProd'] != null AND $_POST['nomProd'] != "undefined") {
+    if ((isset($_POST["nomProd"], $_SESSION["teacherApproval"]) && $_SESSION["teacherApproval"]) && $_POST['nomProd'] != null && $_POST['nomProd'] != "undefined") {
+        $nom = $_POST['nomProd'];
+        echo "<h5>$nom</h5>";
+        echo ControleurAudio::record();
+    } elseif ((isset($_POST['nomProd'], $_POST['courriel'], $_POST['mdp'], $_POST['stayConnected']) AND $_POST['nomProd'] != null AND $_POST['nomProd'] != "undefined")) {
         $log = Utilisateur::login($_POST['courriel'], $_POST['mdp']);
         if ($log[0] == -1)
             echo "err-login";
@@ -345,7 +349,6 @@ $app->post('/createProdEleve', function () {
             if ($log[0] == 0 OR $log[0] == 2) {
                 //Si le prof est resté connecté, on enregistre une variable de session dasn ce sens
                 if ($_POST['stayConnected'] == 1) {
-                    session_start();
                     $_SESSION['teacherApproval'] = 1;
                 }
                 $nom = $_POST['nomProd'];
@@ -359,7 +362,6 @@ $app->post('/createProdEleve', function () {
     } else
         echo "err-data";
 });
-
 
 try {
     $app->run();

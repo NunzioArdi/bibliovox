@@ -5,7 +5,6 @@ namespace bibliovox\views;
 
 use bibliovox\controllers\ControleurAudio;
 use bibliovox\controllers\ControleurCompte;
-use bibliovox\controllers\ControleurProduction;
 use bibliovox\controllers\ControleurUtilisateur;
 use bibliovox\models\Production;
 use Exception;
@@ -199,8 +198,8 @@ END
         $this->title('Nouvelle production')
             ->content("<h1>Créer une nouvelle production</h1>");
 
-            if (ControleurCompte::isTeatch())
-        $this->content(<<<FORM
+        if (ControleurCompte::isTeatch())
+            $this->content(<<<FORM
 <form id='new_production' method='post' action='$path' enctype="multipart/form-data">
 <label>Titre de la production</label>
 <input type='text' name='nom' placeholder='Titre' required>
@@ -211,8 +210,8 @@ END
 </form>
 FORM
             );
-else
-            $this->content(<<<ELEVE
+        else {
+            $content = <<<ELEVE
 <div id="prod">
 
 <div class="card border-0">
@@ -228,8 +227,21 @@ else
   <input id="nomprod" name="prod" type="text" placeholder="nom de la production" class="form-control input-md" required="" onkeypress="refuserToucheEntree(event);">
   </div>
 </div>
-
 </div></div>
+ELEVE;
+            if (array_key_exists("teacherApproval", $_SESSION) && $_SESSION["teacherApproval"])
+                $content .= <<<NONEEDAUTH
+<div class="card border-dark text-dark w-100">
+<div class="card-header">Trop fort ! Tu as déjà l'accord !</div>
+<div class="card-body">
+<div>
+    <button id="noNeedConnectProd" class="btn btn-success">Suivant</button>
+</div>
+</div>
+</div>
+NONEEDAUTH;
+            else
+                $content .= <<<NEEDAUTH
 <div class="card border-dark text-dark w-100">
 <div class="card-header">Connexion de ton maître ou de ta maîtresse</div>
 <div class="card-body">
@@ -260,15 +272,17 @@ else
 </div>
 
 </div>
+NEEDAUTH;
 
-
+            $content .= <<<OTHER
 
 <input id="path" value="{$GLOBALS["PATH"]}" hidden>
 <script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
-ELEVE
-);
+OTHER;
+            $this->content($content);
+        }
 
-            $this->afficher();
+        $this->afficher();
     }
 
     private function printHisto(bool $all): string

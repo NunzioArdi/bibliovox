@@ -81,11 +81,18 @@ if (document.getElementById("connectProd") !== null)
         makeRequest(PATH + '/createProdEleve', "nomProd=" + encodeURIComponent(nomProd) + "&courriel=" + encodeURIComponent(courriel) + "&mdp=" + encodeURIComponent(mdp) + "&stayConnected=" + stayConnected, createProd);
     };
 
+if (document.getElementById("noNeedConnectProd") !== null)
+    document.getElementById("noNeedConnectProd").onclick = function () {
+        let nomProd = document.getElementById("nomprod").value;
+        makeRequest(PATH + '/createProdEleve', "nomProd=" + encodeURIComponent(nomProd), createProd);
+    };
+
 
 function createProd() {
 
     if (this.readyState === XMLHttpRequest.DONE) {
         let txt = this.response;
+
         //Vérifications des erreurs
         if (txt === "err-login") {
             alert("Votre mot de passe ou votre identifiant est incorrect");
@@ -124,7 +131,7 @@ function printResultSearchAudio(e) {
 
                 txt = "<input type='text' name='cbnumber' hidden value='" + resp.length + "'>";
 
-                txt += "<p>Sélectionnez les audio que vous souhaitez associer au mot.</p>"
+                txt += "<p>Sélectionnez les audio que vous souhaitez associer au mot.</p>";
 
                 for (let i = 0; i < resp.length - 1; i++) {
                     txt += "<div>\n" +
