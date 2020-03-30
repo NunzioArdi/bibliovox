@@ -4,20 +4,33 @@
 namespace bibliovox\models;
 
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @method static orderBy(string $nomColone, string $mode)
  * @method static where(string $nomColone, string $comparateur, string $valeur)
  */
-class AudioRecueil extends Model
+class AudioRecueil extends Pivot
 {
     protected $primaryKey = 'idAudio';
     protected $table = 'audioRec';
     public $timestamps = false;
 
-    static function getByBoth (int $idR, int $idU) {
+    public static function createNew(int $idA, int $idR, int $idU, bool $partage)
+    {
+        $aud = new AudioRecueil();
+        $aud->idAudio = $idA;
+        $aud->idR = $idR;
+        $aud->idU = $idU;
+
+        if ($partage)
+            $aud->partage = 1;
+
+        $aud->save();
+    }
+
+    static function getByBoth(int $idR, int $idU)
+    {
         return AudioRecueil::where("idR", "=", "$idR")->where("idU", "=", "$idU")->first();
     }
 
