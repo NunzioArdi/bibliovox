@@ -11,18 +11,11 @@ class ControleurAudio extends Controleur
     public static function createAudio(int $idU, String $commentaire = null)
     {
         if (isset($_FILES['newAudio'])) {
-            if ($_FILES['newAudio']['error'] == 0) {
-                $extension_upload = pathinfo($_FILES['newAudio']['name'])['extension'];
-                $extensions_autorisees = array('mp3');
-                if (in_array($extension_upload, $extensions_autorisees)) {
-                    $fileName = rand() . filter_var($_FILES['newAudio']['name'], FILTER_SANITIZE_URL);
-                    move_uploaded_file($_FILES['newAudio']['tmp_name'], 'media/aud/' . $fileName);
+            if (!$_FILES['newAudio']['error']) {
+                $fileName = rand(0, 99) . "_" . date("d-m-Y_H-i-s") . ".mp3";
+                move_uploaded_file($_FILES['newAudio']['tmp_name'], 'media/aud/' . $fileName);
 
-                    $ret = Audio::newAudio($fileName, $idU, $commentaire);
-
-                } else {
-                    return -2;
-                }
+                $ret = Audio::newAudio($fileName, $idU, $commentaire);
 
             } else
                 return -1;
@@ -43,7 +36,7 @@ class ControleurAudio extends Controleur
         <button  class="btn btn-success" id="bRecord">Enregistrement</button>
         <button  class="btn btn-light" id="bPause">Stop</button>
         <button  class="btn btn-light" id="bPlay">Écouter</button>
-        <button  class="btn btn-warning" id="bUpload" disabled>Envoyer</button>
+        <button  class="btn btn-warning" id="bUpload">Envoyer</button>
         <button  class="btn btn-danger" id="bReset" title="Efface le début de l'enregistrement">Recommencer</button>
 
     </p>
@@ -64,7 +57,6 @@ REC;
     {
         return Audio::where("idAudio", "=", "$idAudio")->first();
     }
-
 
 
 }
