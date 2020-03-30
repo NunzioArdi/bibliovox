@@ -339,7 +339,7 @@ $app->post('/recueil/upload', function () {
 $app->post('/production/upload', function () {
     $idU = ControleurCompte::getIdUser();
 
-    Production::createNew($_POST["nom"], $idU);
+    Production::createNew($_POST["nom"], ControleurAudio::createAudio($idU));
 });
 
 $app->post('/createProdEleve', function () {
@@ -353,7 +353,7 @@ $app->post('/createProdEleve', function () {
             echo "err-login";
         else {
             //On vérifie si cette personne est bien un prof
-            if ($log[0] == 0 OR $log[0] == 2) {
+            if ($log[1] == 0 OR $log[1] == 2) {
                 //Si le prof est resté connecté, on enregistre une variable de session dasn ce sens
                 if ($_POST['stayConnected'] == 1) {
                     $_SESSION['teacherApproval'] = 1;
