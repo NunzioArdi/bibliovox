@@ -18,6 +18,7 @@ use bibliovox\models\AudioMot;
 use bibliovox\models\AudioRecueil;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
+use bibliovox\models\Production;
 use bibliovox\models\Utilisateur;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
@@ -333,6 +334,12 @@ $app->post('/recueil/upload', function () {
     $idU = ControleurCompte::getIdUser();
 
     AudioRecueil::createNew(ControleurAudio::createAudio($idU), $_POST["id"], $idU, false);
+});
+
+$app->post('/production/upload', function () {
+    $idU = ControleurCompte::getIdUser();
+
+    Production::createNew($_POST["nom"], $idU);
 });
 
 $app->post('/createProdEleve', function () {

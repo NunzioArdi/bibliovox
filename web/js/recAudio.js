@@ -147,6 +147,9 @@ function updateButtonUpload() {
             case "recueil":
                 data.append("id", path[2]);
                 break;
+            case "production":
+                data.append("nom", $("#prod > h5")[0].innerText);
+                break;
         }
 
         $.ajax({
@@ -156,10 +159,13 @@ function updateButtonUpload() {
             contentType: false,
             processData: false,
             success: function () {
-                window.location.reload();
+                if (categorie === "production")
+                    window.location.href = window.location.origin + "/production";
+                else
+                    window.location.reload();
             },
-            error: function () {
-
+            error: function (response) {
+                console.log(response);
             }
         })
     })
