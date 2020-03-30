@@ -37,7 +37,7 @@ if (document.getElementsByClassName("saveRec") !== null) {
             if (document.getElementById("shared-" + id).checked)
                 shared = 1;
 
-            makeRequest(PATH + '/upddateAudioRec', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+            makeRequest(PATH + '/updateAudioRec', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
         }
     }
 }
@@ -52,7 +52,7 @@ if (document.getElementsByClassName("saveMot") !== null) {
             if (document.getElementById("shared-" + id).checked)
                 shared = 1;
 
-            makeRequest(PATH + '/upddateAudioMot', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
+            makeRequest(PATH + '/updateAudioMot', "data=" + encodeURIComponent(comm) + "&shared=" + shared + "&id=" + id, nothing);
         }
     }
 }
@@ -65,11 +65,50 @@ if (document.getElementsByClassName("saveProd") !== null) {
             let id = this.value;
             var comm = document.getElementById("comm-" + id).value;
 
-            makeRequest(PATH + '/upddateAudioProd', "data=" + encodeURIComponent(comm) + "&id=" + id, nothing);
+            makeRequest(PATH + '/updateAudioProd', "data=" + encodeURIComponent(comm) + "&id=" + id, nothing);
         }
     }
 }
 
+if (document.getElementById("connectProd") !== null)
+    document.getElementById("connectProd").onclick = function () {
+        var nomProd = document.getElementById("nomprod").value;
+        var courriel = document.getElementById("mail").value;
+        var mdp = document.getElementById("mdp").value;
+        var stayConnected = 0;
+        if (document.getElementById("stayConnected").checked)
+            stayConnected = 1;
+        makeRequest(PATH + '/createProdEleve', "nomProd=" + encodeURIComponent(nomProd) + "&courriel=" + encodeURIComponent(courriel) + "&mdp=" + encodeURIComponent(mdp) + "&stayConnected=" + stayConnected, createProd);
+    };
+
+
+function createProd() {
+
+    if (this.readyState === XMLHttpRequest.DONE) {
+        let txt = this.response;
+        //Vérifications des erreurs
+        if (txt === "err-login") {
+            alert("Votre mot de passe ou votre identifiant est incorrect");
+            return null;
+        }
+        if (txt === "err-right") {
+            alert("Vous n\'avez pas le droit de créer une production.\nSeuls les enseignants ont ce droit.");
+            return null;
+        }
+        if (txt === "err-data") {
+            alert("Les informations envoyées sont incorrectes.\nVérifiez que vous avez bien indiqué un nom pour la production.");
+            return null;
+        }
+
+        //Ici, il n'y a pas d'erreur normalement
+
+        let board = document.querySelector("#prod");
+        while (board.firstChild) {
+            board.removeChild(board.firstChild);
+        }
+        $('#prod').append(txt);
+    }
+}
 
 function printResultSearchAudio(e) {
     let txt;

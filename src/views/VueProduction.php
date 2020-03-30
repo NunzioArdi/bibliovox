@@ -197,8 +197,10 @@ END
         $path = $GLOBALS["router"]->urlFor("new_production_process") . "?idU=$id";
 
         $this->title('Nouvelle production')
-            ->content("<h1>Créer une nouvelle production</h1>")
-            ->content(<<<FORM
+            ->content("<h1>Créer une nouvelle production</h1>");
+
+            if (ControleurCompte::isTeatch())
+        $this->content(<<<FORM
 <form id='new_production' method='post' action='$path' enctype="multipart/form-data">
 <label>Titre de la production</label>
 <input type='text' name='nom' placeholder='Titre' required>
@@ -208,7 +210,65 @@ END
 <input class="bouton" type="submit" value="Valider">
 </form>
 FORM
-            )->afficher();
+            );
+else
+            $this->content(<<<ELEVE
+<div id="prod">
+
+<div class="card border-0">
+<div class="card-body">
+<p>Essaie de mettre le nom de la production.</p>
+<p>Puis appelle ton maître ou ta maîtresse pour qu'il se connecte et vérifie le nom.</p>
+<p>Tu pourras ensuite t'enregistrer.</p>
+
+<!-- Text input-->
+<div class="form-group">
+  <div class="col-md-5">
+  <label>Nom de la production</label>
+  <input id="nomprod" name="prod" type="text" placeholder="nom de la production" class="form-control input-md" required="" onkeypress="refuserToucheEntree(event);">
+  </div>
+</div>
+
+</div></div>
+<div class="card border-dark text-dark w-100">
+<div class="card-header">Connexion de ton maître ou de ta maîtresse</div>
+<div class="card-body">
+
+
+<!-- Text input-->
+<div class="form-group">
+  <div class="col-md-5">
+  <input id="mail" name="mail" type="text" placeholder="courriel" class="form-control input-md" required="" onkeypress="refuserToucheEntree(event);">
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <div class="col-md-5">
+    <input id="mdp" name="mdp" type="password" placeholder="mot de passe" class="form-control input-md" required="" onkeypress="refuserToucheEntree(event);">
+  </div>
+</div>
+<div class="form-group">
+<input type="checkbox" name="connect" id="stayConnected" value="">
+      Rester connecté - Attention, votre élève n'aura plus besoin de votre permission pour créer des productions
+</div>
+
+<div>
+    <button id="connectProd" class="btn btn-success">Se connecter</button>
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+<input id="path" value="{$GLOBALS["PATH"]}" hidden>
+<script src="{$GLOBALS["PATH"]}/web/js/bibliovox.js"></script>
+ELEVE
+);
+
+            $this->afficher();
     }
 
     private function printHisto(bool $all): string

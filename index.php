@@ -305,21 +305,21 @@ $app->post("/updateDicoName", function () {
     }
 });
 
-$app->post('/upddateAudioRec', function () {
+$app->post('/updateAudioRec', function () {
     if (isset($_POST['data'], $_POST['shared'])) {
         Audio::updateComm($_POST['id'], $_POST['data']);
         AudioRecueil::updatePartage($_POST['id'], $_POST['shared']);
     }
 });
 
-$app->post('/upddateAudioMot', function () {
+$app->post('/updateAudioMot', function () {
     if (isset($_POST['data'], $_POST['shared'], $_POST['id'])) {
         Audio::updateComm($_POST['id'], $_POST['data']);
         AudioMot::updatePartage($_POST['id'], $_POST['shared']);
     }
 });
 
-$app->post('/upddateAudioProd', function () {
+$app->post('/updateAudioProd', function () {
     if (isset($_POST['data'], $_POST['id'])) {
         Audio::updateComm($_POST['id'], $_POST['data']);
     }
@@ -333,6 +333,31 @@ $app->post('/recueil/upload', function () {
     $idU = ControleurCompte::getIdUser();
 
     AudioRecueil::createNew(ControleurAudio::createAudio($idU), $_POST["id"], $idU, false);
+});
+
+$app->post('/createProdEleve', function () {
+    if (isset($_POST['nomProd'], $_POST['courriel'], $_POST['mdp'], $_POST['stayConnected']) AND $_POST['nomProd'] != null AND $_POST['nomProd'] != "undefined") {
+        $log = Utilisateur::login($_POST['courriel'], $_POST['mdp']);
+        if ($log[0] == -1)
+            echo "err-login";
+        else {
+            //On vérifie si cette personne est bien un prof
+            if ($log[0] == 0 OR $log[0] == 2) {
+                //Si le prof est resté connecté, on enregistre une variable de session dasn ce sens
+                if ($_POST['stayConnected'] == 1) {
+                    session_start();
+                    $_SESSION['teacherApproval'] = 1;
+                }
+                $nom = $_POST['nomProd'];
+                echo "<h5>$nom</h5>";
+                echo ControleurAudio::record();
+
+            } else
+                echo "err-right";
+
+        }
+    } else
+        echo "err-data";
 });
 
 
