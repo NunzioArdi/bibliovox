@@ -112,7 +112,7 @@ FORM
            // Préparation pour $histo
             $idAudio = $aud->idAudio;
             $details = ControleurAudio::getPathById($aud->idAudio);
-            $chemin = $details->chemin;
+            $chemin = $GLOBALS["PATH"] . "/" .$details->chemin;
             $nom = ControleurUtilisateur::getNameById($aud->idU);
             $comm = $details->commentaire;
 
