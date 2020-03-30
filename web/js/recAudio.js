@@ -143,6 +143,7 @@ function reset() {
 
 function updateButtonUpload() {
     bUpload.prop("disabled", false);
+    bUpload.off();
     bUpload.click(function () {
 
         let data = new FormData();
