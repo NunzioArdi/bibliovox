@@ -52,6 +52,9 @@ class Audio extends Model
         $aud = Audio::where("idAudio", "=", "$id")->first();
         unlink($GLOBALS["PATH"] . "/" . $aud->chemin);
         $aud->forceDelete();
+
+        AudioMot::deleteByID($id);
+        AudioRecueil::deleteByID($id);
     }
 
     public static function updateComm(string $id, string $data)

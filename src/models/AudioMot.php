@@ -26,6 +26,7 @@ class AudioMot extends Pivot
     public static function deleteByID($id)
     {
         $aud = AudioMot::where("idAudio", "=", "$id")->first();
+        if (isset($aud))
         $aud->forceDelete();
     }
 

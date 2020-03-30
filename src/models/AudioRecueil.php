@@ -28,4 +28,11 @@ class AudioRecueil extends Model
         $aud->update();
     }
 
+    public static function deleteByID($id)
+    {
+        $aud = AudioRecueil::where("idAudio", "=", "$id")->first();
+        if (isset($aud))
+            $aud->forceDelete();
+    }
+
 }
