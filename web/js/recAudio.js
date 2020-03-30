@@ -14,6 +14,7 @@ let mediaStream = null;
 let sampleRate = 44100;
 let context = null;
 let blob = null;
+let audio = null;
 
 bRecord.on("click", () => {
     if (!recording)
@@ -32,6 +33,10 @@ function gestionErreurUserMedia(erreur) {
 }
 
 function record(stream) {
+    if (audio !== null) {
+        audio.pause();
+        audio = null;
+    }
 
     bRecord.addClass("btn-danger");
     bPause.prop("disabled", false);
@@ -58,6 +63,11 @@ function record(stream) {
 }
 
 function pause() {
+    if (audio !== null) {
+        audio.pause();
+        audio = null;
+    }
+
     if (recording) {
         bRecord.removeClass("btn-danger");
         bUpload.prop("disabled", false);
@@ -111,13 +121,20 @@ function pause() {
 }
 
 function play() {
+    console.log(audio);
+
+    if (audio !== null) {
+        audio.pause();
+        audio = null;
+    }
+
     if (recording)
         pause();
 
     if (blob != null) {
         let url = window.URL.createObjectURL(blob);
         console.log(url);
-        let audio = new Audio(url);
+        audio = new Audio(url);
         console.log(audio);
         audio.play();
     }
