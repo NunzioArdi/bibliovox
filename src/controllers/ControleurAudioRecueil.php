@@ -27,10 +27,16 @@ class ControleurAudioRecueil extends Controleur
             $mois = $date[1];
             $jour = explode(" ", $date[2])[0];
 
-            $ret .= "<p class='date'>Créé le: $jour / $mois / $an</p>";
+            $ret .= "<div class='card text-dark'> <div class='card-body'>";
             $ret .= "<audio controls>";
             $ret .= "<source src=' " . $GLOBALS["PATH"] . "/" . $aud->chemin . "' type='audio/mp3'>";
             $ret .= "</audio>";
+            if (isset($aud->commentaire) AND $aud->commentaire != "")
+                $ret .= "<h5>Commentaire:</h5><p>$aud->commentaire</p>";
+
+            $ret .= "</div><div class='card-footer'>";
+            $ret .= "<p class='date'>Créé le: $jour / $mois / $an</p>";
+            $ret .= "</div></div>";
         }
 
         if ($ret == "")

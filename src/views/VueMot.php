@@ -37,13 +37,16 @@ class VueMot extends Vue
             $an = $date[0];
             $mois = $date[1];
             $jour = explode(" ", $date[2])[0];
-
-            $temp = "<p class='date'>Créé le: $jour / $mois / $an</p>";
+            $temp = "<div class='card text-dark'> <div class='card-body'>";
             $temp .= "<audio controls>";
             $temp .= "<source src=' " . $GLOBALS["PATH"] . "/" . $audio->chemin . "' type='audio/mp3'>";
             $temp .= "</audio>";
-
-                $printAudioPerso .= $temp;
+            if (isset($audio->commentaire) AND $audio->commentaire != "")
+                $temp .= "<h5>Commentaire:</h5><p>$audio->commentaire</p>";
+            $temp .= "</div><div class='card-footer'>";
+            $temp .= "<p class='date'>Créé le: $jour / $mois / $an</p>";
+            $temp .= "</div></div>";
+            $printAudioPerso .= $temp;
         }
 
         $printAudioEx = ControleurAudioMot::allSharedPrinter($mot->idM);
