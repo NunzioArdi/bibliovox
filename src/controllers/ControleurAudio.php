@@ -12,7 +12,7 @@ class ControleurAudio extends Controleur
     {
         if (isset($_FILES['newAudio'])) {
             if (!$_FILES['newAudio']['error']) {
-                $fileName = rand(0, 99) . "_" . date("d-m-Y_H-i-s") . ".mp3";
+                $fileName = date("d-m-Y_H-i-s") . "_" . rand(0, 99) . ".mp3";
                 move_uploaded_file($_FILES['newAudio']['tmp_name'], 'media/aud/' . $fileName);
 
                 $ret = Audio::newAudio($fileName, $idU, $commentaire);
