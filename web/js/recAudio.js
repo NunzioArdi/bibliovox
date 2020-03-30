@@ -34,6 +34,10 @@ function gestionErreurUserMedia(erreur) {
 function record(stream) {
 
     bRecord.addClass("btn-danger");
+    bPause.prop("disabled", false);
+    bPlay.prop("disabled", false);
+    bReset.prop("disabled", false);
+
     context = new AudioContext();
     mediaStream = context.createMediaStreamSource(stream);
 
@@ -56,6 +60,8 @@ function record(stream) {
 function pause() {
     if (recording) {
         bRecord.removeClass("btn-danger");
+        bUpload.prop("disabled", false);
+
         // stop recording
         recorder.disconnect(context.destination);
         mediaStream.disconnect(recorder);
@@ -128,9 +134,15 @@ function reset() {
     mediaStream = null;
     context = null;
     blob = null;
+    bUpload.prop("disabled", true);
+    bPause.prop("disabled", true);
+    bPlay.prop("disabled", true);
+    bReset.prop("disabled", true);
+    bUpload.off();
 }
 
 function updateButtonUpload() {
+    bUpload.prop("disabled", false);
     bUpload.click(function () {
 
         let data = new FormData();

@@ -34,10 +34,10 @@ class ControleurAudio extends Controleur
     <p>Enregistre toi en utilisant le bouton "enregistrement".</p>
     <p class="text-center">
         <button  class="btn btn-success" id="bRecord">Enregistrement</button>
-        <button  class="btn btn-light" id="bPause">Stop</button>
-        <button  class="btn btn-light" id="bPlay">Écouter</button>
-        <button  class="btn btn-warning" id="bUpload">Envoyer</button>
-        <button  class="btn btn-danger" id="bReset" title="Efface le début de l'enregistrement">Recommencer</button>
+        <button  class="btn btn-light" id="bPause" disabled>Stop</button>
+        <button  class="btn btn-light" id="bPlay" disabled>Écouter</button>
+        <button  class="btn btn-warning" id="bUpload" disabled>Envoyer</button>
+        <button  class="btn btn-danger" id="bReset" title="Efface le début de l'enregistrement" disabled>Recommencer</button>
 
     </p>
   </div>
