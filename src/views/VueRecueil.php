@@ -166,9 +166,10 @@ FORM
 </div>
 AUD;
         }
+        $idR = $rec->idR;
 
         //préparation de l'affichage des enregistrements perso
-        $aPerso = ControleurAudioRecueil::audioPerso($rec->idR, ControleurCompte::getIdUser());
+        $aPerso = ControleurAudioRecueil::audioPerso($idR, ControleurCompte::getIdUser());
         $aPartage = ControleurAudioRecueil::audioPartage($rec->idR);
         $perso = <<<AUDIOS
 
@@ -256,7 +257,8 @@ AUDIOS;
     <form class="form-horizontal">
 <fieldset>
 
-
+  <input id="idR" hidden value="$idR">
+  
 <!-- Text input-->
 <div class="form-group">
   <label class="col-md-4 control-label" for="titre">Titre</label>  
@@ -275,7 +277,7 @@ AUDIOS;
 </div>
 
 <div class="form-group">
-    <div id="er" class="btn btn-success">Enregistrer</div>
+    <div id="editRec" class="btn btn-success">Enregistrer</div>
     <a id="editRec" href="$deleteRec" class="btn btn-danger">Supprimer le recueil</a>
 </div>
 

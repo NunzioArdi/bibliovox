@@ -27,6 +27,15 @@ if (document.getElementById("bttnName") !== null)
         makeRequest(PATH + "/updateDicoName", "dicoName=" + newName + "&idD=" + idD, nothing);
     };
 
+if (document.getElementById("editRec") !== null)
+    document.getElementById("editRec").onclick = function () {
+        let titre = document.getElementById("titre").value;
+        let contenu = document.getElementById("contenu").value;
+        let idR = document.getElementById("idR").value;
+
+        makeRequest(PATH + "/updateRec", "titre=" + titre + "&contenu=" + contenu + "&idR=" + idR, nothing);
+    };
+
 if (document.getElementsByClassName("saveRec") !== null) {
     let all = document.getElementsByClassName("saveRec");
     for (let element of all) {

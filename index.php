@@ -19,6 +19,7 @@ use bibliovox\models\AudioRecueil;
 use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\models\Production;
+use bibliovox\models\Recueil;
 use bibliovox\models\Utilisateur;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\App as Slim;
@@ -340,6 +341,14 @@ $app->post('/production/upload', function () {
     $idU = ControleurCompte::getIdUser();
 
     Production::createNew($_POST["nom"], ControleurAudio::createAudio($idU));
+});
+
+$app->post('/updateRec', function () {
+    if (isset( $_POST['titre'], $_POST['contenu'], $_POST['idR'])){
+        echo "loading";
+        Recueil::updateAll($_POST['idR'], $_POST['titre'], $_POST['contenu']);
+        echo "done";
+    }
 });
 
 $app->post('/createProdEleve', function () {

@@ -74,5 +74,14 @@ class Recueil extends Model
         return $newRecueil;
     }
 
+    public static function updateAll($idR, $titre, $contenu)
+    {
+        $rec = Recueil::where("idR", "=", "$idR")->first();
+        $rec->nomR = $titre;
+        $rec->descriptionR = $contenu;
+
+        $rec->save();
+    }
+
 }
 
