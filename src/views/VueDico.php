@@ -4,6 +4,8 @@
 namespace bibliovox\views;
 
 
+use bibliovox\controllers\ControleurCompte;
+
 class VueDico extends Vue
 {
 
@@ -33,10 +35,15 @@ class VueDico extends Vue
                 </div>\n");
         }
 
-        $this->content("    <div class=\"createNew\">
+        if(ControleurCompte::isTeatch()){
+            $this->content("    <div class=\"createNew\">
             <a id='dicoButton' href=\"" . $GLOBALS["router"]->pathFor("new_dictionnaire") . "\" class=\"btn btn-primary btn-success\"><span class=\"glyphicon \"> + Nouveau Dictionnaire</a>
 
-            </div>")->afficher();
+            </div>");
+        }
+
+        $this->afficher();
+
     }
 
     /**
