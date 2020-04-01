@@ -100,9 +100,9 @@ $app->get('/dictionnaires', function () {
 })->setName('dictionnaires');
 
 //Creation dictionnaire
-$app->get('/dictionnaire/create', function (Request $req, Response $resp, $args = []) {
-    $cont = new ControleurDictionnaire();
-    $cont->createDico();
+$app->get('/dictionnaire/create', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurDictionnaire($req, $resp);
+    return $cont->createDico();
 })->setName('new_dictionnaire');
 
 //Accès à un dictionnaire

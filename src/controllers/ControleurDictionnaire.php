@@ -29,13 +29,19 @@ class ControleurDictionnaire extends Controleur
 
     /**
      * Accès à la création des dictionnaires
-     * @return void
+     * @return Response|void
      * @todo Accès à cette fonctionnalité en fonction des privilège du compte
      */
     public function createDico()
     {
-        $vue = new VueDico();
-        $vue->creDico();
+        if(ControleurCompte::isTeatch()){
+            $vue = new VueDico();
+            $vue->creDico();
+        }else{
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaires"));
+        }
+        return;
+
     }
 
     /**
