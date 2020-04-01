@@ -81,11 +81,16 @@ $app->get('/account/disconnect', function (Request $req, Response $resp) {
     return $cont->disconnect();
 })->setName('deconnection');
 
+$app->get('/account/classes', function (Request $req, Response $resp) {
+    $cont = new ControleurCompte($req, $resp);
+    return $cont->classes();
+})->setName('classes');
+
 //Admin
-$app->get('/admin', function (Request $req, Response $resp) {
+$app->get('/account/createUser', function (Request $req, Response $resp) {
     $cont = new ControleurAdmin($req, $resp);
     return $cont->interface();
-})->setName('admin');
+})->setName('creerCompte');
 
 
 //Dictionnaires
@@ -243,7 +248,7 @@ $app->post('/production/{idP}/edit/process', function (Request $req, Response $r
 
 
 //Admin
-$app->post("/admin/pannel/createUser", function (Request $req, Response $resp, $args) {
+$app->post("/account/createUser", function (Request $req, Response $resp, $args) {
     $cont = new ControleurAdmin($req, $resp, $args);
     return $cont->processCreateUser();
 })->setName('createUser');
@@ -255,6 +260,16 @@ $app->post('/account/login', function (Request $req, Response $resp, $args) {
     $cont = new ControleurCompte($req, $resp, $args);
     return $cont->processLogin();
 })->setName('connection');
+
+$app->post("/account/classes/create", function (Request $req, Response $resp, $args) {
+    $cont = new ControleurCompte($req, $resp, $args);
+    return $cont->processCreateClass();
+})->setName('createUser');
+
+$app->post("/account/classes/add", function (Request $req, Response $resp, $args) {
+    $cont = new ControleurCompte($req, $resp, $args);
+    return $cont->processAddUserClass();
+})->setName('AddUserClass');
 
 /********************************
  *      MÉTHODES POUR AJAX      *

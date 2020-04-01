@@ -6,34 +6,24 @@ namespace bibliovox\views;
 class VueAdmin extends Vue
 {
 
-    public function __construct($res = null)
-    {
-        parent::__construct($res);
-
-        $this->nav += [
-            "admin" => "<li><a href=\"" . $GLOBALS["router"]->urlFor('admin') . "\"><img class =\"icn\" src=\" " . $GLOBALS["PATH"] . "/media/img/icn/compte.png\" alt=\"Compte\">Admin</a></li>",
-        ];
-    }
-
-
     public function creerCompte()
     {
+        $path = $GLOBALS["PATH"];
+
         $this->content(<<<END
-<form method="POST" action="/admin/pannel/createUser">
+<form method="POST" action="$path/account/createUser">
 
 <!-- File Button --> 
 <div class="form-group">
   <div class="col-md-4">
-    <label>First Name</label>
+    <label>Prénom</label>
     <input name="firstname" type="text"><br>
-    <label>Last Name</label>
+    <label>Nom</label>
     <input name="lastname" type="text"><br>
-    <label>Password</label>
+    <label>Mot de passe</label>
     <input name="password" type="text"><br>
     <label>Grade</label>
     <input name="grade" type="text" value="1"><br>
-    <label>Email</label>
-    <input name="email" type="text">
   </div>
 </div>
 

@@ -10,5 +10,7 @@ class Eleve  extends Model
 {
     //protected $primaryKey = ['idC', 'idU'];
     protected $table = 'eleve';
+    public $timestamps = false;
+
 
 }

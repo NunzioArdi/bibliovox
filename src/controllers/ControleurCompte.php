@@ -117,5 +117,37 @@ class ControleurCompte extends Controleur
         return $this->resp->withRedirect($GLOBALS["router"]->pathFor("home"));
     }
 
+    public function classes()
+    {
+        if(ControleurCompte::isTeatch()){
+            $vue = new VueCompte();
+            $vue->classe();
+        }else{
+            return $this->resp->withRedirect($GLOBALS["router"]->pathFor("compte"));
+        }
+        return null;
+    }
+
+    public function processCreateClass()
+    {
+
+        $c = new Classe();
+        $c->nom=$_POST["className"];
+        $c->idUEnseignant = $_POST['prof'];
+        $c->annee = $_POST['year'];
+        $c->save();
+        return $this->resp->withRedirect($GLOBALS["router"]->pathFor("classes"));
+    }
+
+    public function processAddUserClass()
+    {
+        $e = new Eleve();
+        $e->idC = $_POST['classe'];
+        $e->idU = $_POST['eleve'];
+        $e->save();
+        return $this->resp->withRedirect($GLOBALS["router"]->pathFor("classes"));
+
+    }
+
 
 }

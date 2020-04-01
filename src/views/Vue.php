@@ -23,7 +23,7 @@ abstract class Vue
     /**
      * @var string $content contenu de la page
      */
-    protected $content;
+    private $content;
 
 
     /**
@@ -90,7 +90,7 @@ HTML;
 
     protected function content($str)
     {
-        $this->content .= $str;
+        $this->content .= "$str";
         return $this;
     }
 
