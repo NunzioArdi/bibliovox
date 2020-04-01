@@ -49,7 +49,7 @@ class VueErreur extends Vue
     {
         $this->title = "Nouveau recueil";
 
-        $this->content .= "<div class=\"erreur\">Erreur inconnue</div>";
+        $this->content("<div class=\"erreur\">Erreur inconnue</div>");
     }
 
     /**
@@ -60,7 +60,7 @@ class VueErreur extends Vue
     {
         $this->title = 'Page non trouvé';
 
-        $this->content .= "<div class=\"erreur\">Le recueil n'existe pas</div>";
+        $this->content("<div class=\"erreur\">Le recueil n'existe pas</div>");
     }
 
     /**
@@ -71,13 +71,13 @@ class VueErreur extends Vue
     {
         $this->title = 'Page non trouvé';
 
-        $this->content .= "<div class=\"erreur\">Ce dictionnaire n'existe pas.</div>";
-        $this->content .= "<a href=\"" . $GLOBALS["router"]->urlFor('dictionnaires') . "\"><h1><- Retour</h1></a>";
+        $this->content("<div class=\"erreur\">Ce dictionnaire n'existe pas.</div>")
+            ->content("<a href=\"" . $GLOBALS["router"]->urlFor('dictionnaires') . "\"><h1><- Retour</h1></a>");
     }
 
     private function getMotDico(){
-        $this->content.= "<div class=\"erreur\">Ce mot n'existe pas dans ce dictionnaire ";
-        $this->content.= "<a href=\"" . $GLOBALS["router"]->urlFor('dictionnaire_acces', ['idD' => $this->res]) . "\">Retour au dictionnaire.</a>";
+        $this->content("<div class=\"erreur\">Ce mot n'existe pas dans ce dictionnaire")
+            ->content("<a href=\"" . $GLOBALS["router"]->urlFor('dictionnaire_acces', ['idD' => $this->res]) . "\">Retour au dictionnaire.</a>");
     }
 
     /**
@@ -88,10 +88,10 @@ class VueErreur extends Vue
     {
         switch ($this->res) {
             case 1:
-                $this->content .= "<div class=\"erreur\">L'extension du fichier n'est pas autorisée</div>";
+                $this->content("<div class=\"erreur\">L'extension du fichier n'est pas autorisée</div>");
                 break;
             default:
-                $this->content .= "<div class=\"erreur\">Erreur inconnue</div>";
+                $this->content("<div class=\"erreur\">Erreur inconnue</div>");
                 break;
         }
     }
@@ -104,7 +104,7 @@ class VueErreur extends Vue
     {
         $this->title = 'Page non trouvé';
 
-        $this->content .= "<div class=\"erreur\">Production inconnue.</div>";
+        $this->content("<div class=\"erreur\">Production inconnue.</div>");
     }
 
     /**
@@ -115,21 +115,21 @@ class VueErreur extends Vue
     {
         switch ($this->res) {
             case 1:
-                $this->content .= "<div class=\"erreur\">L'extension du fichier n'est pas autorisée</div>";
+                $this->content("<div class=\"erreur\">L'extension du fichier n'est pas autorisée</div>");
                 break;
             case 2:
-                $this->content .= "<div class=\"erreur\">Aucun fichier uploadé</div>";
+                $this->content("<div class=\"erreur\">Aucun fichier uploadé</div>");
                 break;
             default:
-                $this->content .= "<div class=\"erreur\">Erreur inconnue</div>";
+                $this->content("<div class=\"erreur\">Erreur inconnue</div>");
                 break;
 
         }
 
         if(isset($this->res[1]))
-            $this->content .= "<a href=\"" . $GLOBALS["router"]->urlFor('edit_production', ['idP' => $this->res[1]]) . "\"><h1><- Retour</h1></a>";
+            $this->content("<a href=\"" . $GLOBALS["router"]->urlFor('edit_production', ['idP' => $this->res[1]]) . "\"><h1><- Retour</h1></a>");
         else
-            $this->content .= "<a href=\"" . $GLOBALS["router"]->urlFor('new_production') . "\"><h1><- Retour</h1></a>";
+            $this->content("<a href=\"" . $GLOBALS["router"]->urlFor('new_production') . "\"><h1><- Retour</h1></a>");
 
     }
 }
