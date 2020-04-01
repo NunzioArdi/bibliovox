@@ -137,7 +137,7 @@ $app->get("/deleteMot", function (Request $req, Response $resp, $args) {
 //Supprimer le dictionnaire
 $app->get('/dictionnaire/access/{idD}/delete', function (Request $req, Response $resp, $args = []) {
     $cont = new ControleurDictionnaire($req, $resp, $args);
-    $cont->delete($args['idD']);
+    return $cont->delete($args['idD']);
 })->setName('delete_dico');
 //Supprimer l'enregistrement d'un mot
 $app->get('/dictionnaire/deleteRecordMot', function (Request $req, Response $resp, $args = []) {
