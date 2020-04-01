@@ -119,8 +119,8 @@ MOTS
             $this->content("<li class='list-group-item'><p class='btn btn-danger'>Aucun mot dans ce dictionnaire.</p></li>");
 
         $this->content("</ul></div>");
-        //TODO Test si admin
-        if (true) {
+
+        if (ControleurCompte::isTeatch()) {
             $this->outilsAdmin();
         }
         $this->afficher();
