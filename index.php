@@ -122,9 +122,9 @@ $app->get('/dictionnaire/acces/{idD}/{idM}/', function (Request $req, Response $
 })->setName('mot');
 
 //Créer un mot
-$app->get('/dictionnaire/acces/{idD}/nouveauMot', function (Request $req, Response $resp, $args = []) {
-    $cont = new ControleurMot();
-    $cont->createMot($args['idD']);
+$app->get('/dictionnaire/acces/{idD}/nouveauMot', function (Request $req, Response $resp, $args) {
+    $cont = new ControleurMot($req, $resp);
+    return $cont->createMot($args['idD']);
 })->setName('new_mot');
 
 // Suppression d'un mot

@@ -10,6 +10,7 @@ use bibliovox\models\Dictionnaire;
 use bibliovox\models\Mot;
 use bibliovox\views\VueErreur;
 use bibliovox\views\VueMot;
+use Slim\Http\Response;
 
 class ControleurMot extends Controleur
 {
@@ -34,11 +35,21 @@ class ControleurMot extends Controleur
         }
     }
 
+    /**
+     * Accès à l'interface de création de mot
+     * @param $idD
+     * @return Response|void
+     */
     public function createMot($idD)
     {
-        $dico = Dictionnaire::all();
-        $vue = new VueMot(["idD" => $idD, "dico" => $dico]);
-        $vue->creeMot();
+        if(ControleurCompte::isTeatch()){
+            $dico = Dictionnaire::all();
+            $vue = new VueMot(["idD" => $idD, "dico" => $dico]);
+            $vue->creeMot();
+        }else{
+            return $this->resp->withRedirect($GLOBALS["router"]->urlFor("dictionnaire_acces", ['idD' => 0]));
+        }
+        return;
     }
 
     public function processCreateMot()

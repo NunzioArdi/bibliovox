@@ -86,8 +86,7 @@ FORM
         if ($none)
             $this->content("<p>Aucun mot dans Bibli O'vox.</p>");
 
-        //TODO test si admin
-        if (true) {
+        if (ControleurCompte::isTeatch()) {
             $this->content("<a href=\"" . $GLOBALS["router"]->pathFor("new_mot", $data = ['idD' => 0]) . "\" class=\"btn btn-block btn-success\">+ Créer un mot</a>");
         }
         $this->afficher();
