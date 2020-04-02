@@ -30,7 +30,7 @@ class VueCompte extends Vue
 
         $this->title('Compte')
             ->content("Nom prénom: $nom $prenom<br>\nEmail: $email")
-            ->content("<br><a href='$path/account/disconnect'>Déconnection</a>")
+            ->content("<br><a class='btn btn-danger' href='$path/account/disconnect'>Se déconnecter</a>")
             ->content("<br><br>" . $link)
             ->afficher();
     }
@@ -67,7 +67,7 @@ class VueCompte extends Vue
 
         $this->content(<<<END
 <form method="POST" action="$path/account/login">
-
+<h2>Se connecter</h2>
 <!-- File Button --> 
 <div class="form-group">
   <div class="col-md-4">
@@ -107,11 +107,11 @@ END
   <div class="col-md-4">
   <div class="radio">
       <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
-      Elève
+      Élève - demande de l'aide à ton maître ou à ta maîtresse !
 	</div>
   <div class="radio">
       <input type="radio" name="radios" id="radios-1" value="2">
-      Parent/Professeur
+      Parent ou Professeur
 	</div>
   </div>
 </div>
@@ -135,7 +135,7 @@ END
         $path = $GLOBALS["PATH"];
 
         $this->title("Connection élève")
-            ->content("<h2>Séléctionne ton compte</h2>\n");
+            ->content("<h2>Sélectionne ton compte</h2>\n");
 
         $this->content(<<<END
 <form method="POST" action="$path/account/login">
